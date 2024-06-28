@@ -20,9 +20,10 @@ namespace Game
         public sbyte CriticChance { get; private set; }
         public sbyte CriticDamage { get; private set; }
         public sbyte WeaponDamage { get; private set; }
+        public sbyte WeaponContition { get; set; }
         public bool Alive { get; private set; }
         public bool WeaponEquiped { get; private set; }
-        public sbyte Coins { get; private set; }
+        public sbyte Coins { get; set; }
 
 
         Random random = new Random();
@@ -78,11 +79,12 @@ namespace Game
             this.Life -= damage;
         }
 
-        public void WeaponEquip(string weaponName, sbyte weaponDamage)
+        public void WeaponEquip(string weaponName, sbyte weaponDamage, sbyte weaponCondition)
         {
-            WeaponEquiped = true;
-            WeaponName = weaponName;
-            WeaponDamage = weaponDamage;
+            this.WeaponEquiped = true;
+            this.WeaponName = weaponName;
+            this.WeaponDamage = weaponDamage;
+            this.WeaponContition = weaponCondition;
         }
 
         public void WeaponUnequip()
@@ -90,6 +92,7 @@ namespace Game
             WeaponEquiped = false;
             WeaponName = null;
             WeaponDamage = 0;
+            WeaponContition = 0;
         }
 
         public bool Buy(sbyte price)
@@ -107,11 +110,6 @@ namespace Game
             this.Life += life;
         }
 
-        public void GetCoin(sbyte coins)
-        {
-            this.Coins += coins;
-        }
-
         public override string ToString()
         {
             return 
@@ -122,6 +120,7 @@ namespace Game
                 $"Critic Damage: {CriticDamage}\n" +
                 $"Weapon: {WeaponName}\n" +
                 $"Weapon Damage: {WeaponDamage}\n" +
+                $"Weapon Condition: {WeaponContition}\n" +
                 $"Coins: {Coins}\n";
         }
     }

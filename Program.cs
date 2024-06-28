@@ -71,9 +71,9 @@ namespace Game
                                 #region Weapon
                                 case 0:
 
-                                    randomChoose = random.Next(0, weapons.Length - 1); // Sorteia um número
+                                    randomChoose = random.Next(0, weapons.Length); // Sorteia um número
                                     weaponFound = weapons[randomChoose]; // Pega a arma de acordo com o número sorteado
-                                    weaponFound.Condition = random.Next(weaponFound.MaxCondition); // Determina a condição da arma aleatoriamente
+                                    weaponFound.Condition = random.Next(1, weaponFound.MaxCondition); // Determina a condição da arma aleatoriamente
 
                                     Console.WriteLine("You have found a weapon!\n");
 
@@ -93,11 +93,11 @@ namespace Game
                                         switch (answer)
                                         {
                                             case 1:
-                                                Console.WriteLine("\n" + weaponFound);
+                                                Console.WriteLine("\n" + weaponFound + "\n");
                                                 break;
 
                                             case 2:
-                                                mobs[0].WeaponEquip(weaponFound.Name, weaponFound.Damage);
+                                                mobs[0].WeaponEquip(weaponFound.Name, weaponFound.Damage, (sbyte) weaponFound.Condition);
                                                 Console.WriteLine("You equiped.\n");
                                                 break;
 
@@ -114,15 +114,16 @@ namespace Game
                                 #region Mob
                                 case 1:
 
-                                    randomChoose = random.Next(1, weapons.Length - 1); // Sorteia um número
+                                    randomChoose = random.Next(1, mobs.Length); // Sorteia um número
                                     mobFound = mobs[randomChoose]; // Seleciona um mob aleatório
-                                    mobFound.Cure((sbyte)random.Next(mobFound.MaxLife)); // Determina a vida inicial do mob
+                                    mobFound.Cure((sbyte)random.Next(1, mobFound.MaxLife)); // Determina a vida inicial do mob
 
                                     sbyte coins = (sbyte)random.Next(5);
-                                    mobFound.GetCoin(coins);
+                                    mobFound.Coins = coins;
 
-                                    Console.WriteLine($"You have met with a {mobFound.Name}!\n");
+                                    Console.WriteLine($"You have met a {mobFound.Name}!\n");
 
+                                    char escaped = 'y';
                                     while (true)
                                     {
                                         if (mobFound.Life <= 0)
@@ -134,8 +135,8 @@ namespace Game
 
                                             #endregion
 
-                                            mobs[0].GetCoin(mobFound.Coins);
-                                            Console.WriteLine($"Coins received: {coins}\n");
+                                            mobs[0].Coins += mobFound.Coins;
+                                            Console.WriteLine($"Coins received: {mobFound.Coins}\n");
 
                                             break;
                                         }
@@ -148,6 +149,28 @@ namespace Game
                                         Console.Write(">> ");
                                         answer = byte.Parse(Console.ReadLine());
 
+                                        if (answer == 0)
+                                        {
+                                            // Sistema de chances de conseguir escapar
+                                            int opportunity = random.Next(0, 3);
+
+                                            if (opportunity != 3)
+                                            {
+                                                // Verifica se o jogador já tentou escapar
+                                                if (escaped == 'y')
+                                                {
+                                                    escaped = 'y';
+                                                    Console.WriteLine($"You got away far from {mobFound.Name}.\n");
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                escaped = 'n';
+                                                Console.WriteLine("You couldn't escape. You have to fight!");
+                                            }
+                                        }
+
                                         // Escolha
                                         switch (answer)
                                         {
@@ -156,10 +179,15 @@ namespace Game
                                                 break;
 
                                             case 2:
-                                                sbyte _damage = mobs[0].TakeDamage();
-                                                mobFound.GetDamage( _damage );
+                                                sbyte _damage = mobs[0].TakeDamage(); // Gera o dano
+                                                mobFound.GetDamage( _damage ); // Causa o dano
+                                                mobs[0].WeaponContition --; // Desgasta a arma
 
-                                                if (mobs[0].WeaponEquiped) // Fazer um sistema de desgaste da arma
+                                                if (mobs[0].WeaponEquiped == true && mobs[0].WeaponContition <= 0) // Se a arma quebrar, dropar ela
+                                                {
+                                                    mobs[0].WeaponUnequip();
+                                                    Console.WriteLine("Your weapon have broke.");
+                                                }
 
                                                 Console.WriteLine($"You have taked {_damage} of damage!\n");
                                                 break;
@@ -169,8 +197,8 @@ namespace Game
                                                 break;
 
                                             default:
-                                                Console.WriteLine("You ignore the weapon and continue your exploration.\n");
-                                                break;
+                                                Console.WriteLine("Invalid action!\n");
+                                                continue;
                                         }
 
                                         // Turno do mob
@@ -192,9 +220,9 @@ namespace Game
 
                                     randomChoose = random.Next(0, weapons.Length - 1); // Sorteia um número
                                     weaponFound = weapons[randomChoose]; // Pega a arma de acordo com o número sorteado
-                                    weaponFound.Condition = random.Next(weaponFound.MaxCondition); // Determina a condição da arma aleatoriamente
+                                    weaponFound.Condition = weaponFound.MaxCondition;
 
-                                    sbyte weaponPrice = (sbyte)random.Next(10, 40);
+                                    sbyte weaponPrice = (sbyte)random.Next(5, 20);
 
                                     Console.WriteLine("You have found a merchant.\n");
                                     while (true)
@@ -217,6 +245,7 @@ namespace Game
                                             case 1:
                                                 Console.WriteLine("" +
                                                     "[ITEMS]\n" +
+                                                    $"[You have {mobs[0].Coins} coins]\n" +
                                                     "0- Leave\n" +
                                                     "1- HP Potion ($5)\n" +
                                                     $"2- {weaponFound.Name} (${weaponPrice})\n");
@@ -233,19 +262,29 @@ namespace Game
                                                             mobs[0].Cure(5);
                                                             Console.WriteLine($"[LIFE] {mobs[0].Life}\n");
                                                         }
-                                                        break;
+                                                        else
+                                                        {
+                                                            Console.WriteLine("You don't have enough coins!");
+                                                        }
+                                                        continue;
 
                                                     case 2:
 
                                                         if (mobs[0].Buy(weaponPrice))
                                                         {
-                                                            mobs[0].WeaponEquip(weaponFound.Name, weaponFound.Damage);
+                                                            mobs[0].WeaponEquip(weaponFound.Name, weaponFound.Damage, (sbyte) weaponFound.Condition);
                                                             Console.WriteLine("You bought and equipped the weapon.\n");
                                                         }
-                                                        break;
-                                                }
+                                                        else
+                                                        {
+                                                            Console.WriteLine("You don't have enough coins!");
+                                                        }
+                                                        continue;
 
-                                                break;
+                                                    default:
+                                                        Console.WriteLine("Invalid action!\n");
+                                                        continue;
+                                                }
 
                                             default:
                                                 Console.WriteLine("Invalid action!\n");
@@ -257,10 +296,34 @@ namespace Game
                                     break;
                                 #endregion
 
-                                #region
+                                #region Tesouro
                                 case 3:
 
-                                    Console.WriteLine("You have found a full gold can!\n");
+                                    // Gera uma quantidade aleatória de moedas
+                                    randomChoose = random.Next(5, 20); // Sorteia um número
+                                    Console.WriteLine($"You have found a can with {randomChoose} coins!");
+                                    Console.WriteLine("Would you like to get this money?");
+                                    Console.WriteLine("" +
+                                        "0 - No" +
+                                        "1 - Yes");
+                                    Console.Write(">> ");
+                                    answer = byte.Parse(Console.ReadLine());
+
+                                    switch (answer)
+                                    {
+                                        case 0:
+                                            break;
+
+                                        case 1:
+                                            mobs[0].Coins += (sbyte) randomChoose;
+                                            Console.WriteLine($"you have collected {randomChoose} coins.\n");
+                                            break;
+
+                                        default:
+                                            Console.WriteLine("Invalid action!\n");
+                                            continue;
+
+                                    }
 
                                     break;
 
