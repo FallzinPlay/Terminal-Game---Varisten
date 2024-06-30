@@ -10,19 +10,21 @@ namespace Game
     {
         public string Name { get; set; }
         public sbyte Damage { get; private set; }
+        public sbyte NecessaryLvl { get; private set; }
         public int Condition { get; set; }
         public int MaxCondition { get; private set; }
 
-        public Weapon(string name, sbyte damage, int maxCondition)
+        public Weapon(string name, sbyte damage, int maxCondition, sbyte necessaryLvl)
         {
             Name = name;
             Damage = damage;
             MaxCondition = maxCondition;
+            this.NecessaryLvl = necessaryLvl;
         }
 
-        public Weapon(string name, sbyte damage, int condition, int maxCondition) : this(name, damage, maxCondition)
+        public Weapon(string name, sbyte damage, int condition, int maxCondition, sbyte necessaryLvl) : this(name, damage, maxCondition, necessaryLvl)
         {
-            Condition = condition;
+            this.Condition = condition;
         }
 
         public override string ToString()
@@ -31,7 +33,8 @@ namespace Game
                 "[WEAPON]\n" +
                 $"Name: {Name}\n" +
                 $"Damage: {Damage}\n" +
-                $"Condition: {Condition}";
+                $"Condition: {Condition}\n" +
+                $"Necessary Lvl: {NecessaryLvl}";
         }
     }
 }

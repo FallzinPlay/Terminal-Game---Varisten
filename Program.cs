@@ -14,18 +14,19 @@ namespace Game
             int action;
             int randomChoose;
 
+            // Armas
+            Weapon[] weapons = new Weapon[3];
+            weapons[0] = new Weapon("Stick", 3, 4, 1);
+            weapons[1] = new Weapon("Wooden sword", 4, 5, 2);
+            weapons[2] = new Weapon("Wooden bow", 4, 6, 3);
+            Weapon weaponFound;
+
             // Entidades
             Mob[] mobs = new Mob[4];
             mobs[1] = new Mob("Zombie", 0, 2, 7, 7, 2);
-            mobs[2] = new Mob("Skeleton", 0, 3, 5, 5, 3);
+            mobs[2] = new Mob("Skeleton", 0, 3, 5, 5, 3, weapons[2].Name, weapons[2].Damage, (sbyte)weapons[2].MaxCondition, weapons[2].NecessaryLvl);
             mobs[3] = new Mob("Slime", 0, 2, 4, 10, 2);
             Mob mobFound;
-
-            // Armas
-            Weapon[] weapons = new Weapon[2];
-            weapons[0] = new Weapon("Stick", 3, 4);
-            weapons[1] = new Weapon("Wooden sword", 4, 5);
-            Weapon weaponFound;
 
             byte answer;
 
@@ -36,7 +37,10 @@ namespace Game
                 Console.WriteLine("Hey! Let's create your character!");
                 Console.Write("First write their name: ");
                 mobs[0] = new Mob(Console.ReadLine(), 10); // Cria o jogador
-                Console.WriteLine($"Alright, {mobs[0].Name}! Now we're going to go to into that forest.\nBut be careful, there are monsters over there.\nLet's go!\n");
+                Console.WriteLine(
+                    $"Alright, {mobs[0].Name}! Now we're going to go to into that forest.\n" +
+                    $"But be careful, there are monsters over there.\n" +
+                    $"Let's go!\n");
 
 
                 // Loop do jogo
@@ -79,7 +83,10 @@ namespace Game
 
                                     while (true)
                                     {
-                                        Console.WriteLine("0: Ignore\n1: Verify\n2: Equip");
+                                        Console.WriteLine(
+                                            "0: Ignore\n" +
+                                            "1: Verify\n" +
+                                            "2: Equip");
                                         Console.Write(">> ");
                                         answer = byte.Parse(Console.ReadLine());
 
@@ -97,8 +104,7 @@ namespace Game
                                                 break;
 
                                             case 2:
-                                                mobs[0].WeaponEquip(weaponFound.Name, weaponFound.Damage, (sbyte) weaponFound.Condition);
-                                                Console.WriteLine("You equiped.\n");
+                                                mobs[0].WeaponEquip(weaponFound.Name, weaponFound.Damage, (sbyte) weaponFound.Condition, weaponFound.NecessaryLvl);
                                                 break;
 
                                             default:
@@ -121,6 +127,8 @@ namespace Game
                                     sbyte coins = (sbyte)random.Next(5);
                                     mobFound.Coins = coins;
 
+                                    sbyte xp = (sbyte)random.Next(5, 20);
+
                                     Console.WriteLine($"You have met a {mobFound.Name}!\n");
 
                                     char escaped = 'y';
@@ -128,12 +136,40 @@ namespace Game
                                     {
                                         if (mobFound.Life <= 0)
                                         {
+                                            escaped = 'y';
                                             Console.WriteLine($"You have defeated {mobFound.Name}.\n");
 
                                             #region Chance de drop
+                                            int dropChance = random.Next(3);
+                                            if (dropChance == 3)
+                                            {
+                                                Console.WriteLine(
+                                                    $"The {mobFound.Name} dropped a {mobFound.WeaponName}.\n" +
+                                                    $"Would you like to equip it?\n" +
+                                                    $"0 - No\n" +
+                                                    $"1 - Yes");
+                                                Console.Write(">> ");
+                                                answer = byte.Parse(Console.ReadLine());
 
+                                                switch (answer)
+                                                {
+                                                    case 0:
+                                                        Console.WriteLine("You ignore the weapon and go ahead in your journey.\n");
+                                                        break;
+
+                                                    case 1:
+                                                        mobs[0].WeaponEquip(mobFound.WeaponName, mobFound.WeaponDamage, mobFound.WeaponContition, mobFound.Lvl);
+                                                        break;
+
+                                                    default:
+                                                        Console.WriteLine("Invalid action!\n");
+                                                        continue;
+                                                }
+                                            }
 
                                             #endregion
+
+                                            mobs[0].GetXp(xp);
 
                                             mobs[0].Coins += mobFound.Coins;
                                             Console.WriteLine($"Coins received: {mobFound.Coins}\n");
@@ -159,7 +195,6 @@ namespace Game
                                                 // Verifica se o jogador já tentou escapar
                                                 if (escaped == 'y')
                                                 {
-                                                    escaped = 'y';
                                                     Console.WriteLine($"You got away far from {mobFound.Name}.\n");
                                                     break;
                                                 }
@@ -181,7 +216,6 @@ namespace Game
                                             case 2:
                                                 sbyte _damage = mobs[0].TakeDamage(); // Gera o dano
                                                 mobFound.GetDamage( _damage ); // Causa o dano
-                                                mobs[0].WeaponContition --; // Desgasta a arma
 
                                                 if (mobs[0].WeaponEquiped == true && mobs[0].WeaponContition <= 0) // Se a arma quebrar, dropar ela
                                                 {
@@ -270,9 +304,8 @@ namespace Game
 
                                                     case 2:
 
-                                                        if (mobs[0].Buy(weaponPrice))
+                                                        if (mobs[0].Buy(weaponPrice) && mobs[0].WeaponEquip(weaponFound.Name, weaponFound.Damage, (sbyte)weaponFound.Condition, weaponFound.NecessaryLvl))
                                                         {
-                                                            mobs[0].WeaponEquip(weaponFound.Name, weaponFound.Damage, (sbyte) weaponFound.Condition);
                                                             Console.WriteLine("You bought and equipped the weapon.\n");
                                                         }
                                                         else

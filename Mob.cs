@@ -21,54 +21,70 @@ namespace Game
         public sbyte CriticDamage { get; private set; }
         public sbyte WeaponDamage { get; private set; }
         public sbyte WeaponContition { get; set; }
+        public sbyte Coins { get; set; }
+        public sbyte Lvl { get; private set; }
+        public sbyte Xp { get; private set; }
+        public sbyte NextLvlXp {  get; private set; }
         public bool Alive { get; private set; }
         public bool WeaponEquiped { get; private set; }
-        public sbyte Coins { get; set; }
 
 
         Random random = new Random();
 
-        public Mob(string name, sbyte life)
+        public Mob(string name, sbyte maxLife)
         {
             this.Name = name;
-            this.Life = life;
-            Damage = 2;
-            Alive = true;
-            CriticChance = 5;
-            CriticDamage = 2;
+            this.MaxLife = maxLife;
+            this.Life = maxLife;
+            this.Damage = 2;
+            this.Alive = true;
+            this.CriticChance = 5;
+            this.CriticDamage = 2;
+            this.Lvl = 1;
+            this.NextLvlXp = 10;
         }
 
         public Mob(string name, sbyte life, sbyte damage) : this(name, life)
         {
-            Damage = damage;
-            Alive = true;
-            CriticChance = 5;
-            CriticDamage = 2;
+            this.Damage = damage;
+            this.Alive = true;
+            this.CriticChance = 5;
+            this.CriticDamage = 2;
         }
 
         public Mob(string name, sbyte life, sbyte damage, sbyte maxLife, sbyte criticChance, sbyte criticDamage) : this(name, life, damage)
         {
-            MaxLife = maxLife;
-            Alive = true;
-            CriticChance = criticChance;
-            CriticDamage = criticDamage;
+            this.MaxLife = maxLife;
+            this.Alive = true;
+            this.CriticChance = criticChance;
+            this.CriticDamage = criticDamage;
+            this.Lvl = 1;
+        }
+
+        public Mob(string name, sbyte life, sbyte damage, sbyte maxLife, sbyte criticChance, sbyte criticDamage, string weaponName, sbyte weaponDamage, sbyte weaponCondition, sbyte lvl) : this(name, life, damage, maxLife, criticChance, criticDamage)
+        {
+            this.WeaponName = weaponName;
+            this.WeaponDamage = weaponDamage;
+            this.WeaponContition = weaponCondition;
+            this.Lvl = lvl;
         }
 
         public sbyte TakeDamage()
         {
-            sbyte damage = Damage;
+            sbyte damage = this.Damage;
 
             // Se estiver equipando uma arma, somar ataque
             if (WeaponEquiped)
             {
                 damage = WeaponDamage;
+                this.WeaponContition--;
             }
 
             // Chance de crítico
             if (random.Next(CriticChance) == 0)
             {
                 damage *= CriticDamage;
-                Console.WriteLine("[Critical]!!");
+                Console.WriteLine("[Critical]!!\n");
             }
 
             return damage;
@@ -79,12 +95,23 @@ namespace Game
             this.Life -= damage;
         }
 
-        public void WeaponEquip(string weaponName, sbyte weaponDamage, sbyte weaponCondition)
+        public bool WeaponEquip(string weaponName, sbyte weaponDamage, sbyte weaponCondition, sbyte necessaryLvl)
         {
-            this.WeaponEquiped = true;
-            this.WeaponName = weaponName;
-            this.WeaponDamage = weaponDamage;
-            this.WeaponContition = weaponCondition;
+            if (Lvl >= necessaryLvl)
+            {
+                this.WeaponEquiped = true;
+                this.WeaponName = weaponName;
+                this.WeaponDamage = weaponDamage;
+                this.WeaponContition = weaponCondition;
+
+                Console.WriteLine("Weapon equiped!\n");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("You don't have enough Lvl!\n");
+                return false;
+            }
         }
 
         public void WeaponUnequip()
@@ -107,14 +134,54 @@ namespace Game
 
         public void Cure(sbyte life)
         {
-            this.Life += life;
+            if (this.Life + life <= this.MaxLife)
+            {
+                this.Life += life;
+            }
+            else
+            {
+                this.Life = MaxLife;
+            }
+        }
+
+        public void GetXp(sbyte xp)
+        {
+            this.Xp += xp;
+            Console.WriteLine($"You received {Xp}xp\n");
+            LvlUp();
+        }
+
+        public bool LvlUp()
+        {
+            if (this.Xp >= this.NextLvlXp)
+            {
+                this.Lvl += 1;
+                this.Xp -= this.NextLvlXp;
+                this.NextLvlXp *= this.Lvl;
+                
+                Console.WriteLine(
+                    $"Lvl up! [{Lvl}]\n" +
+                    $"Max Life: {MaxLife} + 2\n" +
+                    $"Damage: {Damage} + 1\n" +
+                    $"Life: [Full]\n");
+
+                this.MaxLife += 2;
+                this.Damage += 1;
+                this.Life = this.MaxLife;
+                return true;
+            }
+            return false;
         }
 
         public override string ToString()
         {
             return 
                 $"[{Name}]\n" +
+                $"Lvl: {Lvl}\n" +
+                $"Xp: {Xp}\n" +
+                $"Xp to Next Lvl: {NextLvlXp}\n" +
                 $"Life: {Life}\n" +
+                $"Max Life: {MaxLife}\n" +
                 $"Damage: {Damage}\n" +
                 $"Critic Chance: {CriticChance}\n" +
                 $"Critic Damage: {CriticDamage}\n" +
