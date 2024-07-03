@@ -3,28 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Game
 {
     internal class Weapon
     {
         public string Name { get; set; }
-        public sbyte Damage { get; private set; }
-        public sbyte NecessaryLvl { get; private set; }
+        public double Damage { get; private set; }
+        public int NecessaryLvl { get; private set; }
         public int Condition { get; set; }
         public int MaxCondition { get; private set; }
+        public double MinPrice { get; private set; }
+        public double MaxPrice { get; private set; }
 
-        public Weapon(string name, sbyte damage, int maxCondition, sbyte necessaryLvl)
+        public Weapon(string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
         {
-            Name = name;
-            Damage = damage;
-            MaxCondition = maxCondition;
+            this.Name = name;
+            this.Damage = damage;
+            this.MaxCondition = maxCondition;
+            this.Condition = MaxCondition;
             this.NecessaryLvl = necessaryLvl;
-        }
-
-        public Weapon(string name, sbyte damage, int condition, int maxCondition, sbyte necessaryLvl) : this(name, damage, maxCondition, necessaryLvl)
-        {
-            this.Condition = condition;
+            this.MinPrice = minPrice;
+            this.MaxPrice = maxPrice;
         }
 
         public override string ToString()
@@ -32,9 +33,9 @@ namespace Game
             return
                 "[WEAPON]\n" +
                 $"Name: {Name}\n" +
-                $"Damage: {Damage}\n" +
+                $"Damage: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"Condition: {Condition}\n" +
-                $"Necessary Lvl: {NecessaryLvl}";
+                $"Necessary Lvl: {NecessaryLvl}\n";
         }
     }
 }

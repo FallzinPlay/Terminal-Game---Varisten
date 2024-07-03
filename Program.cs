@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Game
 {
@@ -11,16 +12,20 @@ namespace Game
     {
         static void Main(string[] args)
         {
+            // Proxima atualização
+            //--------!! Adicionar biomas !!-----------//
+
             Random random = new Random();
             int action;
             int randomChoose;
 
             // Armas
             Weapon[] weapons = new Weapon[4];
-            weapons[0] = new Weapon("Hand", 0, 1, 1);
-            weapons[1] = new Weapon("Stick", 3, 4, 1);
-            weapons[2] = new Weapon("Wooden sword", 4, 5, 2);
-            weapons[3] = new Weapon("Wooden bow", 4, 6, 3);
+            // nome, dano, condição, nivel necessario
+            weapons[0] = new Weapon("Hand", 2.5d, 1, 1, 0d, 0d);
+            weapons[1] = new Weapon("Stick", 3.2d, 4, 1, 5d, 10d);
+            weapons[2] = new Weapon("Wooden sword", 4.5d, 5, 2, 7d, 12d);
+            weapons[3] = new Weapon("Wooden bow", 5d, 6, 3, 10d, 15d);
             Weapon playerWeapon = weapons[0];
             Weapon enemyWeapon = weapons[0];
             Weapon weaponFound;
@@ -28,9 +33,10 @@ namespace Game
 
             // Entidades
             Mob[] mobs = new Mob[3];
-            mobs[0] = new Mob("Zombie", 0, 2, 7, 7, 2, 1);
-            mobs[1] = new Mob("Skeleton", 0, 3, 5, 5, 3, weapons[3].Name, weapons[3].NecessaryLvl, 4);
-            mobs[2] = new Mob("Slime", 0, 2, 4, 10, 2, 3);
+            // nome, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, esquiva
+            mobs[0] = new Mob("Zombie", 0, 2.2d, 7, 1.1d, 1.7d, null, weapons[0].NecessaryLvl, 0.8d);
+            mobs[1] = new Mob("Skeleton", 0, 3.2d, 5, 2.2d, 2.3d, weapons[3].Name, weapons[3].NecessaryLvl, 2.1d);
+            mobs[2] = new Mob("Slime", 0, 2.7d, 4, 3.5d, 2.7d, null, weapons[0].NecessaryLvl, 0.5d);
             Mob mobFound;
 
             byte answer;
@@ -80,32 +86,43 @@ namespace Game
                             if (action <= 3)
                             {
 
-                                randomChoose = random.Next(0, weapons.Length); // Sorteia um número
+                                randomChoose = random.Next(1, weapons.Length); // Sorteia um número
                                 weaponFound = weapons[randomChoose]; // Pega a arma de acordo com o número sorteado
                                 weaponFound.Condition = random.Next(1, weaponFound.MaxCondition); // Determina a condição da arma aleatoriamente
 
-                                Console.WriteLine("You have found a weapon!\n");
+                                Console.WriteLine($"A {weaponFound.Name}! Should I equip it?\n");
 
                                 while (true)
                                 {
                                     Console.WriteLine(
                                         "0: Ignore\n" +
-                                        "1: Verify\n" +
+                                        "1: Compare\n" +
                                         "2: Equip");
                                     Console.Write(">> ");
                                     answer = byte.Parse(Console.ReadLine());
 
                                     if (answer == 0)
                                     {
-                                        Console.WriteLine("You ignore the weapon and continue your exploration.\n");
+
                                         break;
                                     }
 
                                     // Escolha
                                     switch (answer)
                                     {
+                                        case 0:
+                                            Console.WriteLine("I don't need it for now...\n");
+                                            break;
+                                            
                                         case 1:
-                                            Console.WriteLine("\n" + weaponFound + "\n");
+                                            if (player.WeaponEquiped != false)
+                                            {
+                                                Console.WriteLine("\n[My weapon]\n" + playerWeapon + "\n\n[Weapon Found]\n" + weaponFound + "\n");
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("\nI don't have any weapon...\n" + weaponFound + "\n");
+                                            }
                                             break;
 
                                         case 2:
@@ -127,51 +144,51 @@ namespace Game
                             else if (action <= 7)
                             {
 
-                                randomChoose = random.Next(1, mobs.Length); // Sorteia um número
+                                randomChoose = random.Next(0, mobs.Length); // Sorteia um número
                                 mobFound = mobs[randomChoose]; // Seleciona um mob aleatório
-                                mobFound.Cure((sbyte)random.Next(3, mobFound.MaxLife)); // Vida dos mobs determinadas aleatóriamente
+                                while (mobFound.Life < 1) mobFound.Cure(RandomDouble(random, (double)mobFound.MaxLife/2, (double)mobFound.MaxLife)); // Vida dos mobs determinadas aleatóriamente e impede de ser 0
 
                                 // Configuração de arma dos mobs
-                                if (mobFound.Name == "Skeleton") enemyWeapon = weapons[3]; // Equipa o esqueleto com um arco
+                                if (mobFound.Name == mobs[1].Name) enemyWeapon = weapons[3]; // Equipa o esqueleto com um arco
 
-                                sbyte coins = (sbyte)random.Next(5);
+                                double coins = RandomDouble(random, 0d, 10d);
                                 mobFound.Coins = coins;
 
-                                double xp = (double)random.Next(5, 20);
+                                double xp = RandomDouble(random, 5d, 20d);
 
-                                Console.WriteLine($"You met a {mobFound.Name}!\n");
+                                Console.WriteLine($"A {mobFound.Name}! What should I do?\n");
 
-                                char escaped = 'y';
+                                bool escaped = true;
                                 while (true)
                                 {
-                                    if (player.Life <= 0) break;
 
                                     Console.WriteLine("" +
-                                        "0: Get away\n" +
-                                        "1: Verify\n" +
-                                        "2: Atack\n" +
-                                        "3- My stats\n");
+                                        "0: Run away\n" +
+                                        "1: Analize\n" +
+                                        "2: Atack!\n" +
+                                        "3- My status\n");
                                     Console.Write(">> ");
                                     answer = byte.Parse(Console.ReadLine());
 
                                     if (answer == 0)
                                     {
                                         // Sistema de chances de conseguir escapar
-                                        int opportunity = random.Next(0, 3);
+                                        double escapeChance = 5d;
+                                        double opportunity = RandomDouble(random, 0, escapeChance);
 
-                                        if (opportunity != 3)
+                                        if (opportunity > escapeChance / 1.3d)
                                         {
                                             // Verifica se o jogador já tentou escapar
-                                            if (escaped == 'y')
+                                            if (escaped == true)
                                             {
-                                                Console.WriteLine($"You got away far from {mobFound.Name}.\n");
+                                                Console.WriteLine($"You run away from the {mobFound.Name} as far as you can.\n");
                                                 break;
                                             }
                                         }
                                         else
                                         {
-                                            escaped = 'n';
-                                            Console.WriteLine("You couldn't escape. You have to fight!");
+                                            escaped = false;
+                                            Console.WriteLine("I couldn't escape. I will have to fight!");
                                         }
                                     }
 
@@ -179,20 +196,20 @@ namespace Game
                                     switch (answer)
                                     {
                                         case 1:
-                                            Console.WriteLine("\n" + mobFound);
+                                            Console.WriteLine("\n" + mobFound + "\n");
                                             break;
 
                                         case 2:
-                                            sbyte _damage = Atack(random, player, mobFound, playerWeapon);
-                                            if (player.WeaponEquiped == true && playerWeapon.Condition <= 0) // Se a arma quebrar, dropar ela
+                                            double _damage = Atack(random, player, mobFound, playerWeapon, weapons);
+                                            if (player.WeaponEquiped == true && playerWeapon.Condition <= 0) // Se a arma quebrar, droppar ela
                                             {
                                                 // Desequipa a arma
                                                 player.WeaponUnequip();
                                                 playerWeapon = weapons[0];
-                                                Console.WriteLine("Your weapon have broke.");
+                                                Console.WriteLine("Your weapon broke.");
                                             }
 
-                                            Console.WriteLine($"You have taked {_damage} of damage!\n");
+                                            Console.WriteLine($"You dealt {_damage} damage to the {mobFound.Name}.\n");
                                             break;
 
                                         case 3:
@@ -204,28 +221,23 @@ namespace Game
                                             continue;
                                     }
 
-                                    // Turno do mob
-                                    if (answer == 2)
-                                    {
-                                        if (mobFound.Life > 0) // Se ele tiver vivo
-                                        {
-                                            sbyte mobDamage = Atack(random, mobFound, player, enemyWeapon);
-                                            Console.WriteLine($"\n{mobFound.Name} have taked {mobDamage} of damage.\n");
-                                        }
-                                    }
-
                                     // Morte do inimigo
                                     if (mobFound.Life <= 0)
                                     {
-                                        escaped = 'y';
+                                        escaped = true;
                                         Console.WriteLine($"You defeated {mobFound.Name}.\n");
+
+                                        player.GetXp(xp);
+                                        player.GetCoins(coins);
 
                                         #region Chance de drop
                                         // Chance do mob droppar a arma que ele está usando
                                         if (mobFound.WeaponEquiped == true)
                                         {
-                                            int dropChance = random.Next(3);
-                                            if (dropChance == 3)
+
+                                            double dropChance = 3d;
+                                            double dropped = RandomDouble(random, 0d, dropChance);
+                                            if (dropped > dropChance / 1.3)
                                             {
                                                 Console.WriteLine(
                                                     $"The {mobFound.Name} dropped a {enemyWeapon.Name}.\n" +
@@ -238,7 +250,7 @@ namespace Game
                                                 switch (answer)
                                                 {
                                                     case 0:
-                                                        Console.WriteLine("You ignore the weapon and go ahead in your journey.\n");
+                                                        Console.WriteLine("You ignored the weapon and went ahead in your journey.\n");
                                                         break;
 
                                                     case 1:
@@ -253,14 +265,19 @@ namespace Game
                                         }
 
                                         #endregion
-
-                                        player.GetXp(xp);
-
-                                        player.Coins += mobFound.Coins;
-                                        Console.WriteLine($"Coins received: {mobFound.Coins}\n");
-
                                         break;
                                     }
+                                    else
+                                    {
+                                        // Turno do mob
+                                        if (answer == 2)
+                                        {
+                                            double mobDamage = Atack(random, mobFound, player, enemyWeapon, weapons);
+                                            Console.WriteLine($"\n{mobFound.Name} dealt {mobDamage} damage to you.\n");
+                                        }
+                                    }
+
+                                    if (player.Life <= 0) break;
                                 }
                             }
                             #endregion
@@ -269,16 +286,16 @@ namespace Game
                             else if (action <= 9)
                             {
 
-                                randomChoose = random.Next(0, weapons.Length - 1); // Sorteia um número
+                                randomChoose = random.Next(1, weapons.Length); // Sorteia um número
                                 weaponFound = weapons[randomChoose]; // Pega a arma de acordo com o número sorteado
                                 weaponFound.Condition = weaponFound.MaxCondition;
 
-                                sbyte weaponPrice = (sbyte)random.Next(5, 20);
+                                double weaponPrice = RandomDouble(random, weaponFound.MinPrice, weaponFound.MaxPrice);
 
-                                Console.WriteLine("You have found a merchant.\n");
+                                Console.WriteLine("A Merchant!\n");
                                 while (true)
                                 {
-                                    Console.WriteLine("" +
+                                    Console.WriteLine(
                                         "0: Ignore\n" +
                                         "1: Verify\n");
                                     Console.Write(">> ");
@@ -286,7 +303,7 @@ namespace Game
 
                                     if (answer == 0)
                                     {
-                                        Console.WriteLine("You ignore the merchant and continue your exploration.\n");
+                                        Console.WriteLine("I don't need to buy anything.\n");
                                         break;
                                     }
 
@@ -294,12 +311,12 @@ namespace Game
                                     switch (answer)
                                     {
                                         case 1:
-                                            Console.WriteLine("" +
+                                            Console.WriteLine(
                                                 "[ITEMS]\n" +
-                                                $"[You have {player.Coins} coins]\n" +
+                                                $"[I have {player.Coins.ToString("F2", CultureInfo.InvariantCulture)} coins]\n" +
                                                 "0- Leave\n" +
                                                 "1- HP Potion ($5)\n" +
-                                                $"2- {weaponFound.Name} (${weaponPrice})\n");
+                                                $"2- {weaponFound.Name} (${weaponPrice.ToString("F2", CultureInfo.InvariantCulture)})\n");
                                             Console.Write(">> ");
                                             answer = byte.Parse(Console.ReadLine());
 
@@ -311,11 +328,11 @@ namespace Game
                                                     if (player.Buy(5))
                                                     {
                                                         player.Cure(5);
-                                                        Console.WriteLine($"[LIFE] {player.Life}\n");
+                                                        Console.WriteLine($"[LIFE] {player.Life.ToString("F2", CultureInfo.InvariantCulture)}\n");
                                                     }
                                                     else
                                                     {
-                                                        Console.WriteLine("You don't have enough coins!");
+                                                        Console.WriteLine("I don't have enough coins!");
                                                     }
                                                     continue;
 
@@ -324,11 +341,11 @@ namespace Game
                                                     if (player.Buy(weaponPrice) && player.WeaponEquip(weaponFound.Name, weaponFound.NecessaryLvl))
                                                     {
                                                         playerWeapon = weaponFound;
-                                                        Console.WriteLine("You bought and equipped the weapon.\n");
+                                                        Console.WriteLine("You bought and equiped the weapon.\n");
                                                     }
                                                     else
                                                     {
-                                                        Console.WriteLine("You don't have enough coins!");
+                                                        Console.WriteLine("I don't have enough coins!");
                                                     }
                                                     continue;
 
@@ -352,9 +369,9 @@ namespace Game
                             {
 
                                 // Gera uma quantidade aleatória de moedas
-                                randomChoose = random.Next(5, 20); // Sorteia um número
-                                Console.WriteLine($"You have found a can with {randomChoose} coins!");
-                                Console.WriteLine("Would you like to get this money?");
+                                double coins = RandomDouble(random, 5d, 20d); // Sorteia um número
+                                Console.WriteLine($"A can with full coins!");
+                                Console.WriteLine("Would you like to collect this treasury?");
                                 Console.WriteLine("" +
                                     "0 - No" +
                                     "1 - Yes");
@@ -367,8 +384,8 @@ namespace Game
                                         break;
 
                                     case 1:
-                                        player.Coins += (sbyte)randomChoose;
-                                        Console.WriteLine($"you have collected {randomChoose} coins.\n");
+                                        player.GetCoins(coins);
+                                        Console.WriteLine($"I collected {coins.ToString("F2", CultureInfo.InvariantCulture)} coins.\n");
                                         break;
 
                                     default:
@@ -401,7 +418,7 @@ namespace Game
                             }
                             else
                             {
-                                Console.WriteLine("You have no weapons!");
+                                Console.WriteLine("I have no weapons!");
                             }
                             break;
 
@@ -440,8 +457,8 @@ namespace Game
         // Esquiva
         public static bool Dodge(Random r, Mob _mob)
         {
-            sbyte dodgeChance = 20;
-            if ((sbyte)r.Next(0, dodgeChance) <= _mob.Dodge)
+            double dodgeChance = 20;
+            if (RandomDouble(r, 0d, dodgeChance) <= _mob.Dodge)
             {
                 Console.WriteLine($"[{_mob.Name} DODGED]!!");
                 return true;
@@ -450,21 +467,22 @@ namespace Game
         }
 
         // Ataque
-        public static sbyte Atack(Random r, Mob mobSet, Mob mobGet, Weapon mobWeapon)
+        public static double Atack(Random r, Mob mobSet, Mob mobGet, Weapon mobWeapon, Weapon[] w)
         {
             if (!Dodge(r, mobGet))
             {
-                sbyte damage = mobSet.Damage;
+                double damage = mobSet.Damage;
 
                 // Se estiver equipando uma arma, somar ataque
-                if (mobSet.WeaponEquiped && mobWeapon.Name != "Hand")
+                if (mobSet.WeaponEquiped && mobWeapon.Name != w[0].Name)
                 {
                     damage = mobWeapon.Damage;
                     mobWeapon.Condition--;
                 }
 
                 // Chance de crítico
-                if (r.Next(mobSet.CriticChance) == 0)
+                double criticChance = 20;
+                if (RandomDouble(r, 0d, criticChance) <= mobSet.CriticChance)
                 {
                     damage *= mobSet.CriticDamage;
                     Console.WriteLine("[Critical]!!\n");
@@ -476,6 +494,15 @@ namespace Game
             }
 
             return 0;
+        }
+
+        #endregion
+
+        #region Funções úteis
+
+        public static double RandomDouble(Random r, double min, double max)
+        {
+            return min + (r.NextDouble() * (max - min));
         }
 
         #endregion

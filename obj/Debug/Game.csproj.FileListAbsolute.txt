@@ -5,3 +5,10 @@ C:\Users\vitor\source\repos\Game\Game\bin\Debug\Game.exe
 C:\Users\vitor\source\repos\Game\Game\bin\Debug\Game.pdb
 C:\Users\vitor\source\repos\Game\Game\obj\Debug\Game.exe
 C:\Users\vitor\source\repos\Game\Game\obj\Debug\Game.pdb
+C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\obj\Debug\Game.csproj.AssemblyReference.cache
+C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\obj\Debug\Game.csproj.CoreCompileInputs.cache
+C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\obj\Debug\Game.exe
+C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\obj\Debug\Game.pdb
+C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\bin\Debug\Game.exe.config
+C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\bin\Debug\Game.exe
+C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\bin\Debug\Game.pdb
