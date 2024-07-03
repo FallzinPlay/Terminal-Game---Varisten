@@ -14,6 +14,8 @@ namespace Game
         {
             // Proxima atualização
             //--------!! Adicionar biomas !!-----------//
+            // Fazer um sistema que permita os inimigos fugirem quando estiverem com a vida baixa
+            // e o jogador ter a opção de seguir que será definida randomicamente o sucesso
 
             Random random = new Random();
             int action;
@@ -24,8 +26,8 @@ namespace Game
             // nome, dano, condição, nivel necessario
             weapons[0] = new Weapon("Hand", 2.5d, 1, 1, 0d, 0d);
             weapons[1] = new Weapon("Stick", 3.2d, 4, 1, 5d, 10d);
-            weapons[2] = new Weapon("Wooden sword", 4.5d, 5, 2, 7d, 12d);
-            weapons[3] = new Weapon("Wooden bow", 5d, 6, 3, 10d, 15d);
+            weapons[2] = new Weapon("Wooden sword", 3.5d, 5, 2, 7d, 12d);
+            weapons[3] = new Weapon("Wooden bow", 4.2d, 6, 3, 10d, 15d);
             Weapon playerWeapon = weapons[0];
             Weapon enemyWeapon = weapons[0];
             Weapon weaponFound;
@@ -33,10 +35,10 @@ namespace Game
 
             // Entidades
             Mob[] mobs = new Mob[3];
-            // nome, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, esquiva
-            mobs[0] = new Mob("Zombie", 0, 2.2d, 7, 1.1d, 1.7d, null, weapons[0].NecessaryLvl, 0.8d);
-            mobs[1] = new Mob("Skeleton", 0, 3.2d, 5, 2.2d, 2.3d, weapons[3].Name, weapons[3].NecessaryLvl, 2.1d);
-            mobs[2] = new Mob("Slime", 0, 2.7d, 4, 3.5d, 2.7d, null, weapons[0].NecessaryLvl, 0.5d);
+            // nome, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva
+            mobs[0] = new Mob("Zombie", 0, 2.2d, 7, 1.1d, 1.7d, null, weapons[0].NecessaryLvl, 10, 0.8d);
+            mobs[1] = new Mob("Skeleton", 0, 3.2d, 5, 2.2d, 2.3d, weapons[3].Name, weapons[3].NecessaryLvl, 12, 2.1d);
+            mobs[2] = new Mob("Slime", 0, 2.7d, 4, 3.5d, 2.7d, null, weapons[0].NecessaryLvl, 15, 0.5d);
             Mob mobFound;
 
             byte answer;
@@ -146,10 +148,15 @@ namespace Game
 
                                 randomChoose = random.Next(0, mobs.Length); // Sorteia um número
                                 mobFound = mobs[randomChoose]; // Seleciona um mob aleatório
-                                while (mobFound.Life < 1) mobFound.Cure(RandomDouble(random, (double)mobFound.MaxLife/2, (double)mobFound.MaxLife)); // Vida dos mobs determinadas aleatóriamente e impede de ser 0
+                                mobFound.ForceLvlUp(random.Next(mobFound.Lvl, mobFound.MaxLvl));
 
-                                // Configuração de arma dos mobs
-                                if (mobFound.Name == mobs[1].Name) enemyWeapon = weapons[3]; // Equipa o esqueleto com um arco
+                                // Configuração dos mobs
+                                if (mobFound.Name == mobs[1].Name)
+                                {
+                                    enemyWeapon = weapons[3]; // Equipa o esqueleto com um arco
+                                }
+
+                                while (mobFound.Life < 1) mobFound.Cure(RandomDouble(random, (double)mobFound.MaxLife / 2, (double)mobFound.MaxLife)); // Vida dos mobs determinadas aleatóriamente e impede de ser 0
 
                                 double coins = RandomDouble(random, 0d, 10d);
                                 mobFound.Coins = coins;
@@ -273,7 +280,7 @@ namespace Game
                                         if (answer == 2)
                                         {
                                             double mobDamage = Atack(random, mobFound, player, enemyWeapon, weapons);
-                                            Console.WriteLine($"\n{mobFound.Name} dealt {mobDamage} damage to you.\n");
+                                            Console.WriteLine($"\n{mobFound.Name} dealt {mobDamage.ToString("F2", CultureInfo.InvariantCulture)} damage to you.\n");
                                         }
                                     }
 
@@ -476,7 +483,7 @@ namespace Game
                 // Se estiver equipando uma arma, somar ataque
                 if (mobSet.WeaponEquiped && mobWeapon.Name != w[0].Name)
                 {
-                    damage = mobWeapon.Damage;
+                    damage = mobWeapon.Damage + mobSet.Damage / 5;
                     mobWeapon.Condition--;
                 }
 

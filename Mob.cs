@@ -22,7 +22,8 @@ namespace Game
         public double CriticChance { get; private set; }
         public double CriticDamage { get; private set; }
         public double Coins { get; set; }
-        public int Lvl { get; private set; }
+        public int Lvl { get; set; }
+        public int MaxLvl { get; private set; }
         public double Xp { get; private set; }
         public double NextLvlXp { get; private set; }
         public bool Alive { get; private set; }
@@ -41,11 +42,12 @@ namespace Game
             this.CriticChance = 1.2d;
             this.CriticDamage = 1.5d;
             this.Lvl = 1;
+            this.MaxLvl = 25;
             this.NextLvlXp = 10;
             this.Dodge = 1.3d;
         }
 
-        public Mob(string name, double life, double damage, int maxLife, double criticChance, double criticDamage, string weapon, int lvl, double dodge) : this(name, maxLife)
+        public Mob(string name, double life, double damage, int maxLife, double criticChance, double criticDamage, string weapon, int lvl, int maxLvl, double dodge) : this(name, maxLife)
         {
             this.MaxLife = maxLife;
             this.Life = life;
@@ -57,6 +59,7 @@ namespace Game
             this.Dodge = dodge;
             this.Weapon = weapon;
             this.Lvl = lvl;
+            this.MaxLvl = maxLvl;
             this.NextLvlXp = 10;
 
             if (weapon != null) this.WeaponEquiped = true;
@@ -133,20 +136,32 @@ namespace Game
             {
                 this.Lvl += 1;
                 this.Xp -= this.NextLvlXp;
-                this.NextLvlXp *= this.Lvl;
+                this.NextLvlXp = this.Lvl * 50 / 2;
+
+                this.MaxLife += 1 * this.Lvl;
+                this.Life = this.MaxLife;
+                this.Damage += 0.03 * this.Lvl;
 
                 Console.WriteLine(
                     $"Lvl up! [{Lvl}]\n" +
-                    $"Max Life: {MaxLife} + 2\n" +
-                    $"Damage: {Damage.ToString("F2", CultureInfo.InvariantCulture)} + 1\n" +
+                    $"Max Life: {MaxLife}\n" +
+                    $"Damage: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                     $"Life: [Full]\n");
 
-                this.MaxLife += 2;
-                this.Damage += 1;
-                this.Life = this.MaxLife;
                 return true;
             }
+
             return false;
+        }
+
+        public void ForceLvlUp(int lvl)
+        {
+            this.Lvl = lvl;
+            this.NextLvlXp = this.Lvl * 50 / 2;
+            this.Xp = random.Next(this.Lvl, (int)this.NextLvlXp) * random.NextDouble();
+
+            this.MaxLife += 1 * this.Lvl;
+            this.Damage += 0.03 * this.Lvl;
         }
 
         public override string ToString()
