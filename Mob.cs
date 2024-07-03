@@ -13,17 +13,16 @@ namespace Game
     internal class Mob
     {
         public string Name { get; set; }
-        public string WeaponName { get; private set; }
+        public string Weapon { get; private set; }
         public sbyte Life { get; private set; }
         public sbyte MaxLife { get; private set; }
         public sbyte Damage { get; private set; }
+        public sbyte Dodge {get; private set; }
         public sbyte CriticChance { get; private set; }
         public sbyte CriticDamage { get; private set; }
-        public sbyte WeaponDamage { get; private set; }
-        public sbyte WeaponContition { get; set; }
         public sbyte Coins { get; set; }
         public sbyte Lvl { get; private set; }
-        public sbyte Xp { get; private set; }
+        public double Xp { get; private set; }
         public sbyte NextLvlXp {  get; private set; }
         public bool Alive { get; private set; }
         public bool WeaponEquiped { get; private set; }
@@ -42,52 +41,28 @@ namespace Game
             this.CriticDamage = 2;
             this.Lvl = 1;
             this.NextLvlXp = 10;
+            this.Dodge = 3;
         }
 
-        public Mob(string name, sbyte life, sbyte damage) : this(name, life)
-        {
-            this.Damage = damage;
-            this.Alive = true;
-            this.CriticChance = 5;
-            this.CriticDamage = 2;
-        }
-
-        public Mob(string name, sbyte life, sbyte damage, sbyte maxLife, sbyte criticChance, sbyte criticDamage) : this(name, life, damage)
+        public Mob(string name, sbyte life, sbyte damage, sbyte maxLife, sbyte criticChance, sbyte criticDamage, sbyte dodge) : this(name, maxLife)
         {
             this.MaxLife = maxLife;
+            this.Life = life;
+            this.Life = maxLife;
+            this.Damage = damage;
             this.Alive = true;
             this.CriticChance = criticChance;
             this.CriticDamage = criticDamage;
             this.Lvl = 1;
+            this.Dodge = dodge;
         }
 
-        public Mob(string name, sbyte life, sbyte damage, sbyte maxLife, sbyte criticChance, sbyte criticDamage, string weaponName, sbyte weaponDamage, sbyte weaponCondition, sbyte lvl) : this(name, life, damage, maxLife, criticChance, criticDamage)
+        public Mob(string name, sbyte life, sbyte damage, sbyte maxLife, sbyte criticChance, sbyte criticDamage, string weapon, sbyte lvl, sbyte dodge) : this(name, life, damage, maxLife, criticChance, criticDamage, dodge)
         {
-            this.WeaponName = weaponName;
-            this.WeaponDamage = weaponDamage;
-            this.WeaponContition = weaponCondition;
+            this.Alive = true;
+            this.Weapon = weapon;
+            this.WeaponEquiped = true;
             this.Lvl = lvl;
-        }
-
-        public sbyte TakeDamage()
-        {
-            sbyte damage = this.Damage;
-
-            // Se estiver equipando uma arma, somar ataque
-            if (WeaponEquiped)
-            {
-                damage = WeaponDamage;
-                this.WeaponContition--;
-            }
-
-            // Chance de crítico
-            if (random.Next(CriticChance) == 0)
-            {
-                damage *= CriticDamage;
-                Console.WriteLine("[Critical]!!\n");
-            }
-
-            return damage;
         }
 
         public void GetDamage(sbyte damage)
@@ -95,14 +70,12 @@ namespace Game
             this.Life -= damage;
         }
 
-        public bool WeaponEquip(string weaponName, sbyte weaponDamage, sbyte weaponCondition, sbyte necessaryLvl)
+        public bool WeaponEquip(string weapon, sbyte necessaryLvl)
         {
             if (Lvl >= necessaryLvl)
             {
                 this.WeaponEquiped = true;
-                this.WeaponName = weaponName;
-                this.WeaponDamage = weaponDamage;
-                this.WeaponContition = weaponCondition;
+                this.Weapon = weapon;
 
                 Console.WriteLine("Weapon equiped!\n");
                 return true;
@@ -116,10 +89,8 @@ namespace Game
 
         public void WeaponUnequip()
         {
-            WeaponEquiped = false;
-            WeaponName = null;
-            WeaponDamage = 0;
-            WeaponContition = 0;
+            this.WeaponEquiped = false;
+            this.Weapon = null;
         }
 
         public bool Buy(sbyte price)
@@ -144,10 +115,10 @@ namespace Game
             }
         }
 
-        public void GetXp(sbyte xp)
+        public void GetXp(double xp)
         {
             this.Xp += xp;
-            Console.WriteLine($"You received {Xp}xp\n");
+            Console.WriteLine($"You received {xp}xp\n");
             LvlUp();
         }
 
@@ -185,9 +156,7 @@ namespace Game
                 $"Damage: {Damage}\n" +
                 $"Critic Chance: {CriticChance}\n" +
                 $"Critic Damage: {CriticDamage}\n" +
-                $"Weapon: {WeaponName}\n" +
-                $"Weapon Damage: {WeaponDamage}\n" +
-                $"Weapon Condition: {WeaponContition}\n" +
+                $"Weapon: {Weapon}\n" +
                 $"Coins: {Coins}\n";
         }
     }
