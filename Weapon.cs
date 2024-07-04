@@ -28,6 +28,11 @@ namespace Game
             this.MaxPrice = maxPrice;
         }
 
+        public void Erode()
+        {
+            this.Condition--;
+        }
+
         public override string ToString()
         {
             return

@@ -14,21 +14,23 @@ namespace Game
     internal class Mob
     {
         public string Name { get; set; }
+        public string Race { get; private set; }
+        public string Description { get; set; }
         public string Weapon { get; private set; }
-        public double Life { get; private set; }
+        public int Lvl { get; set; }
+        public int MaxLvl { get; private set; }
         public int MaxLife { get; private set; }
+        public double Life { get; private set; }
         public double Damage { get; private set; }
         public double Dodge { get; private set; }
         public double CriticChance { get; private set; }
         public double CriticDamage { get; private set; }
         public double Coins { get; set; }
-        public int Lvl { get; set; }
-        public int MaxLvl { get; private set; }
         public double Xp { get; private set; }
         public double NextLvlXp { get; private set; }
         public bool Alive { get; private set; }
         public bool WeaponEquiped { get; private set; }
-
+        public bool Fighting { get; set; }
 
         Random random = new Random();
 
@@ -47,8 +49,9 @@ namespace Game
             this.Dodge = 1.3d;
         }
 
-        public Mob(string name, double life, double damage, int maxLife, double criticChance, double criticDamage, string weapon, int lvl, int maxLvl, double dodge) : this(name, maxLife)
+        public Mob(string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, string weapon, int lvl, int maxLvl, double dodge) : this(name, maxLife)
         {
+            this.Race = race;
             this.MaxLife = maxLife;
             this.Life = life;
             this.MaxLife = maxLife;
@@ -64,6 +67,8 @@ namespace Game
 
             if (weapon != null) this.WeaponEquiped = true;
         }
+
+
 
         public void GetDamage(double damage)
         {
@@ -138,9 +143,9 @@ namespace Game
                 this.Xp -= this.NextLvlXp;
                 this.NextLvlXp = this.Lvl * 50 / 2;
 
-                this.MaxLife += 1 * this.Lvl;
+                this.MaxLife += this.Lvl -1;
                 this.Life = this.MaxLife;
-                this.Damage += 0.03 * this.Lvl;
+                this.Damage += 0.02 * this.Lvl;
 
                 Console.WriteLine(
                     $"Lvl up! [{Lvl}]\n" +
@@ -160,14 +165,15 @@ namespace Game
             this.NextLvlXp = this.Lvl * 50 / 2;
             this.Xp = random.Next(this.Lvl, (int)this.NextLvlXp) * random.NextDouble();
 
-            this.MaxLife += 1 * this.Lvl;
-            this.Damage += 0.03 * this.Lvl;
+            this.MaxLife += this.Lvl -1;
+            this.Damage += 0.02 * this.Lvl;
         }
 
         public override string ToString()
         {
             return
                 $"[{Name}]\n" +
+                $"Race: {Race}\n" +
                 $"Lvl: {Lvl}\n" +
                 $"Xp: {Xp.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"Xp to Next Lvl: {NextLvlXp}\n" +
