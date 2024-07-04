@@ -22,40 +22,38 @@ namespace Game
 
             // Armas
             Weapon[] weapons = new Weapon[4];
-            // nome, dano, condição, nivel necessario
-            weapons[0] = new Weapon("Hand", 2.5d, 1, 1, 0d, 0d);
+            // nome, dano, condição, nivel necessario, preço min, preço max
+            weapons[0] = new Weapon("--", 0d, 0, 0, 0d, 0d);
             weapons[1] = new Weapon("Stick", 3.2d, 4, 1, 5d, 10d);
             weapons[2] = new Weapon("Wooden sword", 3.5d, 5, 2, 7d, 12d);
             weapons[3] = new Weapon("Wooden bow", 4.2d, 6, 3, 10d, 15d);
-            Weapon playerWeapon = weapons[0];
-            Weapon enemyWeapon = weapons[0];
             Weapon weaponFound;
             
 
             // Entidades
             Mob[] mobs = new Mob[3];
             // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva
-            mobs[0] = new Mob("Zombie", "zombie", 0, 2.2d, 7, 1.1d, 1.7d, null, weapons[0].NecessaryLvl, 10, 0.8d);
-            mobs[1] = new Mob("Skeleton", "skeleton", 0, 3.2d, 5, 2.2d, 2.3d, weapons[3].Name, weapons[3].NecessaryLvl, 12, 2.1d);
-            mobs[2] = new Mob("Slime", "slime", 0, 2.7d, 4, 3.5d, 2.7d, null, weapons[0].NecessaryLvl, 15, 0.5d);
+            mobs[0] = new Mob("Zombie", "zombie", 0, 2.2d, 7, 1.1d, 1.7d, weapons[0], weapons[0].NecessaryLvl, 10, 0.8d);
+            mobs[1] = new Mob("Skeleton", "skeleton", 0, 3.2d, 5, 2.2d, 2.3d, weapons[3], weapons[3].NecessaryLvl, 12, 2.1d);
+            mobs[2] = new Mob("Slime", "slime", 0, 2.7d, 4, 3.5d, 2.7d, weapons[0], weapons[0].NecessaryLvl, 15, 0.5d);
             Mob mobFound;
 
             // Raças
             Mob[] race = new Mob[2];
             // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva
-            race[0] = new Mob(null, "human", 10d, 2.4d, 10, 1.7d, 1.5d, null, 1, 10, 1.7d);
-            race[1] = new Mob(null, "dwarf", 8d, 3d, 8, 1.3d, 1.6d, null, 1, 7, 1.2d);
+            race[0] = new Mob(null, "human", 10d, 2.4d, 10, 1.7d, 1.5d, weapons[0], 1, 10, 1.7d);
+            race[1] = new Mob(null, "dwarf", 8d, 3d, 8, 1.3d, 1.6d, weapons[0], 1, 7, 1.2d);
 
             #region Descrição das raças
 
             // Humano
             race[0].Description = "" +
-                "" +
+                "a" +
                 "";
 
             // Anão
             race[1].Description = "" +
-                "" +
+                "a" +
                 "";
 
             #endregion
@@ -144,7 +142,7 @@ namespace Game
                                         case 1:
                                             if (player.WeaponEquiped != false)
                                             {
-                                                Console.WriteLine("\n[My weapon]\n" + playerWeapon + "\n\n[Weapon Found]\n" + weaponFound + "\n");
+                                                Console.WriteLine("\n[My weapon]\n" + player.Weapons + "\n\n[Weapon Found]\n" + weaponFound + "\n");
                                             }
                                             else
                                             {
@@ -154,7 +152,7 @@ namespace Game
 
                                         case 2:
                                             // Equipa a arma
-                                            if (player.WeaponEquip(weaponFound.Name, weaponFound.NecessaryLvl)) playerWeapon = weaponFound;
+                                            player.WeaponEquip(weaponFound, weaponFound.NecessaryLvl);
                                             break;
 
                                         default:
@@ -170,6 +168,7 @@ namespace Game
                             #region Mob
                             else if (action <= 7)
                             {
+                                
 
                                 randomChoose = random.Next(0, mobs.Length); // Sorteia um número
                                 mobFound = mobs[randomChoose]; // Seleciona um mob aleatório
@@ -182,7 +181,7 @@ namespace Game
                                 // Configuração dos mobs
                                 if (mobFound.Name == mobs[1].Name)
                                 {
-                                    enemyWeapon = weapons[3]; // Equipa o esqueleto com um arco
+                                    mobFound.Weapons = weapons[3]; // Equipa o esqueleto com um arco
                                 }
 
                                 mobFound.Cure(RandomDouble(random, (double)mobFound.MaxLife / 2, (double)mobFound.MaxLife)); // Vida dos mobs determinadas aleatóriamente e impede de ser 0
@@ -240,12 +239,11 @@ namespace Game
                                             break;
 
                                         case 2:
-                                            double _damage = Atack(random, player, mobFound, playerWeapon, weapons);
-                                            if (player.WeaponEquiped == true && playerWeapon.Condition <= 0) // Se a arma quebrar, droppar ela
+                                            double _damage = Atack(random, player, mobFound, player.Weapons, weapons);
+                                            if (player.WeaponEquiped == true && player.Weapons.Condition <= 0) // Se a arma quebrar, droppar ela
                                             {
                                                 // Desequipa a arma
                                                 player.WeaponUnequip();
-                                                playerWeapon = weapons[0];
                                                 Console.WriteLine("Your weapon broke.\n");
                                             }
 
@@ -280,7 +278,7 @@ namespace Game
                                             if (dropped > dropChance / 1.3)
                                             {
                                                 Console.WriteLine(
-                                                    $"The {mobFound.Name} dropped a {enemyWeapon.Name}.\n" +
+                                                    $"The {mobFound.Name} dropped a {mobFound.Weapons.Name}.\n" +
                                                     $"Would you like to equip it?\n" +
                                                     $"0 - No\n" +
                                                     $"1 - Yes");
@@ -294,7 +292,7 @@ namespace Game
                                                         break;
 
                                                     case 1:
-                                                        if (player.WeaponEquip(enemyWeapon.Name, enemyWeapon.NecessaryLvl)) playerWeapon = enemyWeapon;
+                                                        player.WeaponEquip(mobFound.Weapons, mobFound.Weapons.NecessaryLvl);
                                                         break;
 
                                                     default:
@@ -353,7 +351,7 @@ namespace Game
                                         {
                                             if (answer == 2)
                                             {
-                                                double mobDamage = Atack(random, mobFound, player, enemyWeapon, weapons);
+                                                double mobDamage = Atack(random, mobFound, player, mobFound.Weapons, weapons);
                                                 Console.WriteLine($"\n{mobFound.Name} dealt {mobDamage.ToString("F2", CultureInfo.InvariantCulture)} damage to you.\n");
                                             }
                                         }
@@ -421,9 +419,8 @@ namespace Game
 
                                                 case 2:
 
-                                                    if (player.Buy(weaponPrice) && player.WeaponEquip(weaponFound.Name, weaponFound.NecessaryLvl))
+                                                    if (player.Buy(weaponPrice) && player.WeaponEquip(weaponFound, weaponFound.NecessaryLvl))
                                                     {
-                                                        playerWeapon = weaponFound;
                                                         Console.WriteLine("You bought and equiped the weapon.\n");
                                                     }
                                                     else
@@ -497,7 +494,7 @@ namespace Game
                             // Mostra a arma do player
                             if (player.WeaponEquiped != false)
                             {
-                                Console.WriteLine(playerWeapon);
+                                Console.WriteLine(player.Weapons);
                             }
                             else
                             {

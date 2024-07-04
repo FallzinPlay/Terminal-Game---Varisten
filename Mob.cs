@@ -16,7 +16,6 @@ namespace Game
         public string Name { get; set; }
         public string Race { get; private set; }
         public string Description { get; set; }
-        public string Weapon { get; private set; }
         public int Lvl { get; set; }
         public int MaxLvl { get; private set; }
         public int MaxLife { get; private set; }
@@ -31,6 +30,7 @@ namespace Game
         public bool Alive { get; private set; }
         public bool WeaponEquiped { get; private set; }
         public bool Fighting { get; set; }
+        public Weapon Weapons { get; set; }
 
         Random random = new Random();
 
@@ -47,9 +47,10 @@ namespace Game
             this.MaxLvl = 25;
             this.NextLvlXp = 10;
             this.Dodge = 1.3d;
+            
         }
 
-        public Mob(string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, string weapon, int lvl, int maxLvl, double dodge) : this(name, maxLife)
+        public Mob(string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, Weapon weapon, int lvl, int maxLvl, double dodge) : this(name, maxLife)
         {
             this.Race = race;
             this.MaxLife = maxLife;
@@ -60,12 +61,12 @@ namespace Game
             this.CriticChance = criticChance;
             this.CriticDamage = criticDamage;
             this.Dodge = dodge;
-            this.Weapon = weapon;
+            this.Weapons = weapon;
             this.Lvl = lvl;
             this.MaxLvl = maxLvl;
             this.NextLvlXp = 10;
 
-            if (weapon != null) this.WeaponEquiped = true;
+            if (weapon.Name != "--") this.WeaponEquiped = true;
         }
 
 
@@ -75,12 +76,12 @@ namespace Game
             this.Life -= damage;
         }
 
-        public bool WeaponEquip(string weapon, int necessaryLvl)
+        public bool WeaponEquip(Weapon weapon, int necessaryLvl)
         {
             if (Lvl >= necessaryLvl)
             {
                 this.WeaponEquiped = true;
-                this.Weapon = weapon;
+                this.Weapons = weapon;
 
                 Console.WriteLine("Weapon equiped!\n");
                 return true;
@@ -95,7 +96,7 @@ namespace Game
         public void WeaponUnequip()
         {
             this.WeaponEquiped = false;
-            this.Weapon = null;
+            this.Weapons = null;
         }
 
         public bool Buy(double price)
@@ -183,7 +184,7 @@ namespace Game
                 $"Damage: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"Critic Chance: {CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"Critic Damage: {CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"Weapon: {Weapon}\n" +
+                $"Weapon: {Weapons.Name}\n" +
                 $"Coins: {Coins.ToString("F2", CultureInfo.InvariantCulture)}\n";
         }
     }

@@ -12,3 +12,10 @@ C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\obj\Debug\Game.pd
 C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\bin\Debug\Game.exe.config
 C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\bin\Debug\Game.exe
 C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\bin\Debug\Game.pdb
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\obj\Debug\Game.csproj.AssemblyReference.cache
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\obj\Debug\Game.csproj.CoreCompileInputs.cache
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\obj\Debug\Game.exe
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\obj\Debug\Game.pdb
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\bin\Debug\Game.exe.config
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\bin\Debug\Game.exe
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\bin\Debug\Game.pdb
