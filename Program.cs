@@ -15,6 +15,7 @@ namespace Game
             // Proxima atualização
             //--------!! Adicionar biomas !!-----------//
 
+            Subtitles s = new Subtitles();
 
             Random random = new Random();
             int action;
@@ -32,29 +33,35 @@ namespace Game
 
             // Entidades
             Mob[] mobs = new Mob[3];
-            // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva
-            mobs[0] = new Mob("Zombie", "zombie", 0, 2.2d, 7, 1.1d, 1.7d, weapons[0], weapons[0].NecessaryLvl, 10, 0.8d);
-            mobs[1] = new Mob("Skeleton", "skeleton", 0, 3.2d, 5, 2.2d, 2.3d, weapons[3], weapons[3].NecessaryLvl, 12, 2.1d);
-            mobs[2] = new Mob("Slime", "slime", 0, 2.7d, 4, 3.5d, 2.7d, weapons[0], weapons[0].NecessaryLvl, 15, 0.5d);
+            // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
+            mobs[0] = new Mob("Zombie", "zombies", 0, 2.2d, 7, 1.1d, 1.7d, weapons[0], weapons[0].NecessaryLvl, 10, 0.8d, 1.2d);
+            mobs[1] = new Mob("Skeleton", "skeletons", 0, 3.2d, 5, 2.2d, 2.3d, weapons[3], weapons[3].NecessaryLvl, 12, 2.1d, 1.6d);
+            mobs[2] = new Mob("Slime", "slimes", 0, 2.7d, 4, 3.5d, 2.7d, weapons[0], weapons[0].NecessaryLvl, 15, 0.5d, 2d);
             Mob mobFound;
 
             // Raças
             Mob[] race = new Mob[2];
             // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva
-            race[0] = new Mob(null, "human", 10d, 2.4d, 10, 1.7d, 1.5d, weapons[0], 1, 10, 1.7d);
-            race[1] = new Mob(null, "dwarf", 8d, 3d, 8, 1.3d, 1.6d, weapons[0], 1, 7, 1.2d);
+            race[0] = new Mob(null, "humans", 10d, 2.4d, 10, 1.7d, 1.5d, weapons[0], 1, 10, 1.7d, 1.7d);
+            race[1] = new Mob(null, "dwarves", 8d, 3d, 8, 1.3d, 1.6d, weapons[0], 1, 7, 1.2d, 1.3d);
 
             #region Descrição das raças
 
             // Humano
-            race[0].Description = "" +
-                "a" +
-                "";
+            race[0].Description = $"\n[{race[0].Race.ToUpper()}]:\n" +
+                "If you want to be adaptable, this race is perfect to you!\n" +
+                "The humans are good learning new things and using all kind of weapons.\n" +
+                "They living as in small civilizations as in big cities, and\n" +
+                "can learning any language." +
+                "\n";
 
             // Anão
-            race[1].Description = "" +
-                "a" +
-                "";
+            race[1].Description = $"\n[{race[1].Race.ToUpper()}]:\n" +
+                $"The dwarves are masters building anything.\n" +
+                "They making the most powerful weapons in any civilization, and\n" +
+                "working in the mines obtaining the most valuable ores.\n" +
+                "But these armorers can be a bit unstable at times.\n" +
+                "\n";
 
             #endregion
 
@@ -63,19 +70,16 @@ namespace Game
             #region Jogo
             while (Menu())
             {
-                // Apresentação do jogo e criação de personagem
-                Console.WriteLine("Hey! Let's create your character!");
-                Console.Write("First write their name: ");
+                #region Apresentação do jogo e criação de personagem
+
+                s.Print(s.SetName); // Pequena apresentação
+                Console.Write(">> ");
                 string name = Console.ReadLine(); // Pega o nome do jogador
-                Console.WriteLine("Great choose!");
+                s.Print(s.GreatChoose);
+                Mob player = RaceChoose(race, name); // Cria o jogador
+                s.Print(s.Wellcome);
 
-                Mob player = RaceChoose(race, name);
-
-                Console.WriteLine(
-                    $"Alright, {name}! Now we're going to go to into that forest.\n" +
-                    $"But be careful, there are monsters over there.\n" +
-                    $"Let's go!\n");
-
+                #endregion
 
                 // Loop do jogo
                 while (true)
@@ -84,25 +88,19 @@ namespace Game
                     // Acaba o jogo se o jogador morrer
                     if (player.Life <= 0)
                     {
-                        Console.WriteLine("You died!\nGAME OVER!\n");
+                        GameOver();
                         break;
                     }
 
-                    Console.WriteLine("" +
-                        "[ACTION]\n" +
-                        "0- Exit\n" +
-                        "1- Explore\n" +
-                        "2- Status\n" +
-                        "3- Weapon\n" +
-                        "4- Description");
+                    s.Print(s.MenuOptions);
                     Console.Write(">> ");
-
                     action = int.Parse(Console.ReadLine());
-
-                    if (action == 0) break;
-
                     switch (action)
                     {
+                        case 0:
+                            Console.WriteLine(s.Exiting);
+                            break;
+
                         #region Aventura
                         case 1:
 
@@ -119,20 +117,8 @@ namespace Game
 
                                 while (true)
                                 {
-                                    Console.WriteLine(
-                                        "0: Ignore\n" +
-                                        "1: Compare\n" +
-                                        "2: Equip");
-                                    Console.Write(">> ");
-                                    answer = byte.Parse(Console.ReadLine());
-
-                                    if (answer == 0)
-                                    {
-
-                                        break;
-                                    }
-
-                                    // Escolha
+                                    Console.WriteLine(s.MenuWeaponFound);
+                                    answer = ByteAnswer();
                                     switch (answer)
                                     {
                                         case 0:
@@ -140,6 +126,7 @@ namespace Game
                                             break;
                                             
                                         case 1:
+                                            // Mostra a arma do jogador (se tiver) e a arma encontrada
                                             if (player.WeaponEquiped != false)
                                             {
                                                 Console.WriteLine("\n[My weapon]\n" + player.Weapons + "\n\n[Weapon Found]\n" + weaponFound + "\n");
@@ -160,7 +147,7 @@ namespace Game
                                             continue;
                                     }
 
-                                    if (answer != 1) break;
+                                    if (answer != 1) break; // Permite comparar sem sair do loop
                                 }
                             }
                             #endregion
@@ -168,8 +155,6 @@ namespace Game
                             #region Mob
                             else if (action <= 7)
                             {
-                                
-
                                 randomChoose = random.Next(0, mobs.Length); // Sorteia um número
                                 mobFound = mobs[randomChoose]; // Seleciona um mob aleatório
 
@@ -186,44 +171,27 @@ namespace Game
 
                                 mobFound.Cure(RandomDouble(random, (double)mobFound.MaxLife / 2, (double)mobFound.MaxLife)); // Vida dos mobs determinadas aleatóriamente e impede de ser 0
 
-                                double coins = RandomDouble(random, 0d, 10d);
-                                mobFound.Coins = coins;
-
+                                // Loot do mob
+                                mobFound.Coins = RandomDouble(random, 0d, 10d);
                                 double xp = RandomDouble(random, 5d, 20d);
 
                                 Console.WriteLine($"A {mobFound.Name}! What should I do?\n");
-
-                                bool escaped = true;
                                 Fighting(true, player, mobFound); // Faz o player e o mob entrarem em modo de luta
                                 while (mobFound.Fighting == true)
                                 {
 
-                                    Console.WriteLine("" +
-                                        "0: Run away\n" +
-                                        "1: Analize\n" +
-                                        "2: Atack!\n" +
-                                        "3- My status\n");
-                                    Console.Write(">> ");
-                                    answer = byte.Parse(Console.ReadLine());
-
+                                    Console.WriteLine(s.MenuMobFound);
+                                    answer = ByteAnswer();
                                     if (answer == 0)
                                     {
                                         // Sistema de chances de conseguir escapar
-                                        double escapeChance = 5d;
-                                        double opportunity = RandomDouble(random, 0, escapeChance);
-
-                                        if (opportunity > escapeChance / 1.3d)
-                                        {
-                                            // Verifica se o jogador já tentou escapar
-                                            if (escaped == true)
-                                            {
-                                                Console.WriteLine($"You run away from the {mobFound.Name} as far as you can.\n");
-                                                break;
-                                            }
+                                        if (player.EscapeChance < player.EscapeChance / 3)
+                                        
+                                            Console.WriteLine($"You run away from the {mobFound.Name} as far as you can.\n");
+                                            break;
                                         }
                                         else
                                         {
-                                            escaped = false;
                                             Console.WriteLine("I couldn't escape. I will have to fight!\n");
                                         }
                                     }
@@ -262,11 +230,10 @@ namespace Game
                                     // Morte do inimigo
                                     if (mobFound.Life <= 0)
                                     {
-                                        escaped = true;
                                         Console.WriteLine($"You defeated {mobFound.Name}.\n");
 
                                         player.GetXp(xp);
-                                        player.GetCoins(coins);
+                                        player.GetCoins(mobFound.Coins);
 
                                         #region Chance de drop
                                         // Chance do mob droppar a arma que ele está usando
@@ -533,6 +500,11 @@ namespace Game
             return false;
         }
 
+        public static void GameOver()
+        {
+            Console.WriteLine("You died!\nGAME OVER!\n");
+        }
+
         public static Mob RaceChoose(Mob[] race, string name)
         {
             byte choose;
@@ -570,6 +542,13 @@ namespace Game
                 }
             }
             return raceChose;
+        }
+
+        public static byte ByteAnswer()
+        {
+            Console.WriteLine(">> ");
+            byte answer = byte.Parse(Console.ReadLine());
+            return answer;
         }
 
         #endregion

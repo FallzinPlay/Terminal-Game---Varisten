@@ -24,6 +24,7 @@ namespace Game
         public double Dodge { get; private set; }
         public double CriticChance { get; private set; }
         public double CriticDamage { get; private set; }
+        public double EscapeChance { get; private set; }
         public double Coins { get; set; }
         public double Xp { get; private set; }
         public double NextLvlXp { get; private set; }
@@ -34,24 +35,9 @@ namespace Game
 
         Random random = new Random();
 
-        public Mob(string name, int maxLife)
+        public Mob(string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, Weapon weapon, int lvl, int maxLvl, double dodge, double escapeChance)
         {
             this.Name = name;
-            this.MaxLife = maxLife;
-            this.Life = maxLife;
-            this.Damage = 2.5d;
-            this.Alive = true;
-            this.CriticChance = 1.2d;
-            this.CriticDamage = 1.5d;
-            this.Lvl = 1;
-            this.MaxLvl = 25;
-            this.NextLvlXp = 10;
-            this.Dodge = 1.3d;
-            
-        }
-
-        public Mob(string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, Weapon weapon, int lvl, int maxLvl, double dodge) : this(name, maxLife)
-        {
             this.Race = race;
             this.MaxLife = maxLife;
             this.Life = life;
@@ -65,6 +51,7 @@ namespace Game
             this.Lvl = lvl;
             this.MaxLvl = maxLvl;
             this.NextLvlXp = 10;
+            this.EscapeChance = escapeChance;
 
             if (weapon.Name != "--") this.WeaponEquiped = true;
         }

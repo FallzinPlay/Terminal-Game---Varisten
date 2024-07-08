@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|c:\\users\\aprendiz.informatica\\desktop\\terminal-game---varisten\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|c:\\users\\aprendiz.informatica\\desktop\\terminal-game---varisten\\mob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:mob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|c:\\users\\aprendiz.informatica\\desktop\\terminal-game---varisten\\subtitles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:subtitles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Mob.cs",
+              "DocumentMoniker": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Mob.cs",
+              "RelativeDocumentMoniker": "Mob.cs",
+              "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Mob.cs",
+              "RelativeToolTip": "Mob.cs",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAxwDUAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-08T17:50:18.318Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Subtitles.cs",
+              "DocumentMoniker": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Subtitles.cs",
+              "RelativeDocumentMoniker": "Subtitles.cs",
+              "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Subtitles.cs",
+              "RelativeToolTip": "Subtitles.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAxwCQAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-08T16:51:32.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAKMAAAAAAAAAAAAgwJoAAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-08T12:13:40.925Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
