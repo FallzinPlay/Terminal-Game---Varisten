@@ -8,6 +8,12 @@ using System.Globalization;
 
 namespace Game
 {
+
+    static class Constants
+    {
+        public const double EscapeChance = 1.5;
+    }
+
     internal class Program
     {
         static void Main(string[] args)
@@ -41,7 +47,7 @@ namespace Game
 
             // Raças
             Mob[] race = new Mob[2];
-            // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva
+            // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
             race[0] = new Mob(null, "humans", 10d, 2.4d, 10, 1.7d, 1.5d, weapons[0], 1, 10, 1.7d, 1.7d);
             race[1] = new Mob(null, "dwarves", 8d, 3d, 8, 1.3d, 1.6d, weapons[0], 1, 7, 1.2d, 1.3d);
 
@@ -124,7 +130,7 @@ namespace Game
                                         case 0:
                                             Console.WriteLine("I don't need it for now...\n");
                                             break;
-                                            
+
                                         case 1:
                                             // Mostra a arma do jogador (se tiver) e a arma encontrada
                                             if (player.WeaponEquiped != false)
@@ -160,7 +166,7 @@ namespace Game
 
                                 // Parelha o lvl dos inimigos
                                 int mobLvl = mobFound.Lvl;
-                                if (player.Lvl >= mobLvl) mobLvl = player.Lvl+3;
+                                if (player.Lvl >= mobLvl) mobLvl = player.Lvl + 3;
                                 mobFound.ForceLvlUp(random.Next(mobFound.Lvl, mobLvl));
 
                                 // Configuração dos mobs
@@ -182,19 +188,23 @@ namespace Game
 
                                     Console.WriteLine(s.MenuMobFound);
                                     answer = ByteAnswer();
+
+                                    #region Chance de escapar
                                     if (answer == 0)
                                     {
                                         // Sistema de chances de conseguir escapar
-                                        if (player.EscapeChance < player.EscapeChance / 3)
-                                        
+                                        if (player.EscapeChance > player.EscapeChance / Constants.EscapeChance)
+                                        {
                                             Console.WriteLine($"You run away from the {mobFound.Name} as far as you can.\n");
+                                            Fighting(false, player, mobFound);
                                             break;
                                         }
                                         else
                                         {
                                             Console.WriteLine("I couldn't escape. I will have to fight!\n");
-                                        }
+                                        }   
                                     }
+                                    #endregion
 
                                     // Escolha
                                     switch (answer)
@@ -276,140 +286,142 @@ namespace Game
                                     }
                                     else
                                     {
-
-                                        // Chance do inimigo querer fugir
-                                        if (mobFound.Life < mobFound.MaxLife / 5)
+                                        #region Turno do mob
+                                        if (mobFound.Fighting == true)
                                         {
-                                            double runAwayChance = 5;
-                                            if (RandomDouble(random, 0, runAwayChance) < runAwayChance / 3)
+                                            // Chance do inimigo querer fugir
+                                            if (mobFound.Life < mobFound.MaxLife / 5)
                                             {
-                                                Console.WriteLine($"The {mobFound.Name} is running away!");
-                                                Console.WriteLine(
-                                                    "0- Allow\n" +
-                                                    "1- Run toward it!");
-                                                Console.Write(">> ");
-                                                answer = byte.Parse(Console.ReadLine());
-
-                                                switch (answer)
+                                                if (mobFound.EscapeChance > mobFound.EscapeChance / Constants.EscapeChance)
                                                 {
-                                                    case 0:
-                                                        Console.WriteLine("I'll allow you escape today.");
-                                                        Fighting(false, player, mobFound); // Tira os dois do modo de luta
-                                                        break;
+                                                    Console.WriteLine($"The {mobFound.Name} is running away!");
+                                                    Console.WriteLine(
+                                                        "0- Allow\n" +
+                                                        "1- Run toward it!");
+                                                    Console.Write(">> ");
+                                                    answer = byte.Parse(Console.ReadLine());
 
-                                                    case 1:
-                                                        double catchChance = 3;
-                                                        if(RandomDouble(random, 0, catchChance) < catchChance / 3)
-                                                        {
-                                                            Console.WriteLine("I catched it! Let's continue the fight!\n");
-                                                        }
-                                                        else
-                                                        {
-                                                            Console.WriteLine($"The {mobFound.Name} escaped!\n");
-                                                            Fighting(false, player, mobFound);
-                                                        }
-                                                        break;
+                                                    switch (answer)
+                                                    {
+                                                        case 0:
+                                                            Console.WriteLine("I'll allow you escape today.");
+                                                            Fighting(false, player, mobFound); // Tira os dois do modo de luta
+                                                            break;
+
+                                                        // Verifica se você consegue evitar a fuga do inimigo ou não
+                                                        case 1:
+                                                            if (mobFound.EscapeChance < mobFound.EscapeChance / Constants.EscapeChance)
+                                                            {
+                                                                Console.WriteLine("I catched it! Let's continue the fight!\n");
+                                                            }
+                                                            else
+                                                            {
+                                                                Console.WriteLine($"The {mobFound.Name} escaped!\n");
+                                                                Fighting(false, player, mobFound);
+                                                            }
+                                                            break;
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // Ataque do inimigo
+                                                if (answer == 2)
+                                                {
+                                                    double mobDamage = Atack(random, mobFound, player, mobFound.Weapons, weapons);
+                                                    Console.WriteLine($"\n{mobFound.Name} dealt {mobDamage.ToString("F2", CultureInfo.InvariantCulture)} damage to you.\n");
                                                 }
                                             }
                                         }
-
-                                        // Turno do mob
-                                        if(mobFound.Fighting == true)
-                                        {
-                                            if (answer == 2)
-                                            {
-                                                double mobDamage = Atack(random, mobFound, player, mobFound.Weapons, weapons);
-                                                Console.WriteLine($"\n{mobFound.Name} dealt {mobDamage.ToString("F2", CultureInfo.InvariantCulture)} damage to you.\n");
-                                            }
-                                        }
-
+                                        #endregion
                                     }
 
                                     if (player.Life <= 0) break;
                                 }
                             }
+                    
                             #endregion
 
                             #region Comerciante
-                            else if (action <= 9)
+                                else if (action <= 9)
+                        {
+
+                            randomChoose = random.Next(1, weapons.Length); // Sorteia um número
+                            weaponFound = weapons[randomChoose]; // Pega a arma de acordo com o número sorteado
+                            weaponFound.Condition = weaponFound.MaxCondition;
+
+                            double weaponPrice = RandomDouble(random, weaponFound.MinPrice, weaponFound.MaxPrice);
+
+                            Console.WriteLine("A Merchant!\n");
+                            while (true)
                             {
+                                Console.WriteLine(
+                                    "0: Ignore\n" +
+                                    "1: Verify\n");
+                                Console.Write(">> ");
+                                answer = byte.Parse(Console.ReadLine());
 
-                                randomChoose = random.Next(1, weapons.Length); // Sorteia um número
-                                weaponFound = weapons[randomChoose]; // Pega a arma de acordo com o número sorteado
-                                weaponFound.Condition = weaponFound.MaxCondition;
-
-                                double weaponPrice = RandomDouble(random, weaponFound.MinPrice, weaponFound.MaxPrice);
-
-                                Console.WriteLine("A Merchant!\n");
-                                while (true)
+                                if (answer == 0)
                                 {
-                                    Console.WriteLine(
-                                        "0: Ignore\n" +
-                                        "1: Verify\n");
-                                    Console.Write(">> ");
-                                    answer = byte.Parse(Console.ReadLine());
-
-                                    if (answer == 0)
-                                    {
-                                        Console.WriteLine("I don't need to buy anything.\n");
-                                        break;
-                                    }
-
-                                    // Escolha
-                                    switch (answer)
-                                    {
-                                        case 1:
-                                            Console.WriteLine(
-                                                "[ITEMS]\n" +
-                                                $"[I have {player.Coins.ToString("F2", CultureInfo.InvariantCulture)} coins]\n" +
-                                                "0- Leave\n" +
-                                                "1- HP Potion ($5)\n" +
-                                                $"2- {weaponFound.Name} (${weaponPrice.ToString("F2", CultureInfo.InvariantCulture)})\n");
-                                            Console.Write(">> ");
-                                            answer = byte.Parse(Console.ReadLine());
-
-                                            if (answer == 0) break;
-                                            switch (answer)
-                                            {
-                                                case 1:
-
-                                                    if (player.Buy(5))
-                                                    {
-                                                        player.Cure(5);
-                                                        Console.WriteLine($"[LIFE] {player.Life.ToString("F2", CultureInfo.InvariantCulture)}\n");
-                                                    }
-                                                    else
-                                                    {
-                                                        Console.WriteLine("I don't have enough coins!");
-                                                    }
-                                                    continue;
-
-                                                case 2:
-
-                                                    if (player.Buy(weaponPrice) && player.WeaponEquip(weaponFound, weaponFound.NecessaryLvl))
-                                                    {
-                                                        Console.WriteLine("You bought and equiped the weapon.\n");
-                                                    }
-                                                    else
-                                                    {
-                                                        Console.WriteLine("I don't have enough coins!");
-                                                    }
-                                                    continue;
-
-                                                default:
-                                                    Console.WriteLine("Invalid action!\n");
-                                                    continue;
-                                            }
-
-                                        default:
-                                            Console.WriteLine("Invalid action!\n");
-                                            continue;
-                                    }
-
-                                    if (answer != 1) break;
+                                    Console.WriteLine("I don't need to buy anything.\n");
+                                    break;
                                 }
+
+                                // Escolha
+                                switch (answer)
+                                {
+                                    case 1:
+                                        Console.WriteLine(
+                                            "[ITEMS]\n" +
+                                            $"[I have {player.Coins.ToString("F2", CultureInfo.InvariantCulture)} coins]\n" +
+                                            "0- Leave\n" +
+                                            "1- HP Potion ($5)\n" +
+                                            $"2- {weaponFound.Name} (${weaponPrice.ToString("F2", CultureInfo.InvariantCulture)})\n");
+                                        Console.Write(">> ");
+                                        answer = byte.Parse(Console.ReadLine());
+
+                                        if (answer == 0) break;
+                                        switch (answer)
+                                        {
+                                            case 1:
+
+                                                if (player.Buy(5))
+                                                {
+                                                    player.Cure(5);
+                                                    Console.WriteLine($"[LIFE] {player.Life.ToString("F2", CultureInfo.InvariantCulture)}\n");
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("I don't have enough coins!");
+                                                }
+                                                continue;
+
+                                            case 2:
+
+                                                if (player.Buy(weaponPrice) && player.WeaponEquip(weaponFound, weaponFound.NecessaryLvl))
+                                                {
+                                                    Console.WriteLine("You bought and equiped the weapon.\n");
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("I don't have enough coins!");
+                                                }
+                                                continue;
+
+                                            default:
+                                                Console.WriteLine("Invalid action!\n");
+                                                continue;
+                                        }
+
+                                    default:
+                                        Console.WriteLine("Invalid action!\n");
+                                        continue;
+                                }
+
+                                if (answer != 1) break;
                             }
-                            #endregion
+                        }
+                        #endregion
 
                             #region Tesouro
                             else if (action <= 10)
@@ -450,7 +462,7 @@ namespace Game
                                 Console.WriteLine("Error! Adventure actions invalid!");
                             }
                             break;
-                        #endregion
+                            #endregion
 
                         case 2:
                             // Mostra o status do player
