@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Game
+namespace Game.Classes
 {
     internal class Mob
     {

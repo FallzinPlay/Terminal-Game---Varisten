@@ -1,0 +1,19 @@
+{
+  "Subtitles": {
+    "setName": "Olá! Vamos criar o seu personagem!\nPrimeiro, diga-me o nome que você usará:",
+
+    "wellcome": "Tudo pronto, novo aventureiro.\nAgora adentraremos na floresta\nMas tenha cuidado! Ela abriga muitos monstros.\nVamos lá!",
+
+    "greatChose": "Ótima escolha!",
+
+    "leaving": "Deixando a aventura..."
+  },
+
+  "Menu": {
+    "options": "[AÇÃO]\n0: Abandonar aventura\n1: Explorar\n2: Estado\n3: Arma\n4: Descrição",
+
+    "weaponFound": "0: Ignorar\n1: Comparar\n2: Equipar",
+
+    "mobFound": "0: Fugir\n1: Analizar\n2: Atacar!\n3: Analisar meu estado"
+  }
+}

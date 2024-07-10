@@ -1,8 +1,50 @@
 {
+  "Subtitles": {
+    "setName": "Hey! Let's create your character! \nFirst write their name:",
+
+    "wellcome": "Alright, new adventurer! Now we're going to go to into that forest. \nBut be careful, there are monsters over there. \nLet's go! \n",
+
+    "greatChose": "Great chose!",
+
+    "leaving": "Leaving from the adventure...",
+
+    "gameOver": "You died! \nGAME OVER! \n"
+  },
+
   "Menu": {
-    "setName": [
-      "Hey! Let's create your character!",
-      "First write their name:"
-    ]
+    "start": "Wellcome to Varisten! \nHere is a magic world with so many adventures to go. \n[MENU] \n1: Play \n0: Exit",
+
+    "options": "[ACTION] \n0: Exit \n1: Explor \n2: Status \n3: Weapon \n4: Description",
+
+    "weaponFound": "0: Ignore \n1: Compare \n2: Equip",
+
+    "mobFound": "0: Run away \n1: Analize \n2: Atack! \n3- My status"
+  },
+
+  "Weapons": {
+    "stick": "Stick",
+    "woodenSword": "Wooden sword",
+    "woodenBow": "Wooden bow"
+  },
+
+  "Mobs": {
+    "zombie": "Zombie",
+    "skeleton": "Skeleton",
+    "slime": "Slime"
+  }
+
+  "Races": {
+    "zombies": "Zombies",
+    "skeletons": "Skeletons",
+    "slimes": "Slimes",
+
+    "humans": "Humans",
+    "dwarves": "Dwarves"
+  },
+
+  "Descriptions": {
+    "humans": "If you want to be adaptable, this race is perfect to you! \nThe humans are good learning new things and using all kind of weapons. \nThey living as in small civilizations as in big cities, and \ncan learning any language. \n",
+
+    "dwarves": "The dwarves are masters building anything. \nThey making the most powerful weapons in any civilization, and \nworking in the mines obtaining the most valuable ores. \nBut these armorers can be a bit unstable at times. \n"
   }
 }
