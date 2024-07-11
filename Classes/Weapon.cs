@@ -17,7 +17,9 @@ namespace Game.Classes
         public double MinPrice { get; private set; }
         public double MaxPrice { get; private set; }
 
-        public Weapon(string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
+        private LanguagesManager Language;
+
+        public Weapon(LanguagesManager language, string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
         {
             this.Name = name;
             this.Damage = damage;
@@ -26,6 +28,8 @@ namespace Game.Classes
             this.NecessaryLvl = necessaryLvl;
             this.MinPrice = minPrice;
             this.MaxPrice = maxPrice;
+
+            this.Language = language;
         }
 
         public void Erode()
@@ -36,11 +40,10 @@ namespace Game.Classes
         public override string ToString()
         {
             return
-                "[WEAPON]\n" +
-                $"Name: {Name}\n" +
-                $"Damage: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"Condition: {Condition}\n" +
-                $"Necessary Lvl: {NecessaryLvl}\n";
+                $"[{this.Name}]\n" +
+                $"{this.Language.GetSubtitle("WeaponClass", "damage")}  : {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{this.Language.GetSubtitle("WeaponClass", "condition")}: {Condition}\n" +
+                $"{this.Language.GetSubtitle("WeaponClass", "necessaryLvl")}: {NecessaryLvl}\n";
         }
     }
 }

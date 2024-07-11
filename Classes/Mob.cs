@@ -33,9 +33,11 @@ namespace Game.Classes
         public bool Fighting { get; set; }
         public Weapon Weapons { get; set; }
 
+        private LanguagesManager Language;
+
         Random random = new Random();
 
-        public Mob(string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, Weapon weapon, int lvl, int maxLvl, double dodge, double escapeChance)
+        public Mob(LanguagesManager language, string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, Weapon weapon, int lvl, int maxLvl, double dodge, double escapeChance)
         {
             this.Name = name;
             this.Race = race;
@@ -54,6 +56,7 @@ namespace Game.Classes
             this.EscapeChance = escapeChance;
 
             if (weapon.Name != "--") this.WeaponEquiped = true;
+            this.Language = language;
         }
 
 
@@ -70,12 +73,12 @@ namespace Game.Classes
                 this.WeaponEquiped = true;
                 this.Weapons = weapon;
 
-                Console.WriteLine("Weapon equiped!\n");
+                Console.WriteLine(this.Language.GetSubtitle("Subtitles", "weaponEquipped"));
                 return true;
             }
             else
             {
-                Console.WriteLine("I don't have enough Lvl!\n");
+                Console.WriteLine(this.Language.GetSubtitle("Subtitles", "insufficientMoney"));
                 return false;
             }
         }
@@ -113,13 +116,13 @@ namespace Game.Classes
         public void GetCoins(double coins)
         {
             this.Coins += coins;
-            Console.WriteLine($"Coins received: {coins.ToString("F2", CultureInfo.InvariantCulture)} coins\n");
+            Console.WriteLine($"{this.Language.GetSubtitle("Subtitles", "coinsReceived")} {coins.ToString("F2", CultureInfo.InvariantCulture)} {this.Language.GetSubtitle("MobClass", "coins")}\n");
         }
 
         public void GetXp(double xp)
         {
             this.Xp += xp;
-            Console.WriteLine($"Xp received: {xp.ToString("F2", CultureInfo.InvariantCulture)}xp\n");
+            Console.WriteLine($"{this.Language.GetSubtitle("Subtitles", "xpReceived")} {xp.ToString("F2", CultureInfo.InvariantCulture)}xp\n");
             LvlUp();
         }
 
@@ -136,10 +139,10 @@ namespace Game.Classes
                 this.Damage += 0.02 * this.Lvl;
 
                 Console.WriteLine(
-                    $"Lvl up! [{Lvl}]\n" +
-                    $"Max Life: {MaxLife}\n" +
-                    $"Damage: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                    $"Life: [Full]\n");
+                    $"{this.Language.GetSubtitle("Subtitles", "lvlUp")} [{Lvl}]\n" +
+                    $"{this.Language.GetSubtitle("MobClass", "maxLife")}: {MaxLife}\n" +
+                    $"{this.Language.GetSubtitle("MobClass", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                    $"{this.Language.GetSubtitle("MobClass", "life")}: [Full]\n");
 
                 return true;
             }
@@ -161,18 +164,18 @@ namespace Game.Classes
         {
             return
                 $"[{Name}]\n" +
-                $"Race: {Race}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "race")}: {Race}\n" +
                 $"Lvl: {Lvl}\n" +
                 $"Xp: {Xp.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"Xp to Next Lvl: {NextLvlXp}\n" +
-                $"Life: {Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"Max Life: {MaxLife}\n" +
-                $"Dodge: {Dodge.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"Damage: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"Critic Chance: {CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"Critic Damage: {CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"Weapon: {Weapons.Name}\n" +
-                $"Coins: {Coins.ToString("F2", CultureInfo.InvariantCulture)}\n";
+                $"{this.Language.GetSubtitle("MobClass", "necessaryXp")}: {NextLvlXp}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "life")}: {Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "maxLife")}: {MaxLife}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "dodge")}: {Dodge.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "criticChance")}: {CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "criticDamage")}: {CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "weapon")}: {Weapons.Name}\n" +
+                $"{this.Language.GetSubtitle("MobClass", "coins")}: {Coins.ToString("F2", CultureInfo.InvariantCulture)}\n";
         }
     }
 }

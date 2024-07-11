@@ -6,19 +6,47 @@
 
     "greatChose": "Great chose!",
 
+    "raceChoose": "Now, tell me which race would you like",
+
     "leaving": "Leaving from the adventure...",
 
-    "gameOver": "You died! \nGAME OVER! \n"
+    "gameOver": "You died! \nGAME OVER! \n",
+
+    "thanksForPlayed": "Thanks so much for have played! \nShutting down...",
+
+    "lvlUp": "Lvl Up!",
+
+    "xpReceived": "Xp received:",
+
+    "coinsReceived": "Coins received:",
+
+    "insufficientMoney": "I don't have enough Lvl!\n",
+
+    "weaponEquipped": "Weapon equipped!",
+
+    "a": "A",
+
+    "weaponFound": "Should I equip it?\n",
+
+    "dontEquipWeapon": "I don't need it now...",
+
+    "myWeapon": "My weapon"
+  },
+
+  "Titles": {
+    "races": "RACES"
   },
 
   "Menu": {
     "start": "Wellcome to Varisten! \nHere is a magic world with so many adventures to go. \n[MENU] \n1: Play \n0: Exit",
 
-    "options": "[ACTION] \n0: Exit \n1: Explor \n2: Status \n3: Weapon \n4: Description",
+    "options": "[ACTION] \n0: Exit \n1: Explore \n2: Status \n3: Weapon \n4: Description",
 
     "weaponFound": "0: Ignore \n1: Compare \n2: Equip",
 
-    "mobFound": "0: Run away \n1: Analize \n2: Atack! \n3- My status"
+    "mobFound": "0: Run away \n1: Analize \n2: Atack! \n3- My status",
+
+    "returnConfirm": "0: Return \n1: Confirm"
   },
 
   "Weapons": {
@@ -31,7 +59,7 @@
     "zombie": "Zombie",
     "skeleton": "Skeleton",
     "slime": "Slime"
-  }
+  },
 
   "Races": {
     "zombies": "Zombies",
@@ -46,5 +74,29 @@
     "humans": "If you want to be adaptable, this race is perfect to you! \nThe humans are good learning new things and using all kind of weapons. \nThey living as in small civilizations as in big cities, and \ncan learning any language. \n",
 
     "dwarves": "The dwarves are masters building anything. \nThey making the most powerful weapons in any civilization, and \nworking in the mines obtaining the most valuable ores. \nBut these armorers can be a bit unstable at times. \n"
+  },
+
+  "MobClass": {
+    "race": "Race",
+    "necessaryXp": "Necessary XP",
+    "life": "Life",
+    "maxLife": "Max Life",
+    "dodge": "Dodge",
+    "damage": "Damage",
+    "criticChance": "Critic Chance",
+    "criticDamage": "Critic Damage",
+    "weapon": "Weapon",
+    "coins": "Coins"
+  },
+
+  "WeaponClass": {
+    "damage": "Damage",
+    "condition": "Condition",
+    "necessaryLvl": "Necessary Lvl"
+  },
+
+  "Combat": {
+    "dodged": "DODGED!",
+    "critical": "CRITICAL!"
   }
 }

@@ -20,17 +20,16 @@ namespace Game
     {
         static void Main(string[] args)
         {
-            // Proxima atualização
-            //--------!! Adicionar biomas !!-----------//
+            // Para melhorar os textos pegos pelo arquivo .json tente definir o texto pelo arquivo c#.
+            // Ex: Pegue o nome da arma e crie um texto e então mande para o arquivo .json
+            // Use o string.Replace() para substituir um caracter específico pela palavra que deseja colocar
 
             #region Escolha de idioma
             Console.WriteLine(
                 "Choose your language:\n" +
                 "0 - English, USA (default)\n" +
                 "1 - Português, BR");
-            sbyte languageChose = -1;
-            while (languageChose < 0 || languageChose > 1) languageChose = (sbyte)ByteAnswer(); // Enquanto não for uma opção valida ele continuará pedindo para escolher
-            LanguagesManager s = new LanguagesManager((byte)languageChose);
+            LanguagesManager s = new LanguagesManager(ByteAnswer(1)); // Enquanto não for uma opção valida ele continuará pedindo para escolher
             #endregion
 
             #region Configurações de classes
@@ -42,11 +41,11 @@ namespace Game
             // Armas
             Weapon[] weapons = new Weapon[]
             {
-            // nome, dano, condição, nivel necessario, preço min, preço max
-            new Weapon("--", 0d, 0, 0, 0d, 0d),
-            new Weapon(s.GetSubtitle("Weapons", "stick"), 3.2d, 4, 1, 5d, 10d),
-            new Weapon(s.GetSubtitle("Weapons", "woodenSword"), 3.5d, 5, 2, 7d, 12d),
-            new Weapon(s.GetSubtitle("Weapons", "woodenBow"), 4.2d, 6, 3, 10d, 15d)
+            // idioma, nome, dano, condição, nivel necessario, preço min, preço max
+            new Weapon(s, "--", 0d, 0, 0, 0d, 0d),
+            new Weapon(s, s.GetSubtitle("Weapons", "stick"), 3.2d, 4, 1, 5d, 10d),
+            new Weapon(s, s.GetSubtitle("Weapons", "woodenSword"), 3.5d, 5, 2, 7d, 12d),
+            new Weapon(s, s.GetSubtitle("Weapons", "woodenBow"), 4.2d, 6, 3, 10d, 15d)
             };
             Weapon weaponFound;
 
@@ -54,19 +53,19 @@ namespace Game
             // Entidades
             Mob[] mobs = new Mob[]
             {
-                // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
-                new Mob(s.GetSubtitle("Mobs", "zombie"), s.GetSubtitle("Races", "zombies"), 0, 2.2d, 7, 1.1d, 1.7d, weapons[0], weapons[0].NecessaryLvl, 10, 0.8d, 1.2d),
-                new Mob(s.GetSubtitle("Mobs", "skeleton"), s.GetSubtitle("Races", "skeletons"), 0, 3.2d, 5, 2.2d, 2.3d, weapons[3], weapons[3].NecessaryLvl, 12, 2.1d, 1.6d),
-                new Mob(s.GetSubtitle("Mobs", "slime"), s.GetSubtitle("Races", "slimes"), 0, 2.7d, 4, 3.5d, 2.7d, weapons[0], weapons[0].NecessaryLvl, 15, 0.5d, 2d),
+                // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
+                new Mob(s, s.GetSubtitle("Mobs", "zombie"), s.GetSubtitle("Races", "zombies"), 0, 2.2d, 7, 1.1d, 1.7d, weapons[0], weapons[0].NecessaryLvl, 10, 0.8d, 1.2d),
+                new Mob(s, s.GetSubtitle("Mobs", "skeleton"), s.GetSubtitle("Races", "skeletons"), 0, 3.2d, 5, 2.2d, 2.3d, weapons[3], weapons[3].NecessaryLvl, 12, 2.1d, 1.6d),
+                new Mob(s, s.GetSubtitle("Mobs", "slime"), s.GetSubtitle("Races", "slimes"), 0, 2.7d, 4, 3.5d, 2.7d, weapons[0], weapons[0].NecessaryLvl, 15, 0.5d, 2d),
             };
             Mob mobFound;
 
             // Raças
             Mob[] race = new Mob[]
             {
-                // nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
-                new Mob(null, s.GetSubtitle("Races", "humans"), 10d, 2.4d, 10, 1.7d, 1.5d, weapons[0], 1, 10, 1.7d, 1.7d),
-                new Mob(null, s.GetSubtitle("Races", "dwarves"), 8d, 3d, 8, 1.3d, 1.6d, weapons[0], 1, 7, 1.2d, 1.3d),
+                // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
+                new Mob(s, null, s.GetSubtitle("Races", "humans"), 10d, 2.4d, 10, 1.7d, 1.5d, weapons[0], 1, 10, 1.7d, 1.7d),
+                new Mob(s, null, s.GetSubtitle("Races", "dwarves"), 8d, 3d, 8, 1.3d, 1.6d, weapons[0], 1, 7, 1.2d, 1.3d),
             };
 
             #endregion
@@ -88,7 +87,7 @@ namespace Game
                     Console.Write(">> ");
                     string name = Console.ReadLine(); // Pega o nome do jogador
                     Console.WriteLine(s.GetSubtitle("Subtitles", "greatChose"));
-                    Mob player = RaceChoose(race, name); // Cria o jogador
+                    Mob player = RaceChoose(s, race, name); // Cria o jogador
                     Console.WriteLine(s.GetSubtitle("Subtitles", "wellcome"));
 
                     #endregion
@@ -107,10 +106,16 @@ namespace Game
                         Console.WriteLine(s.GetSubtitle("Menu", "options"));
                         Console.Write(">> ");
                         action = int.Parse(Console.ReadLine());
+
+                        // Sai para o menu principal
+                        if (action == 0)
+                        {
+                            Console.WriteLine(s.GetSubtitle("Subtitles", "leaving"));
+                            break;
+                        }
                         switch (action)
                         {
                             case 0:
-                                Console.WriteLine(s.GetSubtitle("Subtitles", "leaving"));
                                 break;
 
                             #region Aventura
@@ -125,16 +130,16 @@ namespace Game
                                     weaponFound = weapons[randomChoose]; // Pega a arma de acordo com o número sorteado
                                     weaponFound.Condition = random.Next(1, weaponFound.MaxCondition); // Determina a condição da arma aleatoriamente
 
-                                    Console.WriteLine($"A {weaponFound.Name}! Should I equip it?\n");
+                                    Console.WriteLine($"{s.GetSubtitle("Subtitles", "a")} {weaponFound.Name}! \n{s.GetSubtitle("Subtitles", "weaponFound")}");
 
                                     while (true)
                                     {
-                                        Console.WriteLine(s.GetSubtitle("Menu", "weaponFound"));
+                                        Console.WriteLine(s.GetSubtitle("Menu", "weaponFound")); // Menu
                                         answer = ByteAnswer();
                                         switch (answer)
                                         {
                                             case 0:
-                                                Console.WriteLine("I don't need it for now...\n");
+                                                Console.WriteLine(s.GetSubtitle("Subtitles", "dontEquipWeapon"));
                                                 break;
 
                                             case 1:
@@ -192,7 +197,7 @@ namespace Game
                                     while (mobFound.Fighting == true)
                                     {
 
-                                        Console.WriteLine(s.GetSubtitle("Menu", "mobFound"));
+                                        Console.WriteLine(s.GetSubtitle("Menu", "mobFound")); // Menu
                                         answer = ByteAnswer();
 
                                         #region Chance de escapar
@@ -223,7 +228,7 @@ namespace Game
                                                 break;
 
                                             case 2:
-                                                double _damage = Atack(random, player, mobFound, player.Weapons, weapons);
+                                                double _damage = Atack(s, random, player, mobFound, player.Weapons, weapons);
                                                 if (player.WeaponEquiped == true && player.Weapons.Condition <= 0) // Se a arma quebrar, droppar ela
                                                 {
                                                     // Desequipa a arma
@@ -334,7 +339,7 @@ namespace Game
                                                     // Ataque do inimigo
                                                     if (answer == 2)
                                                     {
-                                                        double mobDamage = Atack(random, mobFound, player, mobFound.Weapons, weapons);
+                                                        double mobDamage = Atack(s, random, mobFound, player, mobFound.Weapons, weapons);
                                                         Console.WriteLine($"\n{mobFound.Name} dealt {mobDamage.ToString("F2", CultureInfo.InvariantCulture)} damage to you.\n");
                                                     }
                                                 }
@@ -499,8 +504,7 @@ namespace Game
                 }
             }
 
-            Console.WriteLine("Thanks so much for have played!");
-            Console.WriteLine("Shutting down...");
+            Console.WriteLine(s.GetSubtitle("Subtitles", "thanksForPlayed"));
             #endregion
         }
 
@@ -508,8 +512,7 @@ namespace Game
         public static bool Menu(LanguagesManager s)
         {
             Console.WriteLine(s.GetSubtitle("Menu", "start"));
-            Console.Write(">> ");
-            byte n = byte.Parse(Console.ReadLine());
+            byte n = ByteAnswer(1);
 
             if (n == 1) return true;
 
@@ -521,12 +524,12 @@ namespace Game
             Console.WriteLine(s.GetSubtitle("Menu", "gameOver"));
         }
 
-        public static Mob RaceChoose(Mob[] race, string name)
+        public static Mob RaceChoose(LanguagesManager s, Mob[] race, string name)
         {
             byte choose;
             Mob raceChose = null;
 
-            Console.WriteLine("Now, tell me which race would you like?");
+            Console.WriteLine(s.GetSubtitle("Subtitles", "raceChoose"));
             while (raceChose == null)
             {
                 Console.WriteLine(
@@ -539,11 +542,8 @@ namespace Game
                 race[choose].Name = name;
                 Console.WriteLine($"\n{race[choose]}\n{race[choose].Description}\n");
 
-                Console.WriteLine(
-                    "0 - Return\n" +
-                    "1 - Confirm");
-                Console.Write(">> ");
-                switch (byte.Parse(Console.ReadLine()))
+                Console.WriteLine(s.GetSubtitle("Menu", "returnConfirm"));
+                switch (ByteAnswer(1))
                 {
                     case 0:
                         continue;
@@ -560,12 +560,29 @@ namespace Game
             return raceChose;
         }
 
-        public static byte ByteAnswer()
+        public static byte ByteAnswer(byte max = 10)
         {
-            Console.Write(">> ");
-            byte answer = byte.Parse(Console.ReadLine());
+            byte answer = 0;
+            bool allright = false;
+            while (!allright || answer > max)
+            {
+                try
+                {
+                    Console.Write(">> ");
+                    answer = byte.Parse(Console.ReadLine());
+                    allright = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex}\nTry Again.");
+                }
+            }
             return answer;
         }
+
+        #endregion
+
+        #region Interação com o usuário
 
         #endregion
 
@@ -586,21 +603,21 @@ namespace Game
         }
 
         // Esquiva
-        public static bool Dodge(Random r, Mob _mob)
+        public static bool Dodge(LanguagesManager s, Random r, Mob _mob)
         {
             double dodgeChance = 20;
             if (RandomDouble(r, 0d, dodgeChance) <= _mob.Dodge)
             {
-                Console.WriteLine($"[{_mob.Name} DODGED]!!");
+                Console.WriteLine($"[{_mob.Name} {s.GetSubtitle("Combat", "dodged")}]!!");
                 return true;
             }
             return false;
         }
 
         // Ataque
-        public static double Atack(Random r, Mob mobSet, Mob mobGet, Weapon mobWeapon, Weapon[] w)
+        public static double Atack(LanguagesManager s, Random r, Mob mobSet, Mob mobGet, Weapon mobWeapon, Weapon[] w)
         {
-            if (!Dodge(r, mobGet))
+            if (!Dodge(s, r, mobGet))
             {
                 double damage = mobSet.Damage;
 
@@ -616,7 +633,7 @@ namespace Game
                 if (RandomDouble(r, 0d, criticChance) <= mobSet.CriticChance)
                 {
                     damage *= mobSet.CriticDamage;
-                    Console.WriteLine("[Critical]!!\n");
+                    Console.WriteLine($"[{s.GetSubtitle("Combat", "critical")}]!!\n");
                 }
 
                 // O mob atacado recebe o dano
