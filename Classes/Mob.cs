@@ -78,7 +78,7 @@ namespace Game.Classes
             }
             else
             {
-                Console.WriteLine(this.Language.GetSubtitle("Subtitles", "insufficientMoney"));
+                Console.WriteLine(this.Language.GetSubtitle("Subtitles", "insufficientLvl"));
                 return false;
             }
         }

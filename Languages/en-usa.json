@@ -14,39 +14,92 @@
 
     "thanksForPlayed": "Thanks so much for have played! \nShutting down...",
 
+    // Coleta
     "lvlUp": "Lvl Up!",
 
     "xpReceived": "Xp received:",
 
     "coinsReceived": "Coins received:",
 
-    "insufficientMoney": "I don't have enough Lvl!\n",
+    "insufficientLvl": "I don't have enough Lvl!\n",
 
+    "insufficientMoney": "I don't have enough coins!",
+
+    "myCoins": "I have # coins",
+
+    "coinsCollect": "I collected # coins.\n",
+
+    // Weapon
     "weaponEquipped": "Weapon equipped!",
 
-    "a": "A",
-
-    "weaponFound": "Should I equip it?\n",
+    "weaponFound": "A #! Should I equip it?\n",
 
     "dontEquipWeapon": "I don't need it now...",
 
-    "myWeapon": "My weapon"
+    "myWeapon": "My weapon",
+
+    "haveNoWeapon": "\nI don't have any weapon...\n",
+
+    "weaponBroke": "My weapon broke!",
+
+    "weaponIgnore": "You ignored the weapon and went ahead in your journey.\n",
+
+    // Mob
+    "canRunAway": "You run away from the # as far as you can.\n",
+
+    "cantRunAway": "I couldn't escape. I will have to fight!\n",
+
+    "mobFound": "A #! What should I do?\n",
+
+    "mobDrop": "The #1 dropped a #2. \nWould you like to equip it? \n",
+
+    "mobRunningAway": "The # is running away!",
+
+    "allowMobRun": "I'll allow you escape today.",
+
+    "canCatchMob": "I catched it! Let's continue the fight!\n",
+
+    "cantCatchMob": "The # escaped!\n",
+
+    // Mercador
+    "merchantFound": "A merchant!\n",
+
+    "merchantIgnore": "I don't need to buy anything.\n",
+
+    "buyWeapon": "You bought and equiped the weapon.\n",
+
+    // Tesouro
+    "treasuryFound": "A can with full coins! \nWould you like to collect this treasury?"
   },
 
   "Titles": {
-    "races": "RACES"
+    "races": "Races",
+    "myWeapon": "My Weapon",
+    "weaponFound": "Weapon Found",
+    "items": "Items",
+    "life": "life"
   },
 
   "Menu": {
+    // Inicio
     "start": "Wellcome to Varisten! \nHere is a magic world with so many adventures to go. \n[MENU] \n1: Play \n0: Exit",
 
     "options": "[ACTION] \n0: Exit \n1: Explore \n2: Status \n3: Weapon \n4: Description",
 
+    // Weapon
     "weaponFound": "0: Ignore \n1: Compare \n2: Equip",
 
+    // Mob
     "mobFound": "0: Run away \n1: Analize \n2: Atack! \n3- My status",
 
-    "returnConfirm": "0: Return \n1: Confirm"
+    "returnConfirm": "0: Return \n1: Confirm",
+
+    "noYes": "0: No \n1: Yes",
+
+    "allowRunToward": "0: Allow \n2: Run toward it",
+
+    // Mercador
+    "merchantFound": "0: Ignore \n1: Verify \n"
   },
 
   "Weapons": {
@@ -59,6 +112,10 @@
     "zombie": "Zombie",
     "skeleton": "Skeleton",
     "slime": "Slime"
+  },
+
+  "Merchant": {
+    "shop": "0- Leave \n1- HP Potion ($5) \n2- #1 ($#2) \n"
   },
 
   "Races": {
@@ -96,7 +153,17 @@
   },
 
   "Combat": {
+    // 
     "dodged": "DODGED!",
-    "critical": "CRITICAL!"
+    "critical": "CRITICAL!",
+
+    //
+    "damageToMob": "You dealt #1 damage to the #2.\n",
+    "mobDefeat": "You defeated #.\n",
+    "damageToPlayer": "\n#1 dealt #2 damage to you. \n"
+  },
+
+  "Error": {
+    "invalidAction": "Invalid action!\n"
   }
 }

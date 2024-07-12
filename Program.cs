@@ -20,9 +20,6 @@ namespace Game
     {
         static void Main(string[] args)
         {
-            // Para melhorar os textos pegos pelo arquivo .json tente definir o texto pelo arquivo c#.
-            // Ex: Pegue o nome da arma e crie um texto e então mande para o arquivo .json
-            // Use o string.Replace() para substituir um caracter específico pela palavra que deseja colocar
 
             #region Escolha de idioma
             Console.WriteLine(
@@ -103,14 +100,14 @@ namespace Game
                             break;
                         }
 
-                        Console.WriteLine(s.GetSubtitle("Menu", "options"));
+                        Console.WriteLine(s.GetSubtitle("Menu", "options")); // Menu
                         Console.Write(">> ");
                         action = int.Parse(Console.ReadLine());
 
                         // Sai para o menu principal
                         if (action == 0)
                         {
-                            Console.WriteLine(s.GetSubtitle("Subtitles", "leaving"));
+                            Console.WriteLine(s.GetSubtitle("Subtitles", "leaving")); // Saindo do jogo
                             break;
                         }
                         switch (action)
@@ -130,7 +127,7 @@ namespace Game
                                     weaponFound = weapons[randomChoose]; // Pega a arma de acordo com o número sorteado
                                     weaponFound.Condition = random.Next(1, weaponFound.MaxCondition); // Determina a condição da arma aleatoriamente
 
-                                    Console.WriteLine($"{s.GetSubtitle("Subtitles", "a")} {weaponFound.Name}! \n{s.GetSubtitle("Subtitles", "weaponFound")}");
+                                    Console.WriteLine($"{s.GetSubtitle("Subtitles", "weaponFound").Replace("#", weaponFound.Name)}"); // Encontra uma arma
 
                                     while (true)
                                     {
@@ -139,18 +136,20 @@ namespace Game
                                         switch (answer)
                                         {
                                             case 0:
-                                                Console.WriteLine(s.GetSubtitle("Subtitles", "dontEquipWeapon"));
+                                                Console.WriteLine(s.GetSubtitle("Subtitles", "dontEquipWeapon")); // Abandona a arma
                                                 break;
 
                                             case 1:
                                                 // Mostra a arma do jogador (se tiver) e a arma encontrada
                                                 if (player.WeaponEquiped != false)
                                                 {
-                                                    Console.WriteLine("\n[My weapon]\n" + player.Weapons + "\n\n[Weapon Found]\n" + weaponFound + "\n");
+                                                    // Compara a arma que já tem com a que encontrou
+                                                    Console.WriteLine($"\n[{s.GetSubtitle("Titles", "myWeapon")}]\n" + player.Weapons + $"\n\n[{s.GetSubtitle("Titles", "weaponFound")}]\n" + weaponFound + "\n");
                                                 }
                                                 else
                                                 {
-                                                    Console.WriteLine("\nI don't have any weapon...\n" + weaponFound + "\n");
+                                                    // Diz que não tem arma e avalia a encontrada
+                                                    Console.WriteLine(s.GetSubtitle("Subtitles", "haveNoWeapon") + weaponFound + "\n");
                                                 }
                                                 break;
 
@@ -160,7 +159,8 @@ namespace Game
                                                 break;
 
                                             default:
-                                                Console.WriteLine("Invalid action!\n");
+                                                // Mensagem de erro
+                                                Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                                 continue;
                                         }
 
@@ -192,7 +192,7 @@ namespace Game
                                     mobFound.Coins = RandomDouble(random, 0d, 10d);
                                     double xp = RandomDouble(random, 5d, 20d);
 
-                                    Console.WriteLine($"A {mobFound.Name}! What should I do?\n");
+                                    Console.WriteLine(s.GetSubtitle("Subtitles", "mobFound").Replace("#", mobFound.Name)); // Encontra um mob
                                     Fighting(true, player, mobFound); // Faz o player e o mob entrarem em modo de luta
                                     while (mobFound.Fighting == true)
                                     {
@@ -206,13 +206,13 @@ namespace Game
                                             // Sistema de chances de conseguir escapar
                                             if (player.EscapeChance > player.EscapeChance / Constants.EscapeChance)
                                             {
-                                                Console.WriteLine($"You run away from the {mobFound.Name} as far as you can.\n");
+                                                Console.WriteLine(s.GetSubtitle("Subtitles", "canRunAway").Replace("#", mobFound.Name)); // Foge do mob
                                                 Fighting(false, player, mobFound);
                                                 break;
                                             }
                                             else
                                             {
-                                                Console.WriteLine("I couldn't escape. I will have to fight!\n");
+                                                Console.WriteLine(s.GetSubtitle("Subtitles", "cantRunAway")); // Não consegue fugir do mob
                                             }
                                         }
                                         #endregion
@@ -233,10 +233,11 @@ namespace Game
                                                 {
                                                     // Desequipa a arma
                                                     player.WeaponUnequip();
-                                                    Console.WriteLine("Your weapon broke.\n");
+                                                    Console.WriteLine(s.GetSubtitle("Subtitles", "weaponBroke")); // Mostra que a arma quebrou
                                                 }
 
-                                                Console.WriteLine($"You dealt {_damage.ToString("F2", CultureInfo.InvariantCulture)} damage to the {mobFound.Name}.\n");
+                                                // Mostra quanto dano ô jogador causou ao inimigo
+                                                Console.WriteLine(s.GetSubtitle("Combat", "damageToMob").Replace("#1", _damage.ToString("F2", CultureInfo.InvariantCulture)).Replace("#2", mobFound.Name));
                                                 break;
 
                                             case 3:
@@ -244,14 +245,15 @@ namespace Game
                                                 break;
 
                                             default:
-                                                Console.WriteLine("Invalid action!\n");
+                                                // Erro de ação invalida
+                                                Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                                 continue;
                                         }
 
                                         // Morte do inimigo
                                         if (mobFound.Life <= 0)
                                         {
-                                            Console.WriteLine($"You defeated {mobFound.Name}.\n");
+                                            Console.WriteLine(s.GetSubtitle("Combat", "mobDefeat").Replace("#", mobFound.Name));
 
                                             player.GetXp(xp);
                                             player.GetCoins(mobFound.Coins);
@@ -265,18 +267,16 @@ namespace Game
                                                 double dropped = RandomDouble(random, 0d, dropChance);
                                                 if (dropped > dropChance / 1.3)
                                                 {
-                                                    Console.WriteLine(
-                                                        $"The {mobFound.Name} dropped a {mobFound.Weapons.Name}.\n" +
-                                                        $"Would you like to equip it?\n" +
-                                                        $"0 - No\n" +
-                                                        $"1 - Yes");
-                                                    Console.Write(">> ");
-                                                    answer = byte.Parse(Console.ReadLine());
+                                                    // Mostra o drop do mob
+                                                    Console.WriteLine(s.GetSubtitle("Subtitles", "mobDrop").Replace("#1", mobFound.Name).Replace("#2", mobFound.Weapons.Name));
+                                                    Console.WriteLine(s.GetSubtitle("Menu", "noYes")); // Mostra as opções sim e não
+                                                    answer = ByteAnswer(1);
 
                                                     switch (answer)
                                                     {
                                                         case 0:
-                                                            Console.WriteLine("You ignored the weapon and went ahead in your journey.\n");
+                                                            // Ignora a arma
+                                                            Console.WriteLine(s.GetSubtitle("Subtitles", "weaponIgnore"));
                                                             break;
 
                                                         case 1:
@@ -284,7 +284,8 @@ namespace Game
                                                             break;
 
                                                         default:
-                                                            Console.WriteLine("Invalid action!\n");
+                                                            // Mostra o erro de ação invalida
+                                                            Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                                             continue;
                                                     }
                                                 }
@@ -305,17 +306,16 @@ namespace Game
                                                 {
                                                     if (mobFound.EscapeChance > mobFound.EscapeChance / Constants.EscapeChance)
                                                     {
-                                                        Console.WriteLine($"The {mobFound.Name} is running away!");
-                                                        Console.WriteLine(
-                                                            "0- Allow\n" +
-                                                            "1- Run toward it!");
-                                                        Console.Write(">> ");
-                                                        answer = byte.Parse(Console.ReadLine());
+                                                        // O inimigo está fugindo
+                                                        Console.WriteLine(s.GetSubtitle("Subtitles", "mobRunningAway").Replace("#", mobFound.Name));
+                                                        Console.WriteLine(s.GetSubtitle("Menu", "allowRunToward")); // permitir ou correr atrás
+                                                        answer = ByteAnswer(1);
 
                                                         switch (answer)
                                                         {
                                                             case 0:
-                                                                Console.WriteLine("I'll allow you escape today.");
+                                                                // Permite a fuga do mob
+                                                                Console.WriteLine(s.GetSubtitle("Subtitles", "allowMobRun"));
                                                                 Fighting(false, player, mobFound); // Tira os dois do modo de luta
                                                                 break;
 
@@ -323,11 +323,13 @@ namespace Game
                                                             case 1:
                                                                 if (mobFound.EscapeChance < mobFound.EscapeChance / Constants.EscapeChance)
                                                                 {
-                                                                    Console.WriteLine("I catched it! Let's continue the fight!\n");
+                                                                    // Consegue capturar o mob
+                                                                    Console.WriteLine(s.GetSubtitle("Subtitles", "canCatchMob"));
                                                                 }
                                                                 else
                                                                 {
-                                                                    Console.WriteLine($"The {mobFound.Name} escaped!\n");
+                                                                    // O mob escapa
+                                                                    Console.WriteLine(s.GetSubtitle("Subtitles", "cantCatchMob").Replace("#", mobFound.Name));
                                                                     Fighting(false, player, mobFound);
                                                                 }
                                                                 break;
@@ -339,8 +341,10 @@ namespace Game
                                                     // Ataque do inimigo
                                                     if (answer == 2)
                                                     {
+                                                        // Inimigo ataca
                                                         double mobDamage = Atack(s, random, mobFound, player, mobFound.Weapons, weapons);
-                                                        Console.WriteLine($"\n{mobFound.Name} dealt {mobDamage.ToString("F2", CultureInfo.InvariantCulture)} damage to you.\n");
+                                                        // Mostra o dano do inimigo
+                                                        Console.WriteLine(s.GetSubtitle("Combat", "damageToPlayer").Replace("#1", mobFound.Name).Replace("#2", mobDamage.ToString("F2", CultureInfo.InvariantCulture)));
                                                     }
                                                 }
                                             }
@@ -363,18 +367,16 @@ namespace Game
 
                                     double weaponPrice = RandomDouble(random, weaponFound.MinPrice, weaponFound.MaxPrice);
 
-                                    Console.WriteLine("A Merchant!\n");
+                                    // Encontra o mercador
+                                    Console.WriteLine(s.GetSubtitle("Subtitles", "merchantFound"));
                                     while (true)
                                     {
-                                        Console.WriteLine(
-                                            "0: Ignore\n" +
-                                            "1: Verify\n");
-                                        Console.Write(">> ");
-                                        answer = byte.Parse(Console.ReadLine());
-
+                                        Console.WriteLine(s.GetSubtitle("Menu", "nerchantFound")); // menu
+                                        answer = ByteAnswer(1);
                                         if (answer == 0)
                                         {
-                                            Console.WriteLine("I don't need to buy anything.\n");
+                                            // Ignora o mercador
+                                            Console.WriteLine(s.GetSubtitle("Subtitles", "merchantIgnore"));
                                             break;
                                         }
 
@@ -382,15 +384,16 @@ namespace Game
                                         switch (answer)
                                         {
                                             case 1:
-                                                Console.WriteLine(
-                                                    "[ITEMS]\n" +
-                                                    $"[I have {player.Coins.ToString("F2", CultureInfo.InvariantCulture)} coins]\n" +
-                                                    "0- Leave\n" +
-                                                    "1- HP Potion ($5)\n" +
-                                                    $"2- {weaponFound.Name} (${weaponPrice.ToString("F2", CultureInfo.InvariantCulture)})\n");
-                                                Console.Write(">> ");
-                                                answer = byte.Parse(Console.ReadLine());
+                                                // Titulo
+                                                Console.WriteLine($"[{s.GetSubtitle("Titles", "items")}]\n");
+                                                // moedas do jogador
+                                                Console.WriteLine($"[{s.GetSubtitle("Subtitles", "myCoins").Replace("#", player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]\n");
 
+                                                #region Mercado
+                                                // Mostra o mercado
+                                                Console.WriteLine(s.GetSubtitle("Merchant", "shop").Replace("#1", weaponFound.Name).Replace("#2", weaponPrice.ToString("F2", CultureInfo.InvariantCulture)));
+                                                #endregion
+                                                answer = ByteAnswer(2);
                                                 if (answer == 0) break;
                                                 switch (answer)
                                                 {
@@ -399,11 +402,13 @@ namespace Game
                                                         if (player.Buy(5))
                                                         {
                                                             player.Cure(5);
-                                                            Console.WriteLine($"[LIFE] {player.Life.ToString("F2", CultureInfo.InvariantCulture)}\n");
+                                                            // Compra e toma a poção
+                                                            Console.WriteLine($"[{s.GetSubtitle("Titles", "life")}] {player.Life.ToString("F2", CultureInfo.InvariantCulture)}\n");
                                                         }
                                                         else
                                                         {
-                                                            Console.WriteLine("I don't have enough coins!");
+                                                            // Moedas insuficientes
+                                                            Console.WriteLine(s.GetSubtitle("Subtitles", "insufficientMoney"));
                                                         }
                                                         continue;
 
@@ -411,21 +416,25 @@ namespace Game
 
                                                         if (player.Buy(weaponPrice) && player.WeaponEquip(weaponFound, weaponFound.NecessaryLvl))
                                                         {
-                                                            Console.WriteLine("You bought and equiped the weapon.\n");
+                                                            // Compra e equipa a arma
+                                                            Console.WriteLine(s.GetSubtitle("Subtitles", "buyWeapon"));
                                                         }
                                                         else
                                                         {
-                                                            Console.WriteLine("I don't have enough coins!");
+                                                            // Moedas insuficientes
+                                                            Console.WriteLine(s.GetSubtitle("Subtitles", "insufficientMoney"));
                                                         }
                                                         continue;
 
                                                     default:
-                                                        Console.WriteLine("Invalid action!\n");
+                                                        // Mensagem de erro
+                                                        Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                                         continue;
                                                 }
 
                                             default:
-                                                Console.WriteLine("Invalid action!\n");
+                                                // Mensagem de erro
+                                                Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                                 continue;
                                         }
 
@@ -440,14 +449,9 @@ namespace Game
 
                                     // Gera uma quantidade aleatória de moedas
                                     double coins = RandomDouble(random, 5d, 20d); // Sorteia um número
-                                    Console.WriteLine($"A can with full coins!");
-                                    Console.WriteLine("Would you like to collect this treasury?");
-                                    Console.WriteLine("" +
-                                        "0 - No" +
-                                        "1 - Yes");
-                                    Console.Write(">> ");
-                                    answer = byte.Parse(Console.ReadLine());
-
+                                    Console.WriteLine(s.GetSubtitle("Subtitles", "treasuryFound")); // Encontra um tesouro
+                                    Console.WriteLine(s.GetSubtitle("Menu", "noYes")); // opções sim e não
+                                    answer = ByteAnswer(1);
                                     switch (answer)
                                     {
                                         case 0:
@@ -455,11 +459,13 @@ namespace Game
 
                                         case 1:
                                             player.GetCoins(coins);
-                                            Console.WriteLine($"I collected {coins.ToString("F2", CultureInfo.InvariantCulture)} coins.\n");
+                                            // Coleta as moedas
+                                            Console.WriteLine(s.GetSubtitle("Subtitles", "coinsCollect").Replace("#", coins.ToString("F2", CultureInfo.InvariantCulture)));
                                             break;
 
                                         default:
-                                            Console.WriteLine("Invalid action!\n");
+                                            // Ação invalida
+                                            Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                             continue;
 
                                     }
@@ -470,7 +476,8 @@ namespace Game
 
                                 else
                                 {
-                                    Console.WriteLine("Error! Adventure actions invalid!");
+                                    // Mostra ação invalida
+                                    Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                 }
                                 break;
                             #endregion
@@ -488,7 +495,8 @@ namespace Game
                                 }
                                 else
                                 {
-                                    Console.WriteLine("I have no weapons!");
+                                    // Diz que não tem arma
+                                    Console.WriteLine(s.GetSubtitle("Subtitles", "haveNoWeapon"));
                                 }
                                 break;
 
@@ -497,7 +505,8 @@ namespace Game
                                 break;
 
                             default:
-                                Console.WriteLine("Invalid action!\n");
+                                // mostra ação invalida
+                                Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                 break;
                         }
                     }
@@ -533,7 +542,7 @@ namespace Game
             while (raceChose == null)
             {
                 Console.WriteLine(
-                    "\n[Races]\n" +
+                    $"\n[{s.GetSubtitle("Titles", "races")}]\n" +
                     $"0 - {race[0].Race}\n" +
                     $"1 - {race[1].Race}");
                 Console.Write(">> ");
@@ -553,7 +562,7 @@ namespace Game
                         break;
 
                     default:
-                        Console.WriteLine("Invalid action!");
+                        Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                         continue;
                 }
             }
