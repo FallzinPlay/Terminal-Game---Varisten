@@ -2,18 +2,169 @@
   "Subtitles": {
     "setName": "Olá! Vamos criar o seu personagem!\nPrimeiro, diga-me o nome que você usará:",
 
-    "wellcome": "Tudo pronto, novo aventureiro.\nAgora adentraremos na floresta\nMas tenha cuidado! Ela abriga muitos monstros.\nVamos lá!",
+    "wellcome": "Tudo pronto, novo(a) aventureiro(a).\nAgora adentraremos na floresta.\nMas tenha cuidado! Ela abriga muitos monstros.\nVamos lá!",
 
     "greatChose": "Ótima escolha!",
 
-    "leaving": "Deixando a aventura..."
+    "raceChoose": "Agora, qual raça você gostaria?",
+
+    "leaving": "Deixando a aventura...",
+
+    "gameOver": "Você morreu! \nGAME OVER! \n",
+
+    "thanksForPlayed": "Muito obrigado por ter jogado! \nDesligando...",
+
+    // Coleta
+    "lvlUp": "Lvl Up!",
+
+    "xpReceived": "Xp recebido:",
+
+    "coinsReceived": "Coins recebidos:",
+
+    "insufficientLvl": "Eu não tenho lvl sulficiente!\n",
+
+    "insufficientMoney": "Eu não tenho coins sulficientes!",
+
+    "myCoins": "Eu tenho # coins",
+
+    "coinsCollect": "Eu coletei # coins.\n",
+
+    // Weapon
+    "weaponEquipped": "Arma equipada!",
+
+    "weaponFound": "#! Eu deveria equipar isso?\n",
+
+    "dontEquipWeapon": "Eu não preciso disso agora...",
+
+    "myWeapon": "Minha arma",
+
+    "haveNoWeapon": "\nEu não porto nenhuma arma...\n",
+
+    "weaponBroke": "Minha arma quebrou!",
+
+    "weaponIgnore": "Você ignora a arma e segue adiante em sua jornada.\n",
+
+    // Mob
+    "canRunAway": "Você corre para o mais loge possível, deixando # para trás.\n",
+
+    "cantRunAway": "Eu não conseguiria escapar... Eu devo lutar!\n",
+
+    "mobFound": "#! O que eu deveria fazer?\n",
+
+    "mobDrop": "#1 deixou cair #2. \nVocê gostaria de equipar? \n",
+
+    "mobRunningAway": "# está fugindo! Covarde!",
+
+    "allowMobRun": "Permitirei que viva mais um dia.",
+
+    "canCatchMob": "Te peguei! Continuamos nossa batalha!\n",
+
+    "cantCatchMob": "# escapou!\n",
+
+    // Mercador
+    "merchantFound": "Um mercador!\n",
+
+    "merchantIgnore": "Melhor economizar dinheiro.\n",
+
+    "buyWeapon": "Você comprou e equipou a arma.\n",
+
+    // Tesouro
+    "treasuryFound": "Um pote cheio de moedas! \nVocê gostaria de coletar esse tesouro?"
+  },
+
+  "Titles": {
+    "races": "Raças",
+    "myWeapon": "Minha arma",
+    "weaponFound": "Arma encontrada",
+    "items": "Itens",
+    "life": "Vida"
   },
 
   "Menu": {
+    // Inicio
+    "start": "Bem-vindo(a) a Varisten! \nAqui é um mundo mágico e repleto de aventuras. \n[MENU] \n1: Jogar \n0: Sair",
+
     "options": "[AÇÃO]\n0: Abandonar aventura\n1: Explorar\n2: Estado\n3: Arma\n4: Descrição",
 
+    // Weapon
     "weaponFound": "0: Ignorar\n1: Comparar\n2: Equipar",
 
-    "mobFound": "0: Fugir\n1: Analizar\n2: Atacar!\n3: Analisar meu estado"
+    // Mob
+    "mobFound": "0: Fugir\n1: Analizar\n2: Atacar!\n3: Analisar meu estado",
+
+    "returnConfirm": "0: Retornar \n1: Confirmar",
+
+    "noYes": "0: Não \n1: Sim",
+
+    "allowRunToward": "0: Permitir que fuja \n1: Correr atrás!",
+
+    // Mercador
+    "merchantFound": "0: Ignorar \n1: Verificar \n"
+  },
+
+  "Weapons": {
+    "stick": "Graveto",
+    "woodenSword": "Espada de madeira",
+    "woodenBow": "Arco de madeira"
+  },
+
+  "Mobs": {
+    "zombie": "Zumbi",
+    "skeleton": "Esqueleto",
+    "slime": "Slime"
+  },
+
+  "Merchant": {
+    "shop": "0- Sair \n1- Poção de HP ($5) \n2- #1 ($#2) \n"
+  },
+
+  "Races": {
+    "zombies": "Zumbis",
+    "skeletons": "Esqueletos",
+    "slimes": "Slimes",
+
+    "humans": "Humanos",
+    "dwarves": "Anões"
+  },
+
+  "Descriptions": {
+    "humans": "Caso você deseje ser completamente adaptado, essa raça é perfeita para você! \nOs humanos são bons aprendendo novas coisas e usufruindo de todo tipo de equipamentos. \nEles vivem tanto em pequenas colônias, quanto em grandes cidades, e \npodem, também, aprender qualquer tipo de idioma. \n",
+
+    "dwarves": "Os anões são mestres contruindo qualquer tipo de arma. \nEles fazem as mais poderosas armas de qualquer civilização, e \ntrabalhando nas minas, obtem os mais valiosos minérios. \nMas as vezes esse armeiros podem ser um tanto quanto nervosinhos. \n"
+  },
+
+  "MobClass": {
+    "race": "Raça",
+    "necessaryXp": "XP necessário",
+    "life": "Vida",
+    "maxLife": "Vida máxima",
+    "dodge": "Esquiva",
+    "damage": "Dano",
+    "criticChance": "Chance de crítico",
+    "criticDamage": "Dano crítico",
+    "weapon": "Arma",
+    "coins": "Coins"
+  },
+
+  "WeaponClass": {
+    "damage": "Dano",
+    "condition": "Condição",
+    "necessaryLvl": "Lvl necessário"
+  },
+
+  "Combat": {
+    // 
+    "dodged": "ESQUIVOU!",
+    "critical": "CRITICO!",
+
+    //
+    "damageToMob": "Você causou #1 de dano em #2.\n",
+    "mobDefeat": "Você derrotou #.\n",
+    "damageToPlayer": "\n#1 causou #2 de dano em você. \n"
+  },
+
+  "Error": {
+    "invalidAction": "Ação inválida!\n"
   }
 }
+  

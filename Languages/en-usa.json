@@ -77,7 +77,7 @@
     "myWeapon": "My Weapon",
     "weaponFound": "Weapon Found",
     "items": "Items",
-    "life": "life"
+    "life": "Life"
   },
 
   "Menu": {
@@ -96,7 +96,7 @@
 
     "noYes": "0: No \n1: Yes",
 
-    "allowRunToward": "0: Allow \n2: Run toward it",
+    "allowRunToward": "0: Allow \n1: Run toward it",
 
     // Mercador
     "merchantFound": "0: Ignore \n1: Verify \n"

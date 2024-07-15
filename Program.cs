@@ -371,7 +371,7 @@ namespace Game
                                     Console.WriteLine(s.GetSubtitle("Subtitles", "merchantFound"));
                                     while (true)
                                     {
-                                        Console.WriteLine(s.GetSubtitle("Menu", "nerchantFound")); // menu
+                                        Console.WriteLine(s.GetSubtitle("Menu", "merchantFound")); // menu
                                         answer = ByteAnswer(1);
                                         if (answer == 0)
                                         {
