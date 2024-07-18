@@ -10,23 +10,18 @@ using Game.Classes;
 
 namespace Game
 {
-
-    static class Constants
-    {
-        public const double EscapeChance = 1.5;
-    }
-
     internal class Program
     {
         static void Main(string[] args)
         {
 
             #region Escolha de idioma
+            LanguagesManager s = new LanguagesManager();
             Console.WriteLine(
                 "Choose your language:\n" +
                 "0 - English, USA (default)\n" +
                 "1 - Português, BR");
-            LanguagesManager s = new LanguagesManager(ByteAnswer(1)); // Enquanto não for uma opção valida ele continuará pedindo para escolher
+            s.LanguageChoose(ByteAnswer((byte)s.LanguageOptions.Length));// Enquanto não for uma opção valida ele continuará pedindo para escolher
             #endregion
 
             #region Configurações de classes
@@ -68,8 +63,7 @@ namespace Game
             #endregion
 
             #region Descrição das raças
-            race[0].Description = $"\n[{race[0].Race.ToUpper()}]:\n" + s.GetSubtitle("Descriptions", "humans"); // Humano
-            race[1].Description = $"\n[{race[1].Race.ToUpper()}]:\n" + s.GetSubtitle("Descriptions", "dwarves"); // Anão
+            foreach (Mob m in mobs) m.SetDescription($"\n[{m.Race.ToUpper()}]:\n" + s.GetSubtitle("Descriptions", m.Race.ToLower()));
             #endregion
 
             #region Jogo
@@ -110,14 +104,14 @@ namespace Game
                             Console.WriteLine(s.GetSubtitle("Subtitles", "leaving")); // Saindo do jogo
                             break;
                         }
-                        switch (action)
+                        switch ((GameActions)action)
                         {
-                            case 0:
+                            case GameActions.Exit:
                                 break;
 
-                            #region Aventura
-                            case 1:
+                            case GameActions.Adventure:
 
+                                #region Adventure
                                 action = random.Next(10);
                                 #region Weapon
                                 if (action <= 3)
@@ -480,18 +474,17 @@ namespace Game
                                     Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
                                 }
                                 break;
-                            #endregion
+                                #endregion
 
-                            case 2:
-                                // Mostra o status do player
+                            case GameActions.PlayerStatus:
                                 Console.WriteLine(player);
                                 break;
 
-                            case 3:
+                            case GameActions.PlayerBag:
                                 // Mostra a arma do player
                                 if (player.WeaponEquiped != false)
                                 {
-                                    Console.WriteLine(player.Weapons);
+                                    Console.WriteLine(player.Weapon);
                                 }
                                 else
                                 {
@@ -500,13 +493,12 @@ namespace Game
                                 }
                                 break;
 
-                            case 4:
+                            case GameActions.RaceDescription:
                                 Console.WriteLine(player.Description);
                                 break;
 
                             default:
-                                // mostra ação invalida
-                                Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
+                                InvalidAction(s);
                                 break;
                         }
                     }
@@ -583,7 +575,7 @@ namespace Game
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error: {ex}\nTry Again.");
+                    Console.WriteLine($"Error.\nTry Again.");
                 }
             }
             return answer;
@@ -596,14 +588,8 @@ namespace Game
         #endregion
 
         #region Actions
-
-
-        #endregion
-
-        #region Combat
-
         // Modo luta
-        public static void Fighting(bool mode, params Mob[] mobs)
+        public void Fighting(bool mode, params Mob[] mobs)
         {
             foreach (Mob m in mobs)
             {
@@ -611,55 +597,21 @@ namespace Game
             }
         }
 
-        // Esquiva
-        public static bool Dodge(LanguagesManager s, Random r, Mob _mob)
-        {
-            double dodgeChance = 20;
-            if (RandomDouble(r, 0d, dodgeChance) <= _mob.Dodge)
-            {
-                Console.WriteLine($"[{_mob.Name} {s.GetSubtitle("Combat", "dodged")}]!!");
-                return true;
-            }
-            return false;
-        }
-
-        // Ataque
-        public static double Atack(LanguagesManager s, Random r, Mob mobSet, Mob mobGet, Weapon mobWeapon, Weapon[] w)
-        {
-            if (!Dodge(s, r, mobGet))
-            {
-                double damage = mobSet.Damage;
-
-                // Se estiver equipando uma arma, somar ataque
-                if (mobSet.WeaponEquiped && mobWeapon.Name != w[0].Name)
-                {
-                    damage = mobWeapon.Damage + mobSet.Damage / 5;
-                    mobWeapon.Erode();
-                }
-
-                // Chance de crítico
-                double criticChance = 20;
-                if (RandomDouble(r, 0d, criticChance) <= mobSet.CriticChance)
-                {
-                    damage *= mobSet.CriticDamage;
-                    Console.WriteLine($"[{s.GetSubtitle("Combat", "critical")}]!!\n");
-                }
-
-                // O mob atacado recebe o dano
-                mobGet.GetDamage(damage);
-                return damage;
-            }
-
-            return 0;
-        }
-
         #endregion
+
+
 
         #region Funções úteis
 
         public static double RandomDouble(Random r, double min, double max)
         {
             return min + (r.NextDouble() * (max - min));
+        }
+
+        public static void InvalidAction(LanguagesManager s)
+        {
+            // mostra ação invalida
+            Console.WriteLine(s.GetSubtitle("Error", "invalidAction"));
         }
 
         #endregion

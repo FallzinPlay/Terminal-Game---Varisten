@@ -11,22 +11,27 @@ namespace Game.Classes
 {
     internal class LanguagesManager
     {
-        private readonly JObject Subtitles;
         public bool Chose { get; private set; }
+        public string[] LanguageOptions { get; private set; } = new string[]
+        {
+            $"#en-usa.json",
+            $"#pt-br.json",
+        };
 
-        public LanguagesManager(byte language)
+        private JObject Subtitles;
+
+        public LanguagesManager() 
+        {
+            LanguageChoose();
+        }
+
+        public void LanguageChoose(byte language = 0)
         {
             string path = "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Languages\\"; // Caminho para os arquivos
-            string[] languageOptions = new string[]
-            {
-                $"{path}en-usa.json",
-                $"{path}pt-br.json",
-            };
-            
             try
             {
                 // Carrega o conteúdo do arquivo JSON
-                string jsonText = File.ReadAllText(languageOptions[language]);
+                string jsonText = File.ReadAllText(this.LanguageOptions[language].Replace("#", path));
                 this.Subtitles = JObject.Parse(jsonText);
                 this.Chose = true; // Para verificar se o processo foi bem sucedido
             }
@@ -48,6 +53,15 @@ namespace Game.Classes
                 Console.WriteLine($"Erro ao obter legenda: {ex.Message}");
                 return null;
             }
+        }
+
+        public string ShowSubtitle(string subtitle)
+        {
+            #region Show subtitles
+            Console.WriteLine(subtitle);
+            #endregion
+
+            return subtitle;
         }
     }
 }
