@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    internal enum GameActions : int
+    internal enum GameActions : byte
     {
         Exit,
         Adventure,

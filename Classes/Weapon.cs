@@ -17,7 +17,7 @@ namespace Game.Classes
         public double MinPrice { get; private set; }
         public double MaxPrice { get; private set; }
 
-        private LanguagesManager Language;
+        private readonly LanguagesManager Language;
 
         public Weapon(LanguagesManager language, string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
         {
@@ -41,9 +41,9 @@ namespace Game.Classes
         {
             return
                 $"[{this.Name}]\n" +
-                $"{this.Language.GetSubtitle("WeaponClass", "damage")}  : {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{this.Language.GetSubtitle("WeaponClass", "condition")}: {Condition}\n" +
-                $"{this.Language.GetSubtitle("WeaponClass", "necessaryLvl")}: {NecessaryLvl}\n";
+                $"{this.Language.GetSubtitle("WeaponClass", "damage")}  : {this.Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{this.Language.GetSubtitle("WeaponClass", "condition")}: {this.Condition}\n" +
+                $"{this.Language.GetSubtitle("WeaponClass", "necessaryLvl")}: {this.NecessaryLvl}\n";
         }
     }
 }

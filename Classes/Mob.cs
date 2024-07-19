@@ -35,7 +35,6 @@ namespace Game.Classes
         public Weapon Weapon { get; private set; }
 
         readonly LanguagesManager Language;
-        readonly Random random = new Random();
 
         public Mob(LanguagesManager language, string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, Weapon weapon, int lvl, int maxLvl, double dodge, double escapeChance)
         {
@@ -63,9 +62,10 @@ namespace Game.Classes
         #region Combat
 
         // Esquiva
-        public bool GetDodge(double randomization)
+        public bool GetDodge()
         {
-            bool dodged = randomization <= this.Dodge / 3;
+            double dodgeChance = Tools.RandomDouble(this.Dodge);
+            bool dodged = dodgeChance <= this.Dodge / 3;
             if (dodged)
             {
                 // Legenda
@@ -86,24 +86,22 @@ namespace Game.Classes
         }
 
         // Ataque
-        public double SetDamage(double randomization, Mob enemy, params Weapon[] weapons)
+        public double SetDamage(Mob enemy)
         {
-            if (!GetDodge(randomization))
+            double criticChance = Tools.RandomDouble(this.CriticChance);
+            if (!enemy.GetDodge())
             {
                 double damage = this.Damage;
 
                 // Se estiver equipando uma arma, somar ataque
-                bool invalidWeapon = false;
-                foreach (Weapon w in weapons) if (this.Weapon == w) invalidWeapon = true; // Verifica se está usando uma arma valida
-                if (this.WeaponEquiped && !invalidWeapon)
+                if (this.WeaponEquiped)
                 {
                     damage = this.Weapon.Damage + this.Damage / 5;
                     this.Weapon.Erode();
                 }
 
                 // Chance de crítico
-                bool criticChance = randomization <= this.CriticChance / 3;
-                if (criticChance)
+                if (criticChance <= this.CriticChance / 3)
                 {
                     damage *= this.CriticDamage;
 
@@ -130,12 +128,10 @@ namespace Game.Classes
                 this.WeaponEquiped = true;
                 this.Weapon = weapon;
 
-                Console.WriteLine(this.Language.GetSubtitle("Subtitles", "weaponEquipped"));
                 return true;
             }
             else
             {
-                Console.WriteLine(this.Language.GetSubtitle("Subtitles", "insufficientLvl"));
                 return false;
             }
         }
@@ -161,7 +157,7 @@ namespace Game.Classes
         }
         #endregion
 
-        public void Cure(double life)
+        public bool Cure(double life)
         {
             if (this.Life + life <= this.MaxLife)
             {
@@ -171,30 +167,22 @@ namespace Game.Classes
             {
                 this.Life = this.MaxLife;
             }
+            return true;
         }
 
-        public void GetCoins(double coins)
+        public bool GetCoins(double coins)
         {
             this.Coins += coins;
-
-            // Legenda
-            this.Language.ShowSubtitle(
-                $"{this.Language.GetSubtitle("Subtitles", "coinsReceived")}" +
-                $"{coins.ToString("F2", CultureInfo.InvariantCulture)}" +
-                $"{this.Language.GetSubtitle("MobClass", "coins")}\n");
+            return true;
         }
 
         #region Lvl
-        public void GetXp(double xp)
+        public bool GetXp(double xp)
         {
             this.Xp += xp;
 
-            //Legenda
-            this.Language.ShowSubtitle(
-                $"{this.Language.GetSubtitle("Subtitles", "xpReceived")}" +
-                $"{xp.ToString("F2", CultureInfo.InvariantCulture)}xp\n");
-
             LvlUp();
+            return true;
         }
 
         public bool LvlUp(int lvl = 0)
@@ -204,7 +192,7 @@ namespace Game.Classes
             {
                 this.Lvl = lvl;
                 this.NextLvlXp = this.Lvl * 50 / 2;
-                this.Xp = random.Next(this.Lvl, (int)this.NextLvlXp) * random.NextDouble();
+                this.Xp = Tools.RandomDouble(10, this.NextLvlXp - 5);
 
                 this.MaxLife += this.Lvl - 1;
                 this.Damage += 0.02 * this.Lvl;

@@ -11,24 +11,28 @@
       "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:languages\\en-usa.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\classes\\weapon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:classes\\weapon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\classes\\tools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:classes\\tools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\classes\\mob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:classes\\mob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\enums\\gameactions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:enums\\gameactions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\classes\\languagesmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:classes\\languagesmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|c:\\users\\aprendiz.informatica\\desktop\\terminal-game---varisten\\enums\\gameactions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:enums\\gameactions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\languages\\pt-br.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:languages\\pt-br.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\classes\\weapon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C5EA28C-05A7-4D24-A54B-06F4937F241C}|Game.csproj|solutionrelative:classes\\weapon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,46 +42,56 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "GameActions.cs",
-              "DocumentMoniker": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Enums\\GameActions.cs",
-              "RelativeDocumentMoniker": "Enums\\GameActions.cs",
-              "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Enums\\GameActions.cs",
-              "RelativeToolTip": "Enums\\GameActions.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAFAAAA",
+              "DocumentIndex": 2,
+              "Title": "Tools.cs",
+              "DocumentMoniker": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Classes\\Tools.cs",
+              "RelativeDocumentMoniker": "Classes\\Tools.cs",
+              "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Classes\\Tools.cs",
+              "RelativeToolTip": "Classes\\Tools.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAYwBIAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-18T13:17:37.3Z",
+              "WhenOpened": "2024-07-19T12:08:15.066Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "GameActions.cs",
+              "DocumentMoniker": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Enums\\GameActions.cs",
+              "RelativeDocumentMoniker": "Enums\\GameActions.cs",
+              "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Enums\\GameActions.cs",
+              "RelativeToolTip": "Enums\\GameActions.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-18T13:17:37.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "LanguagesManager.cs",
               "DocumentMoniker": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Classes\\LanguagesManager.cs",
               "RelativeDocumentMoniker": "Classes\\LanguagesManager.cs",
               "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Classes\\LanguagesManager.cs",
               "RelativeToolTip": "Classes\\LanguagesManager.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABgAAAAdAAAA",
+              "ViewState": "AQIAACMAAAAAAAAAAAAIwDIAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-10T14:44:58.713Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-10T14:44:58.713Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "Weapon.cs",
               "DocumentMoniker": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Classes\\Weapon.cs",
               "RelativeDocumentMoniker": "Classes\\Weapon.cs",
               "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Classes\\Weapon.cs",
               "RelativeToolTip": "Classes\\Weapon.cs",
-              "ViewState": "AQIAABEAAAAAAAAAAAA8wCUAAAAJAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAC0AAABUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-10T14:45:15.772Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-10T14:45:15.772Z"
             },
             {
               "$type": "Document",
@@ -87,7 +101,7 @@
               "RelativeDocumentMoniker": "Classes\\Mob.cs",
               "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Classes\\Mob.cs",
               "RelativeToolTip": "Classes\\Mob.cs",
-              "ViewState": "AQIAANkAAAAAAAAAAAAgwPEAAAAkAAAA",
+              "ViewState": "AQIAACUAAAAAAAAAAAAAwIUAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-08T17:50:18.318Z",
               "EditorCaption": ""
@@ -100,7 +114,7 @@
               "RelativeDocumentMoniker": "Languages\\pt-br.json",
               "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Languages\\pt-br.json",
               "RelativeToolTip": "Languages\\pt-br.json",
-              "ViewState": "AQIAAIEAAAAAAAAAAAAAAJwAAAAXAAAA",
+              "ViewState": "AQIAAFEAAAAAAAAAAAAAAJwAAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-07-10T15:38:16.815Z"
             },
@@ -112,7 +126,7 @@
               "RelativeDocumentMoniker": "Languages\\en-usa.json",
               "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Languages\\en-usa.json",
               "RelativeToolTip": "Languages\\en-usa.json",
-              "ViewState": "AQIAAHUAAAAAAAAAAAAAAGIAAAAjAAAA",
+              "ViewState": "AQIAADMAAAAAAAAAAAAAAKYAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-07-09T16:57:07.752Z",
               "EditorCaption": ""
@@ -125,7 +139,7 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAACoAAAAAAAAAAAAAAEAAAAAMAAAA",
+              "ViewState": "AQIAAFAAAAAAAAAAAADwv2kAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-08T12:13:40.925Z",
               "EditorCaption": ""
