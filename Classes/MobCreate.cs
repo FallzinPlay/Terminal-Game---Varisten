@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 
 namespace Game.Classes
 {
-    internal class Mob
+    internal class MobCreate
     {
         public string Name { get; set; }
         public string Race { get; private set; }
@@ -32,11 +32,11 @@ namespace Game.Classes
         public bool Alive { get; private set; }
         public bool WeaponEquiped { get; private set; }
         public bool Fighting { get; set; }
-        public Weapon Weapon { get; private set; }
+        public WeaponCreate Weapon { get; private set; }
 
         readonly LanguagesManager Language;
 
-        public Mob(LanguagesManager language, string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, Weapon weapon, int lvl, int maxLvl, double dodge, double escapeChance)
+        public MobCreate(LanguagesManager language, string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, WeaponCreate weapon, int lvl, int maxLvl, double dodge, double escapeChance)
         {
             this.Name = name;
             this.Race = race;
@@ -86,7 +86,7 @@ namespace Game.Classes
         }
 
         // Ataque
-        public double SetDamage(Mob enemy)
+        public double SetDamage(MobCreate enemy)
         {
             double criticChance = Tools.RandomDouble(this.CriticChance);
             if (!enemy.GetDodge())
@@ -121,7 +121,7 @@ namespace Game.Classes
         #endregion
 
         #region Weapon
-        public bool WeaponEquip(Weapon weapon, int necessaryLvl)
+        public bool WeaponEquip(WeaponCreate weapon, int necessaryLvl)
         {
             if (Lvl >= necessaryLvl)
             {
@@ -232,7 +232,8 @@ namespace Game.Classes
 
         public override string ToString()
         {
-            return
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(
                 $"[{this.Name}]\n" +
                 $"{this.Language.GetSubtitle("MobClass", "race")}: {this.Race}\n" +
                 $"Lvl: {this.Lvl}\n" +
@@ -245,7 +246,9 @@ namespace Game.Classes
                 $"{this.Language.GetSubtitle("MobClass", "criticChance")}: {this.CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"{this.Language.GetSubtitle("MobClass", "criticDamage")}: {this.CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"{this.Language.GetSubtitle("MobClass", "weapon")}: {this.Weapon.Name}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "coins")}: {this.Coins.ToString("F2", CultureInfo.InvariantCulture)}\n";
+                $"{this.Language.GetSubtitle("MobClass", "coins")}: {this.Coins.ToString("F2", CultureInfo.InvariantCulture)}\n");
+
+            return sb.ToString();
         }
     }
 }

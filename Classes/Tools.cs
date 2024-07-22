@@ -21,5 +21,31 @@ namespace Game.Classes
             Random r = new Random();
             return min + (r.NextDouble() * (max - min));
         }
+
+        public static byte ByteAnswer(byte max = 10)
+        {
+            byte answer = 0;
+            bool allright = false;
+            while (!allright || answer > max)
+            {
+                try
+                {
+                    Console.Write(">> ");
+                    answer = byte.Parse(Console.ReadLine());
+                    allright = true;
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"Error.\nTry Again.");
+                }
+            }
+            return answer;
+        }
+
+        public static void InvalidAction(LanguagesManager s)
+        {
+            // mostra ação invalida
+            s.ShowSubtitle(s.GetSubtitle("Error", "invalidAction"));
+        }
     }
 }

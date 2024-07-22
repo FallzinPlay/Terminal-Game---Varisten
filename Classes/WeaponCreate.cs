@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace Game.Classes
 {
-    internal class Weapon
+    internal class WeaponCreate
     {
         public string Name { get; set; }
         public double Damage { get; private set; }
@@ -19,7 +19,7 @@ namespace Game.Classes
 
         private readonly LanguagesManager Language;
 
-        public Weapon(LanguagesManager language, string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
+        public WeaponCreate(LanguagesManager language, string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
         {
             this.Name = name;
             this.Damage = damage;
@@ -39,11 +39,14 @@ namespace Game.Classes
 
         public override string ToString()
         {
-            return
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(
                 $"[{this.Name}]\n" +
                 $"{this.Language.GetSubtitle("WeaponClass", "damage")}  : {this.Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"{this.Language.GetSubtitle("WeaponClass", "condition")}: {this.Condition}\n" +
-                $"{this.Language.GetSubtitle("WeaponClass", "necessaryLvl")}: {this.NecessaryLvl}\n";
+                $"{this.Language.GetSubtitle("WeaponClass", "necessaryLvl")}: {this.NecessaryLvl}\n");
+
+            return sb.ToString();
         }
     }
 }
