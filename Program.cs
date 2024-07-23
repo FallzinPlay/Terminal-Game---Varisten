@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Net;
 using Game.Classes;
-using Game.Classes.Entities;
 using System.Diagnostics;
 
 namespace Game
@@ -30,9 +29,8 @@ namespace Game
             #region Configurações de classes
 
             Random random = new Random();
-            Weapon weapon = new Weapon(s);
 
-            WeaponCreate[] weapons = new WeaponCreate[]
+            WeaponCreate[] weapon = new WeaponCreate[]
             {
                 new WeaponCreate(s, "--", 0d, 0, 0, 0d, 0d),
                 new WeaponCreate(s, s.GetSubtitle("Weapons", "stick"), 3.2d, 4, 1, 5d, 10d),
@@ -41,20 +39,20 @@ namespace Game
             };
 
             // Entidades
-            MobCreate[] mobs = new MobCreate[]
+            MobCreate[] mob = new MobCreate[]
             {
                 // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
-                new MobCreate(s, s.GetSubtitle("Mobs", "zombie"), s.GetSubtitle("Races", "zombies"), 0, 2.2d, 7, 1.1d, 1.7d, weapon.None, weapon.None.NecessaryLvl, 10, 0.8d, 1.2d),
-                new MobCreate(s, s.GetSubtitle("Mobs", "skeleton"), s.GetSubtitle("Races", "skeletons"), 0, 3.2d, 5, 2.2d, 2.3d, weapon.WoodenBow, weapon.WoodenBow.NecessaryLvl, 12, 2.1d, 1.6d),
-                new MobCreate(s, s.GetSubtitle("Mobs", "slime"), s.GetSubtitle("Races", "slimes"), 0, 2.7d, 4, 3.5d, 2.7d, weapon.None, weapon.None.NecessaryLvl, 15, 0.5d, 2d),
+                new MobCreate(s, s.GetSubtitle("Mobs", "zombie"), s.GetSubtitle("Races", "zombies"), 0, 2.2d, 7, 1.1d, 1.7d, weapon[0], weapon[0].NecessaryLvl, 10, 0.8d, 1.2d),
+                new MobCreate(s, s.GetSubtitle("Mobs", "skeleton"), s.GetSubtitle("Races", "skeletons"), 0, 3.2d, 5, 2.2d, 2.3d, weapon[3], weapon[3].NecessaryLvl, 12, 2.1d, 1.6d),
+                new MobCreate(s, s.GetSubtitle("Mobs", "slime"), s.GetSubtitle("Races", "slimes"), 0, 2.7d, 4, 3.5d, 2.7d, weapon[0], weapon[0].NecessaryLvl, 15, 0.5d, 2d),
             };
 
             // Raças
             MobCreate[] race = new MobCreate[]
             {
                 // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
-                new MobCreate(s, null, s.GetSubtitle("Races", "humans"), 10d, 2.4d, 10, 1.7d, 1.5d, weapon.None, 1, 10, 1.7d, 1.7d),
-                new MobCreate(s, null, s.GetSubtitle("Races", "dwarves"), 8d, 3d, 8, 1.3d, 1.6d, weapon.None, 1, 7, 1.2d, 1.3d),
+                new MobCreate(s, null, s.GetSubtitle("Races", "humans"), 10d, 2.4d, 10, 1.7d, 1.5d, weapon[0], 1, 10, 1.7d, 1.7d),
+                new MobCreate(s, null, s.GetSubtitle("Races", "dwarves"), 8d, 3d, 8, 1.3d, 1.6d, weapon[0], 1, 7, 1.2d, 1.3d),
             };
 
             #endregion
@@ -70,16 +68,19 @@ namespace Game
             {
                 // criação do jogador
                 MobCreate player = CreatePlayer(s, race);
-                Adventure adventure = new Adventure(s, player, mobs, weapons);
+                player.Player = true;
+                Adventure adventure = new Adventure(s, player, mob, weapon);
 
                 // Loop do jogo
-                while (Menu(s))
+                Menu(s);
+                bool playing = true;
+                while (playing)
                 {
                     // Acaba o jogo se o jogador morrer
                     if (player.Life <= 0)
                     {
                         GameOver(s);
-                        break;
+                        playing = false;
                     }
 
                     s.ShowSubtitle(s.GetSubtitle("Menu", "options")); // Menu
@@ -89,7 +90,7 @@ namespace Game
                     if (answer == 0)
                     {
                         s.ShowSubtitle(s.GetSubtitle("Subtitles", "leaving")); // Saindo do jogo
-                        break;
+                        playing = false;
                     }
                     switch ((StartActions)answer)
                     {
@@ -218,48 +219,6 @@ namespace Game
         }
 
 
-        #endregion
-
-        #region Coleta
-        public static void XpCollect(LanguagesManager s, MobCreate mob, double xp)
-        {
-            if (mob.GetXp(xp))
-            {
-                //Legenda
-                s.ShowSubtitle(
-                    $"{s.GetSubtitle("Subtitles", "xpReceived")}" +
-                    $"{xp.ToString("F2", CultureInfo.InvariantCulture)}xp\n");
-            }
-        }
-
-        public static void CoinsCollect(LanguagesManager s, MobCreate mob, double coins)
-        {
-            if (mob.GetCoins(coins))
-            {
-                // Legenda
-                s.ShowSubtitle(
-                    $"{s.GetSubtitle("Subtitles", "coinsReceived")}" +
-                    $"{coins.ToString("F2", CultureInfo.InvariantCulture)}" +
-                    $"{s.GetSubtitle("MobClass", "coins")}\n");
-            }
-        }
-
-        public static bool WeaponCollect(LanguagesManager s, MobCreate mob, WeaponCreate weapon)
-        {
-            if (mob.WeaponEquip(weapon, weapon.NecessaryLvl))
-            {
-                // Legenda
-                s.ShowSubtitle(
-                    s.GetSubtitle("Subtitles", "weaponEquipped"));
-
-                return true;
-            }
-            else
-            {
-                s.ShowSubtitle(s.GetSubtitle("Subtitles", "insufficientLvl"));
-                return false;
-            }
-        }
         #endregion
     }
 }

@@ -164,6 +164,6 @@
   },
 
   "Error": {
-    "invalidAction": "Invalid action!\n",
+    "invalidAction": "Invalid action!\n"
   }
 }

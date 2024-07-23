@@ -22,3 +22,6 @@ C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\bin\Debug\Gam
 C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\bin\Debug\Newtonsoft.Json.dll
 C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\bin\Debug\Newtonsoft.Json.xml
 C:\Users\aprendiz.informatica\Desktop\Terminal-Game---Varisten\obj\Debug\Game.csproj.Up2Date
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\bin\Debug\Newtonsoft.Json.dll
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\bin\Debug\Newtonsoft.Json.xml
+C:\Users\vitor\OneDrive\Área de Trabalho\Terminal-Game---Varisten\obj\Debug\Game.csproj.Up2Date

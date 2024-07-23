@@ -47,8 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Adventure.cs" />
-    <Compile Include="Classes\Entities\Enemy.cs" />
-    <Compile Include="Classes\Entities\Weapon.cs" />
     <Compile Include="Classes\LanguagesManager.cs" />
     <Compile Include="Classes\MobCreate.cs" />
     <Compile Include="Classes\Tools.cs" />

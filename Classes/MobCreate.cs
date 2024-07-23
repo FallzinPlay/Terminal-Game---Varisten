@@ -29,6 +29,7 @@ namespace Game.Classes
         public double Coins { get; private set; }
         public double Xp { get; private set; }
         public double NextLvlXp { get; private set; }
+        public bool Player {  get; set; }
         public bool Alive { get; private set; }
         public bool WeaponEquiped { get; private set; }
         public bool Fighting { get; set; }
@@ -69,7 +70,7 @@ namespace Game.Classes
             if (dodged)
             {
                 // Legenda
-                Console.WriteLine(
+                this.Language.ShowSubtitle(
                     $"[{this.Name}" +
                     $"{this.Language.GetSubtitle("Combat", "dodged")}]!!");
 
@@ -106,7 +107,7 @@ namespace Game.Classes
                     damage *= this.CriticDamage;
 
                     // Legenda
-                    Console.WriteLine(
+                    this.Language.ShowSubtitle(
                         $"[{this.Language.GetSubtitle("Combat", "critical")}]!!\n");
                 }
 
@@ -123,16 +124,33 @@ namespace Game.Classes
         #region Weapon
         public bool WeaponEquip(WeaponCreate weapon, int necessaryLvl)
         {
-            if (Lvl >= necessaryLvl)
-            {
-                this.WeaponEquiped = true;
-                this.Weapon = weapon;
 
-                return true;
+            if (this.Player)
+            {
+                if (Lvl >= necessaryLvl)
+                {
+                    this.WeaponEquiped = true;
+                    this.Weapon = weapon;
+
+                    // Legenda
+                    this.Language.ShowSubtitle(
+                        this.Language.GetSubtitle("Subtitles", "weaponEquipped"));
+
+                    return true;
+                }
+                else
+                {
+                    // Legenda
+                    this.Language.ShowSubtitle(this.Language.GetSubtitle("Subtitles", "insufficientLvl"));
+
+                    return false;
+                }
             }
             else
             {
-                return false;
+                this.WeaponEquiped = true;
+                this.Weapon = weapon;
+                return true;
             }
         }
 
@@ -173,6 +191,16 @@ namespace Game.Classes
         public bool GetCoins(double coins)
         {
             this.Coins += coins;
+
+            if (this.Player)
+            {
+                // Legenda
+                this.Language.ShowSubtitle(
+                    $"{this.Language.GetSubtitle("Subtitles", "coinsReceived")}" +
+                    $"{coins.ToString("F2", CultureInfo.InvariantCulture)}" +
+                    $"{this.Language.GetSubtitle("MobClass", "coins")}\n");
+            }
+
             return true;
         }
 
@@ -180,8 +208,16 @@ namespace Game.Classes
         public bool GetXp(double xp)
         {
             this.Xp += xp;
-
             LvlUp();
+
+            if (this.Player)
+            {
+                //Legenda
+                this.Language.ShowSubtitle(
+                    $"{this.Language.GetSubtitle("Subtitles", "xpReceived")}" +
+                    $"{xp.ToString("F2", CultureInfo.InvariantCulture)}xp\n");
+            }
+
             return true;
         }
 

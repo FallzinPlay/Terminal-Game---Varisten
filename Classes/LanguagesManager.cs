@@ -27,7 +27,7 @@ namespace Game.Classes
 
         public void LanguageChoose(byte language = 0)
         {
-            string path = "C:\\Users\\aprendiz.informatica\\Desktop\\Terminal-Game---Varisten\\Languages\\"; // Caminho para os arquivos
+            string path = "C:\\Users\\vitor\\OneDrive\\Área de Trabalho\\Terminal-Game---Varisten\\Languages\\"; // Caminho para os arquivos
             try
             {
                 // Carrega o conteúdo do arquivo JSON
@@ -35,10 +35,10 @@ namespace Game.Classes
                 this.Subtitles = JObject.Parse(jsonText);
                 this.Chose = true; // Para verificar se o processo foi bem sucedido
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.Chose = false;
-                Console.WriteLine("Error! The file could not be obtained.\n");
+                Console.WriteLine(ex.Message);
             }
         }
 
