@@ -27,7 +27,7 @@ namespace Game.Classes
 
         public void LanguageChoose(byte language = 0)
         {
-            string path = "C:\\Users\\vitor\\OneDrive\\Área de Trabalho\\Terminal-Game---Varisten\\Languages\\"; // Caminho para os arquivos
+            string path = "..\\..\\Languages\\"; // Caminho para os arquivos
             try
             {
                 // Carrega o conteúdo do arquivo JSON

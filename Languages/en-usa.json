@@ -154,7 +154,7 @@
 
   "Combat": {
     // 
-    "dodged": "DODGED!",
+    "dodged": " DODGED!",
     "critical": "CRITICAL!",
 
     //
