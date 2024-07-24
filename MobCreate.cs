@@ -10,7 +10,7 @@ using System.Globalization;
 using static System.Net.Mime.MediaTypeNames;
 using System.Security.Cryptography;
 
-namespace Game.Classes
+namespace Game
 {
     internal class MobCreate
     {

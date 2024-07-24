@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 
-namespace Game.Classes
+namespace Game
 {
     internal class WeaponCreate
     {
@@ -32,9 +32,10 @@ namespace Game.Classes
             this.Language = language;
         }
 
-        public void Erode()
+        public void Erode(bool randomErode = false)
         {
-            this.Condition--;
+            if (randomErode) this.Condition = Tools.Random().Next(1, this.MaxCondition);
+            else this.Condition--;
         }
 
         public override string ToString()

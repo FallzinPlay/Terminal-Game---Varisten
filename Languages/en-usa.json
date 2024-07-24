@@ -2,7 +2,7 @@
   "Subtitles": {
     "setName": "Hey! Let's create your character! \nFirst write their name:",
 
-    "wellcome": "Alright, new adventurer! Now we're going to go to into that forest. \nBut be careful, there are monsters over there. \nLet's go! \n",
+    "wellcome": "Alright, new adventurer! Now we're going to go to into that forest. \nBut be careful, there are monsters over there. \nLet's go!",
 
     "greatChose": "Great chose!",
 
@@ -10,7 +10,7 @@
 
     "leaving": "Leaving from the adventure...",
 
-    "gameOver": "You died! \nGAME OVER! \n",
+    "gameOver": "You died! \nGAME OVER!",
 
     "thanksForPlayed": "Thanks so much for have played! \nShutting down...",
 
@@ -21,52 +21,52 @@
 
     "coinsReceived": "Coins received:",
 
-    "insufficientLvl": "I don't have enough Lvl!\n",
+    "insufficientLvl": "I don't have enough Lvl!",
 
     "insufficientMoney": "I don't have enough coins!",
 
     "myCoins": "I have # coins",
 
-    "coinsCollect": "I collected # coins.\n",
+    "coinsCollect": "I collected # coins.",
 
     // Weapon
     "weaponEquipped": "Weapon equipped!",
 
-    "weaponFound": "A #! Should I equip it?\n",
+    "weaponFound": "A #! Should I equip it?",
 
     "dontEquipWeapon": "I don't need it now...",
 
     "myWeapon": "My weapon",
 
-    "haveNoWeapon": "\nI don't have any weapon...\n",
+    "haveNoWeapon": "\nI don't have any weapon...",
 
     "weaponBroke": "My weapon broke!",
 
-    "weaponIgnore": "You ignored the weapon and went ahead in your journey.\n",
+    "weaponIgnore": "You ignored the weapon and went ahead in your journey.",
 
     // Mob
-    "canRunAway": "You run away from the # as far as you can.\n",
+    "canRunAway": "You run away from the # as far as you can.",
 
-    "cantRunAway": "I couldn't escape. I will have to fight!\n",
+    "cantRunAway": "I couldn't escape. I will have to fight!",
 
-    "mobFound": "A #! What should I do?\n",
+    "mobFound": "A #! What should I do?",
 
-    "mobDrop": "The #1 dropped a #2. \nWould you like to equip it? \n",
+    "mobDrop": "The #1 dropped a #2. \nWould you like to equip it?",
 
     "mobRunningAway": "The # is running away!",
 
     "allowMobRun": "I'll allow you escape today.",
 
-    "canCatchMob": "I catched it! Let's continue the fight!\n",
+    "canCatchMob": "I catched it! Let's continue the fight!",
 
-    "cantCatchMob": "The # escaped!\n",
+    "cantCatchMob": "The # escaped!",
 
     // Mercador
-    "merchantFound": "A merchant!\n",
+    "merchantFound": "A merchant!",
 
-    "merchantIgnore": "I don't need to buy anything.\n",
+    "merchantIgnore": "I don't need to buy anything.",
 
-    "buyWeapon": "You bought and equiped the weapon.\n",
+    "buyWeapon": "You bought and equiped the weapon.",
 
     // Tesouro
     "treasuryFound": "A can with full coins! \nWould you like to collect this treasury?"
@@ -99,7 +99,7 @@
     "allowRunToward": "0: Allow \n1: Run toward it",
 
     // Mercador
-    "merchantFound": "0: Ignore \n1: Verify \n"
+    "merchantFound": "0: Ignore \n1: Verify"
   },
 
   "Weapons": {
@@ -115,7 +115,7 @@
   },
 
   "Merchant": {
-    "shop": "0- Leave \n1- HP Potion ($5) \n2- #1 ($#2) \n"
+    "shop": "0- Leave \n1- HP Potion ($5) \n2- #1 ($#2)"
   },
 
   "Races": {
@@ -128,9 +128,9 @@
   },
 
   "Descriptions": {
-    "humans": "If you want to be adaptable, this race is perfect to you! \nThe humans are good learning new things and using all kind of weapons. \nThey living as in small civilizations as in big cities, and \ncan learning any language. \n",
+    "humans": "If you want to be adaptable, this race is perfect to you! \nThe humans are good learning new things and using all kind of weapons. \nThey living as in small civilizations as in big cities, and \ncan learning any language.",
 
-    "dwarves": "The dwarves are masters building anything. \nThey making the most powerful weapons in any civilization, and \nworking in the mines obtaining the most valuable ores. \nBut these armorers can be a bit unstable at times. \n"
+    "dwarves": "The dwarves are masters building anything. \nThey making the most powerful weapons in any civilization, and \nworking in the mines obtaining the most valuable ores. \nBut these armorers can be a bit unstable at times."
   },
 
   "MobClass": {
@@ -154,16 +154,16 @@
 
   "Combat": {
     // 
-    "dodged": " DODGED!",
+    "dodged": "DODGED!",
     "critical": "CRITICAL!",
 
     //
-    "damageToMob": "You dealt #1 damage to the #2.\n",
-    "mobDefeat": "You defeated #.\n",
-    "damageToPlayer": "\n#1 dealt #2 damage to you. \n"
+    "damageToMob": "You dealt #1 damage to the #2.",
+    "mobDefeat": "You defeated #.",
+    "damageToPlayer": "\n#1 dealt #2 damage to you."
   },
 
   "Error": {
-    "invalidAction": "Invalid action!\n"
+    "invalidAction": "It is not a valid option."
   }
 }

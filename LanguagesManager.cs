@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 
-namespace Game.Classes
+namespace Game
 {
     internal class LanguagesManager
     {
@@ -25,7 +25,7 @@ namespace Game.Classes
             LanguageChoose();
         }
 
-        public void LanguageChoose(byte language = 0)
+        public void LanguageChoose(int language = 0)
         {
             string path = "..\\..\\Languages\\"; // Caminho para os arquivos
             try

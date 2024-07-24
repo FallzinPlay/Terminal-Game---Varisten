@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.Net;
-using Game.Classes;
 using System.Diagnostics;
 
 namespace Game
@@ -16,19 +15,15 @@ namespace Game
         static void Main(string[] args)
         {
 
-            #region Escolha de idioma
+            // ------------- Choose the game language
             LanguagesManager s = new LanguagesManager();
-            s.ShowSubtitle(
-                "Choose your language:\n" +
-                "0 - English, USA (default)\n" +
-                "1 - Português, BR");
-            int max_languages = s.LanguageOptions.Length - 1;
-            s.LanguageChoose(Tools.ByteAnswer((byte)max_languages));// Enquanto não for uma opção valida ele continuará pedindo para escolher
-            #endregion
+            s.LanguageChoose(
+                Tools.Answer(s, "Choose your language: \n0 - English, USA (default) \n1 - Português, BR", s.LanguageOptions.Length));
+            // --------------------------------------------------
+            
+            //
 
-            #region Configurações de classes
-
-            Random random = new Random();
+            // ------------- Make the classes options
 
             WeaponCreate[] weapon = new WeaponCreate[]
             {
@@ -54,37 +49,40 @@ namespace Game
                 new MobCreate(s, null, s.GetSubtitle("Races", "humans"), 10d, 2.4d, 10, 1.7d, 1.5d, weapon[0], 1, 10, 1.7d, 1.7d),
                 new MobCreate(s, null, s.GetSubtitle("Races", "dwarves"), 8d, 3d, 8, 1.3d, 1.6d, weapon[0], 1, 7, 1.2d, 1.3d),
             };
+            // --------------------------------------------------
 
-            #endregion
+            //
 
-            #region Descrição das raças
+            // ------------- Make the race descriptions
             race[0].SetDescription($"\n[{race[0].Race.ToUpper()}]:\n" + s.GetSubtitle("Descriptions", "humans"));
             race[1].SetDescription($"\n[{race[1].Race.ToUpper()}]:\n" + s.GetSubtitle("Descriptions", "dwarves"));
-            #endregion
+            // --------------------------------------------------
+
+            //
 
             #region Jogo
-            byte answer;
+            int answer;
             if (s.Chose)
             {
                 // criação do jogador
-                MobCreate player = CreatePlayer(s, race);
+                MobCreate player = Menu.CreatePlayer(s, race);
                 player.Player = true;
                 Adventure adventure = new Adventure(s, player, mob, weapon);
 
                 // Loop do jogo
-                Menu(s);
+                Menu.StartMenu(s);
                 bool playing = true;
                 while (playing)
                 {
                     // Acaba o jogo se o jogador morrer
                     if (player.Life <= 0)
                     {
-                        GameOver(s);
+                        Menu.GameOver(s);
                         playing = false;
                     }
 
-                    s.ShowSubtitle(s.GetSubtitle("Menu", "options")); // Menu
-                    answer = Tools.ByteAnswer((byte)Enum.GetValues(typeof(StartActions)).Length);
+                    // Menu
+                    answer = Tools.Answer(s, s.ShowSubtitle(s.GetSubtitle("Menu", "options")), Enum.GetValues(typeof(StartActions)).Length);
 
                     // Sai para o menu principal
                     if (answer == 0)
@@ -99,7 +97,7 @@ namespace Game
 
                         case StartActions.Adventure:
 
-                            answer = (byte)random.Next(10);
+                            answer = Tools.Random().Next(10);
 
                             // Weapon
                             if (answer <= 3) adventure.WeaponFound();
@@ -151,74 +149,5 @@ namespace Game
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "thanksForPlayed"));
             #endregion
         }
-
-        #region Menu
-        public static bool Menu(LanguagesManager s)
-        {
-            s.ShowSubtitle(s.GetSubtitle("Menu", "start"));
-            byte n = Tools.ByteAnswer(1);
-
-            if (n == 1) return true;
-
-            return false;
-        }
-
-        public static MobCreate CreatePlayer(LanguagesManager s, MobCreate[] race)
-        {
-            string playerName = null;
-            s.ShowSubtitle(s.GetSubtitle("Subtitles", "setName")); // Pequena apresentação
-            Console.Write(">> ");
-            playerName = Console.ReadLine(); // Pega o nome do jogador
-            s.ShowSubtitle(s.GetSubtitle("Subtitles", "greatChose"));
-            MobCreate player = RaceChoose(s, race, playerName); // Cria o jogador
-            s.ShowSubtitle(s.GetSubtitle("Subtitles", "wellcome"));
-
-            return player;
-        }
-
-        public static void GameOver(LanguagesManager s)
-        {
-            s.ShowSubtitle(s.GetSubtitle("Menu", "gameOver"));
-        }
-
-        public static MobCreate RaceChoose(LanguagesManager s, MobCreate[] race, string name)
-        {
-
-            byte choose = 0;
-            MobCreate raceChose = null;
-            //*
-            s.ShowSubtitle(s.GetSubtitle("Subtitles", "raceChoose"));
-            while (raceChose == null)
-            {
-                s.ShowSubtitle($"\n[{s.GetSubtitle("Titles", "races")}]\n");
-                int max = race.Length - 1;
-                for (byte i = 0; i < (byte)race.Length; i++) s.ShowSubtitle($"{i}: {race[i].Race}");
-                choose = Tools.ByteAnswer((byte)max);
-
-                race[choose].Name = name;
-                s.ShowSubtitle($"\n{race[choose]}\n{race[choose].Description}\n");
-
-                s.ShowSubtitle(s.GetSubtitle("Menu", "returnConfirm"));
-                switch (Tools.ByteAnswer(1))
-                {
-                    case 0:
-                        continue;
-
-                    case 1:
-                        raceChose = race[choose];
-                        break;
-
-                    default:
-                        s.ShowSubtitle(s.GetSubtitle("Error", "invalidAction"));
-                        continue;
-                }
-            }
-            //*/
-            return raceChose;
-            
-        }
-
-
-        #endregion
     }
 }

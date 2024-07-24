@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Game.Classes
+namespace Game
 {
     internal class Adventure
     {
@@ -14,7 +14,7 @@ namespace Game.Classes
         public MobCreate[] Mobs { get; private set; }
         public WeaponCreate[] Weapons { get; private set; }
 
-        private readonly Random R = new Random();
+        private int answer;
 
         public Adventure(LanguagesManager language, MobCreate player, MobCreate[] mobs, WeaponCreate[] weapons)
         {
@@ -28,16 +28,14 @@ namespace Game.Classes
         {
             LanguagesManager s = this.Language;
 
-            int randomWeapon = R.Next(1, this.Weapons.Length); // Sorteia um número
-            WeaponCreate weaponFound = this.Weapons[randomWeapon]; // Pega a arma de acordo com o número sorteado
-            weaponFound.Condition = R.Next(1, weaponFound.MaxCondition); // Determina a condição da arma aleatoriamente
-
+            // Generate a weapon randomly
+            WeaponCreate weaponFound = Tools.RandomWeapon(this.Weapons, true);
             s.ShowSubtitle($"{s.GetSubtitle("Subtitles", "weaponFound").Replace("#", weaponFound.Name)}"); // Encontra uma arma
 
-            while (true)
+            do
             {
-                s.ShowSubtitle(s.GetSubtitle("Menu", "weaponFound")); // Menu
-                byte answer = Tools.ByteAnswer();
+                // Menu
+                answer = Tools.Answer(s, s.ShowSubtitle(s.GetSubtitle("Menu", "weaponFound")));
                 switch (answer)
                 {
                     case 0:
@@ -49,12 +47,18 @@ namespace Game.Classes
                         if (this.Player.WeaponEquiped != false)
                         {
                             // Compara a arma que já tem com a que encontrou
-                            s.ShowSubtitle($"\n[{s.GetSubtitle("Titles", "myWeapon")}]\n" + this.Player.Weapon + $"\n\n[{s.GetSubtitle("Titles", "weaponFound")}]\n" + weaponFound + "\n");
+                            s.ShowSubtitle(
+                                $"\n[{s.GetSubtitle("Titles", "myWeapon")}]\n" +
+                                this.Player.Weapon +
+                                $"\n\n[{s.GetSubtitle("Titles", "weaponFound")}]\n" +
+                                weaponFound + "\n");
                         }
                         else
                         {
                             // Diz que não tem arma e avalia a encontrada
-                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "haveNoWeapon") + weaponFound + "\n");
+                            s.ShowSubtitle(
+                                s.GetSubtitle("Subtitles", "haveNoWeapon") +
+                                weaponFound + "\n");
                         }
                         break;
 
@@ -71,19 +75,20 @@ namespace Game.Classes
 
                 if (answer != 1) break; // Permite comparar sem sair do loop
             }
+            while (answer > 0);
         }
 
         public void MobFound()
         {
             LanguagesManager s = this.Language;
 
-            int randomMob = R.Next(this.Mobs.Length); // Sorteia um número
+            int randomMob = Tools.Random().Next(this.Mobs.Length); // Sorteia um número
             MobCreate mobFound = this.Mobs[randomMob]; // Seleciona um mob aleatório
 
             // Parelha o lvl dos inimigos
             int mobLvl = mobFound.Lvl;
             if (this.Player.Lvl >= mobLvl) mobLvl = this.Player.Lvl + 3;
-            mobFound.LvlUp(R.Next(mobFound.Lvl, mobLvl));
+            mobFound.LvlUp(Tools.Random().Next(mobFound.Lvl, mobLvl));
 
             // Configuração dos mobs
             if (mobFound.Name == this.Mobs[1].Name)
@@ -101,8 +106,8 @@ namespace Game.Classes
             while (mobFound.Fighting == true)
             {
 
-                s.ShowSubtitle(s.GetSubtitle("Menu", "mobFound")); // Menu
-                byte answer = Tools.ByteAnswer();
+                // Menu
+                answer = Tools.Answer(s, s.GetSubtitle("Menu", "mobFound"), 4);
 
                 #region Chance de escapar
                 if (answer == 0)
@@ -174,9 +179,9 @@ namespace Game.Classes
                         if (dropped > dropChance / 1.3)
                         {
                             // Mostra o drop do mob
-                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "mobDrop").Replace("#1", mobFound.Name).Replace("#2", mobFound.Weapon.Name));
-                            s.ShowSubtitle(s.GetSubtitle("Menu", "noYes")); // Mostra as opções sim e não
-                            answer = Tools.ByteAnswer(1);
+                            answer = Tools.Answer(s, 
+                                $"{s.GetSubtitle("Subtitles", "mobDrop").Replace("#1", mobFound.Name).Replace("#2", mobFound.Weapon.Name)}" +
+                                $"{s.GetSubtitle("Menu", "noYes")}");
 
                             switch (answer)
                             {
@@ -214,9 +219,9 @@ namespace Game.Classes
                             if (mobFound.EscapeChance > mobFound.EscapeChance / 3)
                             {
                                 // O inimigo está fugindo
-                                s.ShowSubtitle(s.GetSubtitle("Subtitles", "mobRunningAway").Replace("#", mobFound.Name));
-                                s.ShowSubtitle(s.GetSubtitle("Menu", "allowRunToward")); // permitir ou correr atrás
-                                answer = Tools.ByteAnswer(1);
+                                answer = Tools.Answer(s,
+                                    $"{s.GetSubtitle("Subtitles", "mobRunningAway").Replace("#", mobFound.Name)}" +
+                                    $"{s.GetSubtitle("Menu", "allowRunToward")}");
 
                                 switch (answer)
                                 {
@@ -266,7 +271,7 @@ namespace Game.Classes
         {
             LanguagesManager s = this.Language;
 
-            int randomWeapon = R.Next(1, this.Weapons.Length); // Sorteia um número
+            int randomWeapon = Tools.Random().Next(1, this.Weapons.Length); // Sorteia um número
             WeaponCreate weaponFound = this.Weapons[randomWeapon]; // Pega a arma de acordo com o número sorteado
             weaponFound.Condition = weaponFound.MaxCondition;
 
@@ -276,8 +281,7 @@ namespace Game.Classes
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "merchantFound"));
             while (true)
             {
-                s.ShowSubtitle(s.GetSubtitle("Menu", "merchantFound")); // menu
-                byte answer = Tools.ByteAnswer(1);
+                answer = Tools.Answer(s, s.GetSubtitle("Menu", "merchantFound"));
                 if (answer == 0)
                 {
                     // Ignora o mercador
@@ -294,11 +298,9 @@ namespace Game.Classes
                         // moedas do jogador
                         s.ShowSubtitle($"[{s.GetSubtitle("Subtitles", "myCoins").Replace("#", this.Player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]\n");
 
-                        #region Mercado
-                        // Mostra o mercado
-                        s.ShowSubtitle(s.GetSubtitle("Merchant", "shop").Replace("#1", weaponFound.Name).Replace("#2", weaponPrice.ToString("F2", CultureInfo.InvariantCulture)));
-                        #endregion
-                        answer = Tools.ByteAnswer(2);
+                        answer = Tools.Answer(s,
+                            s.GetSubtitle("Merchant", "shop").Replace("#1", weaponFound.Name).Replace("#2", weaponPrice.ToString("F2", CultureInfo.InvariantCulture)),
+                            3);
                         if (answer == 0) break;
                         switch (answer)
                         {
@@ -357,8 +359,7 @@ namespace Game.Classes
 
             while (true)
             {
-                s.ShowSubtitle(s.GetSubtitle("Menu", "noYes")); // opções sim e não
-                byte answer = Tools.ByteAnswer(1);
+                answer = Tools.Answer(s, s.GetSubtitle("Menu", "noYes"));
                 switch (answer)
                 {
                     case 0:
