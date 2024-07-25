@@ -30,6 +30,7 @@ namespace Game
                 {
                     Console.Write(">> ");
                     answer = int.Parse(Console.ReadLine());
+                    s.ShowSubtitle(" ");
 
                     if (answer >= max || answer < 0)
                     {
@@ -42,6 +43,7 @@ namespace Game
                 catch (Exception)
                 {
                     InvalidAction(s);
+                    s.ShowSubtitle(" ");
                 }
             }
         }
@@ -59,6 +61,29 @@ namespace Game
             weaponFound.Erode(randomCondition); // Determina a condição da arma
 
             return weaponFound;
+        }
+
+        public static MobCreate RandomMob(MobCreate[] mobs, WeaponCreate[] weapons, bool randomLvl = false, int lvlMin = 1)
+        {
+            int randomMob = Random().Next(mobs.Length); // Sorteia um número
+            MobCreate mobFound = mobs[randomMob]; // Seleciona um mob aleatório
+
+            // Weapons
+            WeaponCreate mobWeapon = weapons[0];
+            if (mobFound.Name == mobs[1].Name) mobWeapon = weapons[3]; // Skeleton
+
+            // Parelha o lvl dos inimigos
+            if (randomLvl)
+            {
+                if (mobWeapon.Name != weapons[0].Name) lvlMin = mobWeapon.NecessaryLvl;
+                mobFound.LvlUp(Tools.Random().Next(lvlMin, lvlMin + 3));
+            }
+
+            mobFound.WeaponEquip(mobWeapon);
+            mobFound.Cure(Tools.RandomDouble(mobFound.MaxLife, mobFound.MaxLvl / 2));
+            mobFound.GetCoins(Tools.RandomDouble(10d));
+
+            return mobFound;
         }
     }
 }

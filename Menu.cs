@@ -17,14 +17,13 @@ namespace Game
 
         public static MobCreate CreatePlayer(LanguagesManager s, MobCreate[] race)
         {
-            string playerName = null;
+            string playerName;
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "setName")); // Pequena apresentação
             Console.Write(">> ");
             playerName = Console.ReadLine(); // Pega o nome do jogador
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "greatChose"));
             MobCreate player = RaceChoose(s, race, playerName); // Cria o jogador
-            s.ShowSubtitle(s.GetSubtitle("Subtitles", "wellcome"));
-
+            s.ShowSubtitle($"{s.GetSubtitle("Subtitles", "wellcome")}\n");
             return player;
         }
 
@@ -36,13 +35,12 @@ namespace Game
         public static MobCreate RaceChoose(LanguagesManager s, MobCreate[] race, string name)
         {
 
-            int choose = 0;
+            int choose;
             MobCreate raceChose = null;
-            //*
-            s.ShowSubtitle(s.GetSubtitle("Subtitles", "raceChoose"));
             while (raceChose == null)
             {
-                s.ShowSubtitle($"\n[{s.GetSubtitle("Titles", "races")}]\n");
+                s.ShowSubtitle(s.GetSubtitle("Subtitles", "raceChoose"));
+                s.ShowSubtitle($"\n[{s.GetSubtitle("Titles", "races")}]");
                 int max = race.Length;
                 string options = "";
                 for (int i = 0; i < max; i++)
@@ -52,7 +50,7 @@ namespace Game
                 choose = Tools.Answer(s, options, max);
 
                 race[choose].Name = name;
-                s.ShowSubtitle($"\n{race[choose]}\n{race[choose].Description}\n");
+                s.ShowSubtitle($"{race[choose]}\n{race[choose].Description}\n");
 
                 switch (Tools.Answer(s, s.GetSubtitle("Menu", "returnConfirm")))
                 {
@@ -68,9 +66,7 @@ namespace Game
                         continue;
                 }
             }
-            //*/
             return raceChose;
-
         }
     }
 }

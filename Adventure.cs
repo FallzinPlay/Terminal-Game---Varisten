@@ -35,7 +35,7 @@ namespace Game
             do
             {
                 // Menu
-                answer = Tools.Answer(s, s.ShowSubtitle(s.GetSubtitle("Menu", "weaponFound")));
+                answer = Tools.Answer(s, s.GetSubtitle("Menu", "weaponFound"), 3);
                 switch (answer)
                 {
                     case 0:
@@ -64,7 +64,7 @@ namespace Game
 
                     case 2:
                         // Equipa a arma
-                        this.Player.WeaponEquip(weaponFound, weaponFound.NecessaryLvl);
+                        this.Player.WeaponEquip(weaponFound);
                         break;
 
                     default:
@@ -82,28 +82,10 @@ namespace Game
         {
             LanguagesManager s = this.Language;
 
-            int randomMob = Tools.Random().Next(this.Mobs.Length); // Sorteia um número
-            MobCreate mobFound = this.Mobs[randomMob]; // Seleciona um mob aleatório
-
-            // Parelha o lvl dos inimigos
-            int mobLvl = mobFound.Lvl;
-            if (this.Player.Lvl >= mobLvl) mobLvl = this.Player.Lvl + 3;
-            mobFound.LvlUp(Tools.Random().Next(mobFound.Lvl, mobLvl));
-
-            // Configuração dos mobs
-            if (mobFound.Name == this.Mobs[1].Name)
-            {
-                mobFound.WeaponEquip(this.Weapons[3], mobFound.Lvl); // Equipa o esqueleto com um arco
-            }
-
-            mobFound.Cure(Tools.RandomDouble((double)mobFound.MaxLife / 2, (double)mobFound.MaxLife)); // Vida dos mobs determinadas aleatóriamente e impede de ser 0
-
-            // Loot do mob
-            mobFound.GetCoins(Tools.RandomDouble(10d));
-
+            MobCreate mobFound = Tools.RandomMob(this.Mobs, this.Weapons, true, this.Player.Lvl);
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "mobFound").Replace("#", mobFound.Name)); // Encontra um mob
             Fighting(true, this.Player, mobFound); // Faz o player e o mob entrarem em modo de luta
-            while (mobFound.Fighting == true)
+            do
             {
 
                 // Menu
@@ -179,7 +161,7 @@ namespace Game
                         if (dropped > dropChance / 1.3)
                         {
                             // Mostra o drop do mob
-                            answer = Tools.Answer(s, 
+                            answer = Tools.Answer(s,
                                 $"{s.GetSubtitle("Subtitles", "mobDrop").Replace("#1", mobFound.Name).Replace("#2", mobFound.Weapon.Name)}" +
                                 $"{s.GetSubtitle("Menu", "noYes")}");
 
@@ -192,7 +174,7 @@ namespace Game
 
                                 case 1:
                                     // Equipa a arma do inimigo
-                                    this.Player.WeaponEquip(mobFound.Weapon, mobFound.Weapon.NecessaryLvl);
+                                    this.Player.WeaponEquip(mobFound.Weapon);
                                     break;
 
                                 default:
@@ -265,16 +247,14 @@ namespace Game
 
                 if (this.Player.Life <= 0) break;
             }
+            while (mobFound.Fighting == true);
         }
 
         public void MerchantFound()
         {
             LanguagesManager s = this.Language;
 
-            int randomWeapon = Tools.Random().Next(1, this.Weapons.Length); // Sorteia um número
-            WeaponCreate weaponFound = this.Weapons[randomWeapon]; // Pega a arma de acordo com o número sorteado
-            weaponFound.Condition = weaponFound.MaxCondition;
-
+            WeaponCreate weaponFound = Tools.RandomWeapon(this.Weapons);
             double weaponPrice = Tools.RandomDouble(weaponFound.MaxPrice, weaponFound.MinPrice);
 
             // Encontra o mercador
@@ -321,7 +301,7 @@ namespace Game
 
                             case 2:
 
-                                if (this.Player.Buy(weaponPrice) && this.Player.WeaponEquip(weaponFound, weaponFound.NecessaryLvl))
+                                if (this.Player.Buy(weaponPrice) && this.Player.WeaponEquip(weaponFound))
                                 {
                                     // Compra e equipa a arma
                                     s.ShowSubtitle(s.GetSubtitle("Subtitles", "buyWeapon"));

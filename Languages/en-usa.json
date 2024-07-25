@@ -4,7 +4,9 @@
 
     "wellcome": "Alright, new adventurer! Now we're going to go to into that forest. \nBut be careful, there are monsters over there. \nLet's go!",
 
-    "greatChose": "Great chose!",
+    "playMenu": "Wellcome to Varisten! \nHere is a magic world with so many adventures to go.",
+
+    "greatChose": "Great choose!",
 
     "raceChoose": "Now, tell me which race would you like",
 
@@ -38,7 +40,7 @@
 
     "myWeapon": "My weapon",
 
-    "haveNoWeapon": "\nI don't have any weapon...",
+    "haveNoWeapon": "I don't have any weapon...",
 
     "weaponBroke": "My weapon broke!",
 
@@ -82,7 +84,7 @@
 
   "Menu": {
     // Inicio
-    "start": "Wellcome to Varisten! \nHere is a magic world with so many adventures to go. \n[MENU] \n1: Play \n0: Exit",
+    "start": "[MENU] \n1: Play \n0: Exit",
 
     "options": "[ACTION] \n0: Exit \n1: Explore \n2: Status \n3: Weapon \n4: Description",
 

@@ -37,12 +37,12 @@ namespace Game
 
         readonly LanguagesManager Language;
 
-        public MobCreate(LanguagesManager language, string name, string race, double life, double damage, int maxLife, double criticChance, double criticDamage, WeaponCreate weapon, int lvl, int maxLvl, double dodge, double escapeChance)
+        public MobCreate(LanguagesManager language, string name, string race, double damage, int maxLife, double criticChance, double criticDamage, WeaponCreate weapon, int maxLvl, double dodge, double escapeChance)
         {
             this.Name = name;
             this.Race = race;
             this.MaxLife = maxLife;
-            this.Life = life;
+            this.Life = this.MaxLife;
             this.MaxLife = maxLife;
             this.Damage = damage;
             this.Alive = true;
@@ -50,15 +50,15 @@ namespace Game
             this.CriticDamage = criticDamage;
             this.Dodge = dodge;
             this.Weapon = weapon;
-            this.Lvl = lvl;
+            this.Lvl = 1;
             this.MaxLvl = maxLvl;
             this.NextLvlXp = 10;
             this.EscapeChance = escapeChance;
 
-            if (weapon.Name != "--") this.WeaponEquiped = true;
+            WeaponEquip(weapon);
+            
             this.Language = language;
         }
-
 
         #region Combat
 
@@ -122,36 +122,29 @@ namespace Game
         #endregion
 
         #region Weapon
-        public bool WeaponEquip(WeaponCreate weapon, int necessaryLvl)
+        public bool WeaponEquip(WeaponCreate weapon)
         {
-
+            bool equipped = true;
+            if (weapon.Name == "--") equipped = false;
             if (this.Player)
             {
-                if (Lvl >= necessaryLvl)
+                if (Lvl >= weapon.NecessaryLvl)
                 {
-                    this.WeaponEquiped = true;
-                    this.Weapon = weapon;
-
                     // Legenda
                     this.Language.ShowSubtitle(
                         this.Language.GetSubtitle("Subtitles", "weaponEquipped"));
-
-                    return true;
                 }
                 else
                 {
                     // Legenda
                     this.Language.ShowSubtitle(this.Language.GetSubtitle("Subtitles", "insufficientLvl"));
-
                     return false;
                 }
             }
-            else
-            {
-                this.WeaponEquiped = true;
-                this.Weapon = weapon;
-                return true;
-            }
+
+            this.WeaponEquiped = equipped;
+            this.Weapon = weapon;
+            return true;
         }
 
         public void WeaponUnequip()
@@ -282,7 +275,7 @@ namespace Game
                 $"{this.Language.GetSubtitle("MobClass", "criticChance")}: {this.CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"{this.Language.GetSubtitle("MobClass", "criticDamage")}: {this.CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"{this.Language.GetSubtitle("MobClass", "weapon")}: {this.Weapon.Name}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "coins")}: {this.Coins.ToString("F2", CultureInfo.InvariantCulture)}\n");
+                $"{this.Language.GetSubtitle("MobClass", "coins")}: {this.Coins.ToString("F2", CultureInfo.InvariantCulture)}");
 
             return sb.ToString();
         }

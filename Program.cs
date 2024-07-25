@@ -36,18 +36,18 @@ namespace Game
             // Entidades
             MobCreate[] mob = new MobCreate[]
             {
-                // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
-                new MobCreate(s, s.GetSubtitle("Mobs", "zombie"), s.GetSubtitle("Races", "zombies"), 0, 2.2d, 7, 1.1d, 1.7d, weapon[0], weapon[0].NecessaryLvl, 10, 0.8d, 1.2d),
-                new MobCreate(s, s.GetSubtitle("Mobs", "skeleton"), s.GetSubtitle("Races", "skeletons"), 0, 3.2d, 5, 2.2d, 2.3d, weapon[3], weapon[3].NecessaryLvl, 12, 2.1d, 1.6d),
-                new MobCreate(s, s.GetSubtitle("Mobs", "slime"), s.GetSubtitle("Races", "slimes"), 0, 2.7d, 4, 3.5d, 2.7d, weapon[0], weapon[0].NecessaryLvl, 15, 0.5d, 2d),
+                // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel maximo, esquiva, chance de escapar
+                new MobCreate(s, s.GetSubtitle("Mobs", "zombie"), s.GetSubtitle("Races", "zombies"), 2.2d, 7, 1.1d, 1.7d, weapon[0], 10, 0.8d, 1.2d),
+                new MobCreate(s, s.GetSubtitle("Mobs", "skeleton"), s.GetSubtitle("Races", "skeletons"), 3.2d, 5, 2.2d, 2.3d, weapon[3], 12, 2.1d, 1.6d),
+                new MobCreate(s, s.GetSubtitle("Mobs", "slime"), s.GetSubtitle("Races", "slimes"), 2.7d, 4, 3.5d, 2.7d, weapon[0], 15, 0.5d, 2d),
             };
 
             // Raças
             MobCreate[] race = new MobCreate[]
             {
                 // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
-                new MobCreate(s, null, s.GetSubtitle("Races", "humans"), 10d, 2.4d, 10, 1.7d, 1.5d, weapon[0], 1, 10, 1.7d, 1.7d),
-                new MobCreate(s, null, s.GetSubtitle("Races", "dwarves"), 8d, 3d, 8, 1.3d, 1.6d, weapon[0], 1, 7, 1.2d, 1.3d),
+                new MobCreate(s, null, s.GetSubtitle("Races", "humans"), 2.4d, 10, 1.7d, 1.5d, weapon[0], 10, 1.7d, 1.7d),
+                new MobCreate(s, null, s.GetSubtitle("Races", "dwarves"), 3d, 8, 1.3d, 1.6d, weapon[0], 7, 1.2d, 1.3d),
             };
             // --------------------------------------------------
 
@@ -71,6 +71,7 @@ namespace Game
 
                 // Loop do jogo
                 Menu.StartMenu(s);
+                s.ShowSubtitle($"{s.GetSubtitle("Subtitles", "playMenu")}\n");
                 bool playing = true;
                 while (playing)
                 {
@@ -82,8 +83,9 @@ namespace Game
                     }
 
                     // Menu
-                    answer = Tools.Answer(s, s.ShowSubtitle(s.GetSubtitle("Menu", "options")), Enum.GetValues(typeof(StartActions)).Length);
-
+                    answer = Tools.Answer(s,
+                        s.GetSubtitle("Menu", "options"),
+                        Enum.GetValues(typeof(StartActions)).Length);
                     // Sai para o menu principal
                     if (answer == 0)
                     {
@@ -136,7 +138,7 @@ namespace Game
                             break;
 
                         case StartActions.RaceDescription:
-                            s.ShowSubtitle(player.Description.ToString());
+                            s.ShowSubtitle(player.Description.ToString() + "\n");
                             break;
 
                         default:
