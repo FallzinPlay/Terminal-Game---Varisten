@@ -9,15 +9,19 @@ namespace Game
 {
     internal class Tools
     {
+        private static readonly Random R = new Random();
+
         public static double RandomDouble(double max, double min = 0)
         {
-            Random r = new Random();
-            return min + (r.NextDouble() * (max - min));
+            return min + (R.NextDouble() * (max - min));
         }
 
-        public static Random Random()
+        public static bool RandomChance(double chance)
         {
-            return new Random();
+            double a = RandomDouble(chance);
+            double b = chance / 3;
+            Console.WriteLine($"{a} {b}");
+            return a < b;
         }
 
         public static int Answer(LanguagesManager s, string options = null, int max = 2)
@@ -56,7 +60,7 @@ namespace Game
 
         public static WeaponCreate RandomWeapon(WeaponCreate[] weapons, bool randomCondition = false)
         {
-            int randomWeapon = Random().Next(1, weapons.Length); // Sorteia um número
+            int randomWeapon = R.Next(1, weapons.Length); // Sorteia um número
             WeaponCreate weaponFound = weapons[randomWeapon]; // Pega a arma de acordo com o número sorteado
             weaponFound.Erode(randomCondition); // Determina a condição da arma
 
@@ -65,7 +69,7 @@ namespace Game
 
         public static MobCreate RandomMob(MobCreate[] mobs, WeaponCreate[] weapons, bool randomLvl = false, int lvlMin = 1)
         {
-            int randomMob = Random().Next(mobs.Length); // Sorteia um número
+            int randomMob = R.Next(mobs.Length); // Sorteia um número
             MobCreate mobFound = mobs[randomMob]; // Seleciona um mob aleatório
 
             // Weapons
@@ -76,7 +80,7 @@ namespace Game
             if (randomLvl)
             {
                 if (mobWeapon.Name != weapons[0].Name) lvlMin = mobWeapon.NecessaryLvl;
-                mobFound.LvlUp(Tools.Random().Next(lvlMin, lvlMin + 3));
+                mobFound.LvlUp(Tools.R.Next(lvlMin, lvlMin + 3));
             }
 
             mobFound.WeaponEquip(mobWeapon);

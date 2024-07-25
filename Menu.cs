@@ -27,9 +27,14 @@ namespace Game
             return player;
         }
 
-        public static void GameOver(LanguagesManager s)
+        public static bool GameOver(LanguagesManager s, MobCreate player)
         {
-            s.ShowSubtitle(s.GetSubtitle("Menu", "gameOver"));
+            if (player.Life <= 0)
+            {
+                s.ShowSubtitle(s.GetSubtitle("Subtitles", "gameOver"));
+                return true;
+            }
+            return false;
         }
 
         public static MobCreate RaceChoose(LanguagesManager s, MobCreate[] race, string name)

@@ -18,6 +18,7 @@ namespace Game
         public double MaxPrice { get; private set; }
 
         private readonly LanguagesManager Language;
+        private readonly Random R = new Random();
 
         public WeaponCreate(LanguagesManager language, string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
         {
@@ -34,7 +35,7 @@ namespace Game
 
         public void Erode(bool randomErode = false)
         {
-            if (randomErode) this.Condition = Tools.Random().Next(1, this.MaxCondition);
+            if (randomErode) this.Condition = R.Next(1, this.MaxCondition);
             else this.Condition--;
         }
 

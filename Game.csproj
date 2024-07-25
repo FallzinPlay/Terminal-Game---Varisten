@@ -50,6 +50,7 @@
     <Compile Include="LanguagesManager.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MobCreate.cs" />
+    <Compile Include="MobState.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="GameActions.cs" />
     <Compile Include="Program.cs" />

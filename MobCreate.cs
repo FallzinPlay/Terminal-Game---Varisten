@@ -30,9 +30,9 @@ namespace Game
         public double Xp { get; private set; }
         public double NextLvlXp { get; private set; }
         public bool Player {  get; set; }
-        public bool Alive { get; private set; }
         public bool WeaponEquiped { get; private set; }
-        public bool Fighting { get; set; }
+        //public bool Fighting { get; set; }
+        public MobState State {  get; set; }
         public WeaponCreate Weapon { get; private set; }
 
         readonly LanguagesManager Language;
@@ -45,7 +45,6 @@ namespace Game
             this.Life = this.MaxLife;
             this.MaxLife = maxLife;
             this.Damage = damage;
-            this.Alive = true;
             this.CriticChance = criticChance;
             this.CriticDamage = criticDamage;
             this.Dodge = dodge;
@@ -54,6 +53,7 @@ namespace Game
             this.MaxLvl = maxLvl;
             this.NextLvlXp = 10;
             this.EscapeChance = escapeChance;
+            this.State = MobState.Exploring;
 
             WeaponEquip(weapon);
             
@@ -65,9 +65,7 @@ namespace Game
         // Esquiva
         public bool GetDodge()
         {
-            double dodgeChance = Tools.RandomDouble(this.Dodge);
-            bool dodged = dodgeChance <= this.Dodge / 3;
-            if (dodged)
+            if (Tools.RandomChance(this.Dodge))
             {
                 // Legenda
                 this.Language.ShowSubtitle(
@@ -89,7 +87,6 @@ namespace Game
         // Ataque
         public double SetDamage(MobCreate enemy)
         {
-            double criticChance = Tools.RandomDouble(this.CriticChance);
             if (!enemy.GetDodge())
             {
                 double damage = this.Damage;
@@ -102,7 +99,7 @@ namespace Game
                 }
 
                 // Chance de crítico
-                if (criticChance <= this.CriticChance / 3)
+                if (Tools.RandomChance(this.CriticChance))
                 {
                     damage *= this.CriticDamage;
 

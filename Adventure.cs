@@ -84,42 +84,40 @@ namespace Game
 
             MobCreate mobFound = Tools.RandomMob(this.Mobs, this.Weapons, true, this.Player.Lvl);
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "mobFound").Replace("#", mobFound.Name)); // Encontra um mob
-            Fighting(true, this.Player, mobFound); // Faz o player e o mob entrarem em modo de luta
+            this.Player.State = MobState.Fighting;
             do
             {
+                if (this.Player.Life <= 0) break;
 
                 // Menu
                 answer = Tools.Answer(s, s.GetSubtitle("Menu", "mobFound"), 4);
-
-                #region Chance de escapar
-                if (answer == 0)
-                {
-                    // Sistema de chances de conseguir escapar
-                    if (this.Player.EscapeChance > this.Player.EscapeChance / 3)
-                    {
-                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "canRunAway").Replace("#", mobFound.Name)); // Foge do mob
-                        Fighting(false, this.Player, mobFound);
-                        break;
-                    }
-                    else
-                    {
-                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "cantRunAway")); // Não consegue fugir do mob
-                    }
-                }
-                #endregion
 
                 // Escolha
                 switch (answer)
                 {
                     case 0:
+                        #region Chance de escapar
+                        // Sistema de chances de conseguir escapar
+                        if (Tools.RandomChance(this.Player.EscapeChance))
+                        {
+                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "canRunAway").Replace("#", mobFound.Name)); // Foge do mob
+                            this.Player.State = MobState.Exploring;
+                            break;
+                        }
+                        else
+                        {
+                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "cantRunAway")); // Não consegue fugir do mob
+                        }
+                        #endregion
                         break;
 
                     case 1:
                         s.ShowSubtitle("\n" + mobFound + "\n");
-                        break;
+                        continue;
 
                     case 2:
                         double _damage = this.Player.SetDamage(mobFound);
+                        mobFound.State = MobState.Fighting;
                         if (this.Player.WeaponEquiped == true && this.Player.Weapon.Condition <= 0) // Se a arma quebrar, droppar ela
                         {
                             // Desequipa a arma
@@ -133,7 +131,7 @@ namespace Game
 
                     case 3:
                         s.ShowSubtitle(this.Player.ToString());
-                        break;
+                        continue;
 
                     default:
                         // Erro de ação invalida
@@ -155,10 +153,8 @@ namespace Game
                     // Chance do mob droppar a arma que ele está usando
                     if (mobFound.WeaponEquiped == true)
                     {
-
                         double dropChance = 3d;
-                        double dropped = Tools.RandomDouble(dropChance);
-                        if (dropped > dropChance / 1.3)
+                        if (Tools.RandomChance(dropChance))
                         {
                             // Mostra o drop do mob
                             answer = Tools.Answer(s,
@@ -184,70 +180,60 @@ namespace Game
                             }
                         }
                     }
-
+                    this.Player.State = MobState.Exploring;
                     #endregion
-
-                    Fighting(false, this.Player, mobFound); // Tira os dois de moto de luta
-                    break;
                 }
-                else
+
+                #region Turno do mob
+                // Chance do inimigo querer fugir
+                if (mobFound.Life < mobFound.MaxLife / 5)
                 {
-                    #region Turno do mob
-                    if (mobFound.Fighting == true)
+                    if (Tools.RandomChance(mobFound.EscapeChance))
                     {
-                        // Chance do inimigo querer fugir
-                        if (mobFound.Life < mobFound.MaxLife / 5)
-                        {
-                            if (mobFound.EscapeChance > mobFound.EscapeChance / 3)
-                            {
-                                // O inimigo está fugindo
-                                answer = Tools.Answer(s,
-                                    $"{s.GetSubtitle("Subtitles", "mobRunningAway").Replace("#", mobFound.Name)}" +
-                                    $"{s.GetSubtitle("Menu", "allowRunToward")}");
+                        // O inimigo está fugindo
+                        mobFound.State = MobState.Exploring;
+                        answer = Tools.Answer(s,
+                            $"{s.GetSubtitle("Subtitles", "mobRunningAway").Replace("#", mobFound.Name)}" +
+                            $"{s.GetSubtitle("Menu", "allowRunToward")}");
 
-                                switch (answer)
+                        switch (answer)
+                        {
+                            case 0:
+                                // Permite a fuga do mob
+                                s.ShowSubtitle(s.GetSubtitle("Subtitles", "allowMobRun"));
+                                break;
+
+                            // Verifica se você consegue evitar a fuga do inimigo ou não
+                            case 1:
+                                if (Tools.RandomChance(mobFound.EscapeChance))
                                 {
-                                    case 0:
-                                        // Permite a fuga do mob
-                                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "allowMobRun"));
-                                        Fighting(false, this.Player, mobFound); // Tira os dois do modo de luta
-                                        break;
-
-                                    // Verifica se você consegue evitar a fuga do inimigo ou não
-                                    case 1:
-                                        if (mobFound.EscapeChance < mobFound.EscapeChance / 3)
-                                        {
-                                            // Consegue capturar o mob
-                                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "canCatchMob"));
-                                        }
-                                        else
-                                        {
-                                            // O mob escapa
-                                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "cantCatchMob").Replace("#", mobFound.Name));
-                                            Fighting(false, this.Player, mobFound);
-                                        }
-                                        break;
+                                    // O mob escapa
+                                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "cantCatchMob").Replace("#", mobFound.Name));
                                 }
-                            }
-                        }
-                        else
-                        {
-                            // Ataque do inimigo
-                            if (answer == 2)
-                            {
-                                // Inimigo ataca
-                                double mobDamage = mobFound.SetDamage(this.Player);
-                                // Mostra o dano do inimigo
-                                s.ShowSubtitle(s.GetSubtitle("Combat", "damageToPlayer").Replace("#1", mobFound.Name).Replace("#2", mobDamage.ToString("F2", CultureInfo.InvariantCulture)));
-                            }
+                                else
+                                {
+                                    // Consegue capturar o mob
+                                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "canCatchMob"));
+                                }
+                                break;
+
+                            default:
+                                Tools.InvalidAction(s);
+                                continue;
                         }
                     }
-                    #endregion
                 }
 
-                if (this.Player.Life <= 0) break;
+                if (mobFound.State == MobState.Fighting)
+                {
+                    // Ataque do inimigo
+                    double mobDamage = mobFound.SetDamage(this.Player);
+                    // Mostra o dano do inimigo
+                    s.ShowSubtitle(s.GetSubtitle("Combat", "damageToPlayer").Replace("#1", mobFound.Name).Replace("#2", mobDamage.ToString("F2", CultureInfo.InvariantCulture)));
+                }
+                #endregion
             }
-            while (mobFound.Fighting == true);
+            while (this.Player.State == MobState.Fighting);
         }
 
         public void MerchantFound()
@@ -273,10 +259,10 @@ namespace Game
                 switch (answer)
                 {
                     case 1:
-                        // Titulo
-                        s.ShowSubtitle($"[{s.GetSubtitle("Titles", "items")}]\n");
-                        // moedas do jogador
-                        s.ShowSubtitle($"[{s.GetSubtitle("Subtitles", "myCoins").Replace("#", this.Player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]\n");
+                        // Legenda
+                        s.ShowSubtitle(
+                            $"[{s.GetSubtitle("Titles", "items")}] \n" +
+                            $"[{s.GetSubtitle("Subtitles", "myCoins").Replace("#", this.Player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]\n");
 
                         answer = Tools.Answer(s,
                             s.GetSubtitle("Merchant", "shop").Replace("#1", weaponFound.Name).Replace("#2", weaponPrice.ToString("F2", CultureInfo.InvariantCulture)),
@@ -356,14 +342,6 @@ namespace Game
                         continue;
                 }
                 break;
-            }
-        }
-
-        public static void Fighting(bool mode, params MobCreate[] mobs)
-        {
-            foreach (MobCreate m in mobs)
-            {
-                m.Fighting = mode;
             }
         }
 

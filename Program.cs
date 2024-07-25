@@ -14,6 +14,7 @@ namespace Game
     {
         static void Main(string[] args)
         {
+            Random R = new Random();
 
             // ------------- Choose the game language
             LanguagesManager s = new LanguagesManager();
@@ -36,7 +37,7 @@ namespace Game
             // Entidades
             MobCreate[] mob = new MobCreate[]
             {
-                // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel maximo, esquiva, chance de escapar
+                // idioma, nome, raça, dano, vida maxima, chace de critico, dano de critico, arma, nivel maximo, esquiva, chance de escapar
                 new MobCreate(s, s.GetSubtitle("Mobs", "zombie"), s.GetSubtitle("Races", "zombies"), 2.2d, 7, 1.1d, 1.7d, weapon[0], 10, 0.8d, 1.2d),
                 new MobCreate(s, s.GetSubtitle("Mobs", "skeleton"), s.GetSubtitle("Races", "skeletons"), 3.2d, 5, 2.2d, 2.3d, weapon[3], 12, 2.1d, 1.6d),
                 new MobCreate(s, s.GetSubtitle("Mobs", "slime"), s.GetSubtitle("Races", "slimes"), 2.7d, 4, 3.5d, 2.7d, weapon[0], 15, 0.5d, 2d),
@@ -45,8 +46,8 @@ namespace Game
             // Raças
             MobCreate[] race = new MobCreate[]
             {
-                // idioma, nome, raça, vida, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
-                new MobCreate(s, null, s.GetSubtitle("Races", "humans"), 2.4d, 10, 1.7d, 1.5d, weapon[0], 10, 1.7d, 1.7d),
+                // idioma, nome, raça, dano, vida maxima, chace de critico, dano de critico, arma, nivel, nivel maximo, esquiva, chance de escapar
+                new MobCreate(s, null, s.GetSubtitle("Races", "humans"), 2.4d, 10, 1.7d, 1.5d, weapon[0], 10, 1.7d, 1.5d),
                 new MobCreate(s, null, s.GetSubtitle("Races", "dwarves"), 3d, 8, 1.3d, 1.6d, weapon[0], 7, 1.2d, 1.3d),
             };
             // --------------------------------------------------
@@ -72,43 +73,30 @@ namespace Game
                 // Loop do jogo
                 Menu.StartMenu(s);
                 s.ShowSubtitle($"{s.GetSubtitle("Subtitles", "playMenu")}\n");
-                bool playing = true;
-                while (playing)
+                do
                 {
-                    // Acaba o jogo se o jogador morrer
-                    if (player.Life <= 0)
-                    {
-                        Menu.GameOver(s);
-                        playing = false;
-                    }
-
                     // Menu
                     answer = Tools.Answer(s,
                         s.GetSubtitle("Menu", "options"),
                         Enum.GetValues(typeof(StartActions)).Length);
-                    // Sai para o menu principal
-                    if (answer == 0)
-                    {
-                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "leaving")); // Saindo do jogo
-                        playing = false;
-                    }
                     switch ((StartActions)answer)
                     {
                         case StartActions.Exit:
+                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "leaving")); // Saindo do jogo
                             break;
 
                         case StartActions.Adventure:
 
-                            answer = Tools.Random().Next(10);
+                            answer = R.Next(10);
 
                             // Weapon
-                            if (answer <= 3) adventure.WeaponFound();
+                            if (answer <= 2) adventure.WeaponFound();
 
                             // Mob
                             else if (answer <= 7) adventure.MobFound();
 
                             // Merchant
-                            else if (answer <= 9) adventure.MerchantFound();
+                            else if (answer <= 8) adventure.MerchantFound();
 
                             // Treasury
                             else if (answer <= 10) adventure.TreasuryFound();
@@ -145,7 +133,8 @@ namespace Game
                             Tools.InvalidAction(s);
                             break;
                     }
-                }
+                    if (answer == 0) break;
+                } while (!Menu.GameOver(s, player));
             }
 
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "thanksForPlayed"));
