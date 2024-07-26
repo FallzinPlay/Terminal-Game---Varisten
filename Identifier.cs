@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    public enum MobState : int
+    public class Identifier
     {
-        Exploring,
-        Fighting,
+        public Guid Id { get; protected set; } = Guid.NewGuid();
     }
 }

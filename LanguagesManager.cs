@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Game
 {
-    internal class LanguagesManager
+    public class LanguagesManager
     {
         public bool Chose { get; private set; }
         public string[] LanguageOptions { get; private set; } = new string[]

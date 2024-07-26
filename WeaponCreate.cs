@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace Game
 {
-    internal class WeaponCreate
+    public class WeaponCreate : Identifier
     {
         public string Name { get; set; }
         public double Damage { get; private set; }
@@ -16,11 +16,12 @@ namespace Game
         public int MaxCondition { get; private set; }
         public double MinPrice { get; private set; }
         public double MaxPrice { get; private set; }
+        public MobCreate User { get; set; }
 
         private readonly LanguagesManager Language;
-        private readonly Random R = new Random();
+        private static readonly Random R = new Random();
 
-        public WeaponCreate(LanguagesManager language, string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
+        public WeaponCreate(EntityRegistry register, LanguagesManager language, string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
         {
             this.Name = name;
             this.Damage = damage;
@@ -29,14 +30,29 @@ namespace Game
             this.NecessaryLvl = necessaryLvl;
             this.MinPrice = minPrice;
             this.MaxPrice = maxPrice;
-
             this.Language = language;
+
+            register.AddEntity(this);
         }
 
         public void Erode(bool randomErode = false)
         {
             if (randomErode) this.Condition = R.Next(1, this.MaxCondition);
             else this.Condition--;
+            if (this.User != null) Break();
+        }
+
+        public void Break()
+        {
+            if (this.Condition <= 0)
+            {
+                this.User.WeaponUnequip();
+                if (User.Player)
+                {
+                    // Mostra que a arma quebrou
+                    this.Language.ShowSubtitle(this.Language.GetSubtitle("Subtitles", "weaponBroke"));
+                }
+            }
         }
 
         public override string ToString()

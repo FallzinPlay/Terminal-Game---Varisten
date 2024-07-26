@@ -14,7 +14,7 @@
 
     "gameOver": "You died! \nGAME OVER!",
 
-    "thanksForPlayed": "Thanks so much for have played! \nShutting down...",
+    "thanksForPlayed": "Thank you so much for have played! \nShutting down...",
 
     // Coleta
     "lvlUp": "Lvl Up!",
@@ -28,8 +28,6 @@
     "insufficientMoney": "I don't have enough coins!",
 
     "myCoins": "I have # coins",
-
-    "coinsCollect": "I collected # coins.",
 
     // Weapon
     "weaponEquipped": "Weapon equipped!",
@@ -160,9 +158,8 @@
     "critical": "CRITICAL!",
 
     //
-    "damageToMob": "You dealt #1 damage to the #2.",
-    "mobDefeat": "You defeated #.",
-    "damageToPlayer": "\n#1 dealt #2 damage to you."
+    "damageTo": "dealt #1 damage to the #2.",
+    "mobDefeat": "You defeated #."
   },
 
   "Error": {

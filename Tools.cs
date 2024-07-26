@@ -18,10 +18,9 @@ namespace Game
 
         public static bool RandomChance(double chance)
         {
-            double a = RandomDouble(chance);
-            double b = chance / 3;
-            Console.WriteLine($"{a} {b}");
-            return a < b;
+            double totalChance = RandomDouble(20);
+            bool result = totalChance <= chance;
+            return result;
         }
 
         public static int Answer(LanguagesManager s, string options = null, int max = 2)
@@ -58,10 +57,11 @@ namespace Game
             s.ShowSubtitle(s.GetSubtitle("Error", "invalidAction"));
         }
 
-        public static WeaponCreate RandomWeapon(WeaponCreate[] weapons, bool randomCondition = false)
+        public static WeaponCreate RandomWeapon(EntityRegistry register, LanguagesManager s, WeaponCreate[] weapons, bool randomCondition = false)
         {
             int randomWeapon = R.Next(1, weapons.Length); // Sorteia um número
-            WeaponCreate weaponFound = weapons[randomWeapon]; // Pega a arma de acordo com o número sorteado
+            WeaponCreate weaponGenerate = weapons[randomWeapon]; // Pega a arma de acordo com o número sorteado
+            WeaponCreate weaponFound = new WeaponCreate(register, s, weaponGenerate.Name, weaponGenerate.Damage, weaponGenerate.Condition, weaponGenerate.NecessaryLvl, weaponGenerate.MinPrice, weaponGenerate.MaxPrice);
             weaponFound.Erode(randomCondition); // Determina a condição da arma
 
             return weaponFound;
@@ -71,6 +71,7 @@ namespace Game
         {
             int randomMob = R.Next(mobs.Length); // Sorteia um número
             MobCreate mobFound = mobs[randomMob]; // Seleciona um mob aleatório
+            mobFound.GetDamage(mobFound.MaxLife);
 
             // Weapons
             WeaponCreate mobWeapon = weapons[0];
@@ -80,12 +81,14 @@ namespace Game
             if (randomLvl)
             {
                 if (mobWeapon.Name != weapons[0].Name) lvlMin = mobWeapon.NecessaryLvl;
-                mobFound.LvlUp(Tools.R.Next(lvlMin, lvlMin + 3));
+                int mobLvl = Tools.R.Next(lvlMin, lvlMin + 3);
+                mobFound.LvlUp(mobLvl);
             }
 
             mobFound.WeaponEquip(mobWeapon);
-            mobFound.Cure(Tools.RandomDouble(mobFound.MaxLife, mobFound.MaxLvl / 2));
+            mobFound.Cure(RandomDouble(mobFound.MaxLife, mobFound.MaxLife / 2));
             mobFound.GetCoins(Tools.RandomDouble(10d));
+            mobFound.GetXp(Tools.RandomDouble(mobFound.NextLvlXp / 2, 10d));
 
             return mobFound;
         }

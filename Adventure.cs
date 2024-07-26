@@ -16,12 +16,15 @@ namespace Game
 
         private int answer;
 
-        public Adventure(LanguagesManager language, MobCreate player, MobCreate[] mobs, WeaponCreate[] weapons)
+        private readonly EntityRegistry Register;
+
+        public Adventure(EntityRegistry register, LanguagesManager language, MobCreate player, MobCreate[] mobs, WeaponCreate[] weapons)
         {
             this.Language = language;
             this.Player = player;
             this.Mobs = mobs;
             this.Weapons = weapons;
+            this.Register = register;
         }
 
         public void WeaponFound()
@@ -29,7 +32,7 @@ namespace Game
             LanguagesManager s = this.Language;
 
             // Generate a weapon randomly
-            WeaponCreate weaponFound = Tools.RandomWeapon(this.Weapons, true);
+            WeaponCreate weaponFound = Tools.RandomWeapon(this.Register, s, this.Weapons, true);
             s.ShowSubtitle($"{s.GetSubtitle("Subtitles", "weaponFound").Replace("#", weaponFound.Name)}"); // Encontra uma arma
 
             do
@@ -48,19 +51,20 @@ namespace Game
                         {
                             // Compara a arma que já tem com a que encontrou
                             s.ShowSubtitle(
-                                $"\n[{s.GetSubtitle("Titles", "myWeapon")}]\n" +
-                                this.Player.Weapon +
-                                $"\n\n[{s.GetSubtitle("Titles", "weaponFound")}]\n" +
-                                weaponFound + "\n");
+                                $"[{s.GetSubtitle("Titles", "myWeapon")}]\n" +
+                                this.Player.Weapon);
+                            s.ShowSubtitle(
+                                $"[{s.GetSubtitle("Titles", "weaponFound")}]\n" +
+                                weaponFound);
                         }
                         else
                         {
                             // Diz que não tem arma e avalia a encontrada
                             s.ShowSubtitle(
-                                s.GetSubtitle("Subtitles", "haveNoWeapon") +
-                                weaponFound + "\n");
+                                $"{s.GetSubtitle("Subtitles", "haveNoWeapon")}\n" +
+                                weaponFound);
                         }
-                        break;
+                        continue;
 
                     case 2:
                         // Equipa a arma
@@ -72,8 +76,7 @@ namespace Game
                         Tools.InvalidAction(s);
                         continue;
                 }
-
-                if (answer != 1) break; // Permite comparar sem sair do loop
+                break;
             }
             while (answer > 0);
         }
@@ -116,17 +119,8 @@ namespace Game
                         continue;
 
                     case 2:
-                        double _damage = this.Player.SetDamage(mobFound);
+                        this.Player.SetDamage(mobFound);
                         mobFound.State = MobState.Fighting;
-                        if (this.Player.WeaponEquiped == true && this.Player.Weapon.Condition <= 0) // Se a arma quebrar, droppar ela
-                        {
-                            // Desequipa a arma
-                            this.Player.WeaponUnequip();
-                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "weaponBroke")); // Mostra que a arma quebrou
-                        }
-
-                        // Mostra quanto dano ô jogador causou ao inimigo
-                        s.ShowSubtitle(s.GetSubtitle("Combat", "damageToMob").Replace("#1", _damage.ToString("F2", CultureInfo.InvariantCulture)).Replace("#2", mobFound.Name));
                         break;
 
                     case 3:
@@ -142,7 +136,7 @@ namespace Game
                 // Morte do inimigo
                 if (mobFound.Life <= 0)
                 {
-                    s.ShowSubtitle(s.GetSubtitle("Combat", "mobDefeat").Replace("#", mobFound.Name));
+                    s.ShowSubtitle($"{s.GetSubtitle("Combat", "mobDefeat").Replace("#", mobFound.Name)}\n");
 
                     // Coleta o Xp
                     this.Player.GetXp(mobFound.Xp);
@@ -183,55 +177,55 @@ namespace Game
                     this.Player.State = MobState.Exploring;
                     #endregion
                 }
-
-                #region Turno do mob
-                // Chance do inimigo querer fugir
-                if (mobFound.Life < mobFound.MaxLife / 5)
+                else
                 {
-                    if (Tools.RandomChance(mobFound.EscapeChance))
+                    #region Turno do mob
+                    // Chance do inimigo querer fugir
+                    if (mobFound.Life < mobFound.MaxLife / 5)
                     {
-                        // O inimigo está fugindo
-                        mobFound.State = MobState.Exploring;
-                        answer = Tools.Answer(s,
-                            $"{s.GetSubtitle("Subtitles", "mobRunningAway").Replace("#", mobFound.Name)}" +
-                            $"{s.GetSubtitle("Menu", "allowRunToward")}");
-
-                        switch (answer)
+                        if (Tools.RandomChance(mobFound.EscapeChance))
                         {
-                            case 0:
-                                // Permite a fuga do mob
-                                s.ShowSubtitle(s.GetSubtitle("Subtitles", "allowMobRun"));
-                                break;
+                            // O inimigo está fugindo
+                            mobFound.State = MobState.Exploring;
+                            answer = Tools.Answer(s,
+                                $"{s.GetSubtitle("Subtitles", "mobRunningAway").Replace("#", mobFound.Name)}\n" +
+                                $"{s.GetSubtitle("Menu", "allowRunToward")}");
 
-                            // Verifica se você consegue evitar a fuga do inimigo ou não
-                            case 1:
-                                if (Tools.RandomChance(mobFound.EscapeChance))
-                                {
-                                    // O mob escapa
-                                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "cantCatchMob").Replace("#", mobFound.Name));
-                                }
-                                else
-                                {
-                                    // Consegue capturar o mob
-                                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "canCatchMob"));
-                                }
-                                break;
+                            switch (answer)
+                            {
+                                case 0:
+                                    // Permite a fuga do mob
+                                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "allowMobRun"));
+                                    break;
 
-                            default:
-                                Tools.InvalidAction(s);
-                                continue;
+                                // Verifica se você consegue evitar a fuga do inimigo ou não
+                                case 1:
+                                    if (Tools.RandomChance(mobFound.EscapeChance))
+                                    {
+                                        // O mob escapa
+                                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "cantCatchMob").Replace("#", mobFound.Name));
+                                    }
+                                    else
+                                    {
+                                        // Consegue capturar o mob
+                                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "canCatchMob"));
+                                    }
+                                    break;
+
+                                default:
+                                    Tools.InvalidAction(s);
+                                    continue;
+                            }
                         }
                     }
-                }
 
-                if (mobFound.State == MobState.Fighting)
-                {
-                    // Ataque do inimigo
-                    double mobDamage = mobFound.SetDamage(this.Player);
-                    // Mostra o dano do inimigo
-                    s.ShowSubtitle(s.GetSubtitle("Combat", "damageToPlayer").Replace("#1", mobFound.Name).Replace("#2", mobDamage.ToString("F2", CultureInfo.InvariantCulture)));
+                    if (mobFound.State == MobState.Fighting)
+                    {
+                        // Ataque do inimigo
+                        mobFound.SetDamage(this.Player);
+                    }
+                    #endregion
                 }
-                #endregion
             }
             while (this.Player.State == MobState.Fighting);
         }
@@ -240,36 +234,35 @@ namespace Game
         {
             LanguagesManager s = this.Language;
 
-            WeaponCreate weaponFound = Tools.RandomWeapon(this.Weapons);
+            WeaponCreate weaponFound = Tools.RandomWeapon(this.Register, s, this.Weapons);
             double weaponPrice = Tools.RandomDouble(weaponFound.MaxPrice, weaponFound.MinPrice);
 
             // Encontra o mercador
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "merchantFound"));
-            while (true)
+            do
             {
                 answer = Tools.Answer(s, s.GetSubtitle("Menu", "merchantFound"));
-                if (answer == 0)
-                {
-                    // Ignora o mercador
-                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "merchantIgnore"));
-                    break;
-                }
-
-                // Escolha
                 switch (answer)
                 {
+                    case 0:
+                        // Ignora o mercador
+                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "merchantIgnore"));
+                        break;
+
                     case 1:
                         // Legenda
                         s.ShowSubtitle(
                             $"[{s.GetSubtitle("Titles", "items")}] \n" +
-                            $"[{s.GetSubtitle("Subtitles", "myCoins").Replace("#", this.Player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]\n");
+                            $"[{s.GetSubtitle("Subtitles", "myCoins").Replace("#", this.Player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]");
 
                         answer = Tools.Answer(s,
                             s.GetSubtitle("Merchant", "shop").Replace("#1", weaponFound.Name).Replace("#2", weaponPrice.ToString("F2", CultureInfo.InvariantCulture)),
                             3);
-                        if (answer == 0) break;
                         switch (answer)
                         {
+                            case 0:
+                                break;
+
                             case 1:
 
                                 if (this.Player.Buy(5))
@@ -304,15 +297,15 @@ namespace Game
                                 s.ShowSubtitle(s.GetSubtitle("Error", "invalidAction"));
                                 continue;
                         }
+                        continue;
 
                     default:
                         // Mensagem de erro
                         Tools.InvalidAction(s);
                         continue;
                 }
-
-                if (answer != 1) break;
             }
+            while (answer > 0);
         }
 
         public void TreasuryFound()
@@ -323,7 +316,7 @@ namespace Game
             double coins = Tools.RandomDouble(20d, 5d); // Sorteia um número
             s.ShowSubtitle(s.GetSubtitle("Subtitles", "treasuryFound")); // Encontra um tesouro
 
-            while (true)
+            do
             {
                 answer = Tools.Answer(s, s.GetSubtitle("Menu", "noYes"));
                 switch (answer)
@@ -333,8 +326,6 @@ namespace Game
 
                     case 1:
                         this.Player.GetCoins(coins);
-                        // Coleta as moedas
-                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "coinsCollect").Replace("#", coins.ToString("F2", CultureInfo.InvariantCulture)));
                         break;
 
                     default:
@@ -343,6 +334,7 @@ namespace Game
                 }
                 break;
             }
+            while (answer > 0);
         }
 
     }

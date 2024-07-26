@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adventure.cs" />
+    <Compile Include="EntityRegistry.cs" />
+    <Compile Include="Identifier.cs" />
     <Compile Include="LanguagesManager.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MobCreate.cs" />
