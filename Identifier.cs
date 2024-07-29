@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    public class Identifier
+    public abstract class Identifier
     {
         public Guid Id { get; protected set; } = Guid.NewGuid();
     }

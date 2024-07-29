@@ -10,55 +10,26 @@ using System.Globalization;
 using static System.Net.Mime.MediaTypeNames;
 using System.Security.Cryptography;
 
-namespace Game
+namespace Game.ClassManager
 {
-    public class MobCreate : Identifier
+    public abstract class MobCreate : Identifier
     {
         public string Name { get; set; }
-        public string Race { get; private set; }
-        public string Description { get; private set; }
-        public int Lvl { get; private set; }
-        public int MaxLvl { get; private set; }
-        public int MaxLife { get; private set; }
-        public double Life { get; private set; }
-        public double Damage { get; private set; }
-        public double Dodge { get; private set; }
-        public double CriticChance { get; private set; }
-        public double CriticDamage { get; private set; }
-        public double EscapeChance { get; private set; }
-        public double Coins { get; private set; }
-        public double Xp { get; private set; }
-        public double NextLvlXp { get; private set; }
-        public bool Player {  get; set; }
-        public bool WeaponEquiped { get; private set; }
+        public string Description { get; protected set; }
+        public int Lvl { get; protected set; }
+        public int MaxLvl { get; protected set; }
+        public int MaxLife { get; protected set; }
+        public double Life { get; protected set; }
+        public double Damage { get; protected set; }
+        public double Dodge { get; protected set; }
+        public double CriticChance { get; protected set; }
+        public double CriticDamage { get; protected set; }
+        public double EscapeChance { get; protected set; }
+        public double Coins { get; protected set; }
+        public double Xp { get; protected set; }
+        public double NextLvlXp { get; protected set; }
         public MobState State {  get; set; }
-        public WeaponCreate Weapon { get; private set; }
-
-        private readonly LanguagesManager Language;
-
-        public MobCreate(EntityRegistry register, LanguagesManager language, string name, string race, double damage, int maxLife, double criticChance, double criticDamage, WeaponCreate weapon, int maxLvl, double dodge, double escapeChance)
-        {
-            this.Name = name;
-            this.Race = race;
-            this.MaxLife = maxLife;
-            this.Life = this.MaxLife;
-            this.MaxLife = maxLife;
-            this.Damage = damage;
-            this.CriticChance = criticChance;
-            this.CriticDamage = criticDamage;
-            this.Dodge = dodge;
-            this.Weapon = weapon;
-            this.Lvl = 1;
-            this.MaxLvl = maxLvl;
-            this.NextLvlXp = 10;
-            this.EscapeChance = escapeChance;
-            this.State = MobState.Exploring;
-            this.Language = language;
-
-            WeaponEquip(weapon);
-
-            register.AddEntity(this);
-        }
+        public WeaponCreate Weapon { get; protected set; }
 
         #region Combat
 
@@ -245,29 +216,22 @@ namespace Game
         }
         #endregion
 
-        public string SetDescription(string description)
-        {
-            this.Description = description;
-            return this.Description;
-        }
-
-        public override string ToString()
+        public string ShowInfo(LanguagesManager s)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(
-                $"[{this.Name}]\n" +
-                $"{this.Language.GetSubtitle("MobClass", "race")}: {this.Race}\n" +
-                $"Lvl: {this.Lvl}\n" +
-                $"Xp: {this.Xp.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "necessaryXp")}: {this.NextLvlXp}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "life")}: {this.Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "maxLife")}: {this.MaxLife}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "dodge")}: {this.Dodge.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "damage")}: {this.Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "criticChance")}: {this.CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "criticDamage")}: {this.CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "weapon")}: {this.Weapon.Name}\n" +
-                $"{this.Language.GetSubtitle("MobClass", "coins")}: {this.Coins.ToString("F2", CultureInfo.InvariantCulture)}");
+                $"[{Name}]\n" +
+                $"Lvl: {Lvl}\n" +
+                $"Xp: {Xp.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("MobClass", "necessaryXp")}: {NextLvlXp}\n" +
+                $"{s.GetSubtitle("MobClass", "life")}: {Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("MobClass", "maxLife")}: {MaxLife}\n" +
+                $"{s.GetSubtitle("MobClass", "dodge")}: {Dodge.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("MobClass", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("MobClass", "criticChance")}: {CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("MobClass", "criticDamage")}: {CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("MobClass", "weapon")}: {Weapon.Name}\n" +
+                $"{s.GetSubtitle("MobClass", "coins")}: {Coins.ToString("F2", CultureInfo.InvariantCulture)}");
 
             return sb.ToString();
         }

@@ -7,33 +7,17 @@ using System.Globalization;
 
 namespace Game
 {
-    public class WeaponCreate : Identifier
+    public abstract class WeaponCreate : Identifier
     {
         public string Name { get; set; }
-        public double Damage { get; private set; }
-        public int NecessaryLvl { get; private set; }
+        public double Damage { get; protected set; }
+        public int NecessaryLvl { get; protected set; }
         public int Condition { get; set; }
-        public int MaxCondition { get; private set; }
-        public double MinPrice { get; private set; }
-        public double MaxPrice { get; private set; }
-        public MobCreate User { get; set; }
+        public int MaxCondition { get; protected set; }
+        public double MinPrice { get; protected set; }
+        public double MaxPrice { get; protected set; }
 
-        private readonly LanguagesManager Language;
         private static readonly Random R = new Random();
-
-        public WeaponCreate(EntityRegistry register, LanguagesManager language, string name, double damage, int maxCondition, int necessaryLvl, double minPrice, double maxPrice)
-        {
-            this.Name = name;
-            this.Damage = damage;
-            this.MaxCondition = maxCondition;
-            this.Condition = MaxCondition;
-            this.NecessaryLvl = necessaryLvl;
-            this.MinPrice = minPrice;
-            this.MaxPrice = maxPrice;
-            this.Language = language;
-
-            register.AddEntity(this);
-        }
 
         public void Erode(bool randomErode = false)
         {
