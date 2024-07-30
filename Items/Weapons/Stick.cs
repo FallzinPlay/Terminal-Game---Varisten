@@ -14,7 +14,7 @@ namespace Game.Items.Weapons
         public Stick()
         {
             Name = "Stick";
-            Damage = 3.2d;
+            Damage = 0.5d;
             MaxCondition = 4;
             Condition = MaxCondition;
             NecessaryLvl = 1;

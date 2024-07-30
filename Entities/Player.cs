@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -29,19 +30,21 @@ namespace Game.Entities
             _language = language;
         }
 
-        public override double Attack(MobCreate enemy)
+        public sealed override void GetDamage(double damage)
         {
-            double _damage = base.Attack(enemy);
-            if (Weapon != null && Weapon.Condition <= 0)
-            {
-                WeaponUnequip();
+            base.GetDamage(damage);
+            if (Life < Life / 5)
                 _language.ShowSubtitle(
-                    _language.GetSubtitle("Weapon", "broke"));
-            }
+                    _language.GetSubtitle("Player", "dying"));
+        }
+
+        public sealed override double SetDamage()
+        {
+            double _damage = base.SetDamage();
             return _damage;
         }
 
-        public override bool TryRunAway()
+        public sealed override bool TryRunAway()
         {
             bool _escape = base.TryRunAway();
             if (_escape)
@@ -53,7 +56,7 @@ namespace Game.Entities
             return _escape;
         }
 
-        public override bool WeaponEquip(WeaponCreate weapon)
+        public sealed override bool WeaponEquip(WeaponCreate weapon)
         {
             if (Lvl >= weapon.NecessaryLvl)
             {
@@ -85,6 +88,13 @@ namespace Game.Entities
             return true;
         }
 
+        public sealed override void GetCoins(double coins)
+        {
+            base.GetCoins(coins);
+            _language.ShowSubtitle(
+                _language.GetSubtitle("Player", "getCoins").Replace("#Coins", Coins.ToString("F2", CultureInfo.InvariantCulture)) + "\n");
+        }
+
         public sealed override void GetXp(double xp)
         {
             base.GetXp(xp);
@@ -93,6 +103,8 @@ namespace Game.Entities
                 Xp -= NextLvlXp;
                 LvlUp();
             }
+            _language.ShowSubtitle(
+                _language.GetSubtitle("Player", "getXp").Replace("#Xp", Xp.ToString("F2", CultureInfo.InvariantCulture)));
         }
 
         public sealed override void LvlUp(int lvl = 1)
@@ -100,6 +112,9 @@ namespace Game.Entities
             base.LvlUp(lvl);
             Cure(MaxLife);
             NextLvlXp = Lvl * 42;
+
+            _language.ShowSubtitle(
+                _language.GetSubtitle("Player", "lvlUp"));
         }
         public override string ToString()
         {

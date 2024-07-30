@@ -44,7 +44,7 @@ namespace Game
 
                 // Loop do jogo
                 s.ShowSubtitle($"{s.GetSubtitle("System", "wellcome")}\n");
-                
+
                 int answer;
                 while (Menu.StartMenu(s))
                 {
@@ -83,7 +83,8 @@ namespace Game
                             default:
                                 continue;
                         }
-                    } while (answer > 0 || Menu.GameOver(s, player));
+                        if (Menu.GameOver(s, player)) break;
+                    } while (answer > 0);
                 }
 
                 s.ShowSubtitle(s.GetSubtitle("Me", "thanks"));
@@ -95,7 +96,7 @@ namespace Game
                 s.ShowSubtitle("Error: " + ex);
             }
         }
-        // !!!!!!!!!!!!!!!! Verificar porquê não está saindo do loop !!!!!!!!!!!!!!
+
         public static void MobFound(LanguagesManager s, Random r, MobCreate player)
         {
             int answer;
@@ -113,16 +114,12 @@ namespace Game
                         break;
 
                     case 1:
-                        double _damage = player.Attack(mobFound);
-                        string _critic = "";
-                        if (player.Weapon == null && _damage > player.Damage)
-                            _critic = s.GetSubtitle("Combat", "critic");
-
+                        double _damage = MobAttack(s, player, mobFound);
                         s.ShowSubtitle(
                             s.GetSubtitle("Player", "attack" + mobFound.Name + r.Next(3)));
                         s.ShowSubtitle(
                             s.GetSubtitle("Combat", "getDamage").Replace("#Name", mobFound.Name).Replace("#Damage", _damage.ToString("F2")) +
-                            _critic + "\n");
+                            "\n");
                         break;
 
                     case 2:
@@ -147,7 +144,7 @@ namespace Game
                     player.GetXp(mobFound.Xp);
                     player.GetCoins(mobFound.Coins);
 
-                    /* Chance de drop
+                    //* Chance de drop
                     if (mobFound.Weapon != null)
                     {
                         double dropChance = 3d;
@@ -176,9 +173,8 @@ namespace Game
                             }
                         }
                     }
-                    */
+                    //*/
                     player.State = MobState.Exploring;
-                    Console.WriteLine("Acabou");
                 }
                 else
                 {
@@ -228,21 +224,49 @@ namespace Game
                     if (mobFound.State == MobState.Fighting)
                     {
                         // Ataque do inimigo
-                        double _damage = mobFound.Attack(player); ;
-                        string _critic = "";
-                        if (mobFound.Weapon == null && _damage > mobFound.Damage)
-                            _critic = s.GetSubtitle("Combat", "critic");
-
+                        double _damage = MobAttack(s, mobFound, player); ;
                         s.ShowSubtitle(
                             s.GetSubtitle(mobFound.Name, "attack" + r.Next(3)));
                         s.ShowSubtitle(
                             s.GetSubtitle("Combat", "getDamage").Replace("#Name", player.Name).Replace("#Damage", _damage.ToString("F2")) +
-                            _critic + "\n");
+                            "\n");
                     }
                     #endregion
                 }
+                if (Menu.GameOver(s, player)) break;
             }
-            while (player.State == MobState.Fighting || !Menu.GameOver(s, player));
+            while (player.State == MobState.Fighting);
+        }
+
+        public static double MobAttack(LanguagesManager s, MobCreate mob, MobCreate enemy)
+        {
+            double _damage = 0d;
+            if (!enemy.DodgeCheck())
+            {
+                _damage = mob.SetDamage();
+                double _criticDamage = mob.CriticCheck(_damage);
+
+                if (mob.Weapon != null)
+                {
+                    mob.Weapon.Erode();
+                    if (mob.Weapon.Condition <= 0)
+                    {
+                        s.ShowSubtitle(
+                            s.GetSubtitle("Weapon", "broke").Replace("#Name", mob.Name));
+                        mob.WeaponUnequip();
+                    }
+                }
+
+                if (_criticDamage > _damage)
+                {
+                    _damage = _criticDamage;
+                    s.ShowSubtitle(
+                        s.GetSubtitle("Combat", "critic"));
+                }
+                enemy.GetDamage(_damage);
+            }
+            else s.ShowSubtitle(s.GetSubtitle("Combat", "dodge").Replace("#Name", enemy.Name)); // Dodge
+            return _damage;
         }
 
         public static void MerchantFound(LanguagesManager s, Player player)

@@ -19,6 +19,8 @@ namespace Game.Entities
             CriticDamage = 2.3d;
             MaxLvl = 12;
             Dodge = 2.1d;
+            DropChance = 3.2d;
+            EscapeChance = 2.5d;
 
             WeaponEquip(new WoodenBow());
         }

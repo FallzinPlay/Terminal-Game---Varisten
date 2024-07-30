@@ -29,13 +29,22 @@ namespace Game.ClassManager
         public double Coins { get; protected set; }
         public double Xp { get; protected set; }
         public double NextLvlXp { get; protected set; }
-        public MobState State {  get; set; }
+        public double DropChance {  get; protected set; }
+        public MobState State { get; set; } = MobState.Exploring;
         public WeaponCreate Weapon { get; protected set; }
 
         #region Combat
 
+        // Chance de critico
+        public double CriticCheck(double damage)
+        {
+            if (Tools.RandomChance(CriticChance))
+                return damage *= CriticDamage;
+            return damage;
+        }
+
         // Esquiva
-        public bool GetDodge()
+        public bool DodgeCheck()
         {
             if (Tools.RandomChance(Dodge))
                 return true;
@@ -43,7 +52,7 @@ namespace Game.ClassManager
         }
 
         // Recebe dano
-        public void GetDamage(double damage)
+        public virtual void GetDamage(double damage)
         {
             Life -= damage;
             if (Life <= 0)
@@ -53,24 +62,9 @@ namespace Game.ClassManager
         }
 
         // Ataque
-        public virtual double Attack(MobCreate enemy)
+        public virtual double SetDamage()
         {
-            double damage = 0;
-            if (!enemy.GetDodge())
-            {
-                damage = Damage;
-                if (Weapon != null)
-                {
-                    Weapon.Erode();
-                    if (Weapon.Condition <= 0)
-                        WeaponUnequip();
-                }
-
-                // Chance de crítico
-                if (Tools.RandomChance(CriticChance))
-                    damage *= CriticDamage;
-                enemy.GetDamage(damage);
-            }
+            double damage = Damage;
             return Tools.RandomDouble(damage, damage / 2);
         }
 
@@ -106,7 +100,7 @@ namespace Game.ClassManager
             Life += life;
         }
 
-        public void GetCoins(double coins)
+        public virtual void GetCoins(double coins)
         {
             Coins += coins;
         }
@@ -119,7 +113,7 @@ namespace Game.ClassManager
 
         public virtual void LvlUp(int lvl)
         {
-            Lvl += lvl;
+            Lvl = lvl;
             MaxLife += lvl;
             Damage += 0.02 * lvl;
         }

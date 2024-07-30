@@ -12,7 +12,7 @@ namespace Game.Items.Weapons
         public WoodenSword()
         {
             Name = "Wooden Sword";
-            Damage = 3.5d;
+            Damage = 1.7d;
             MaxCondition = 5;
             Condition = MaxCondition;
             NecessaryLvl = 2;

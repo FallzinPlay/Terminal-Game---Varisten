@@ -3,7 +3,8 @@
     "presentation": "What is it?! Another adventurer? \nOh no...ok, ok. Let's do it quickly. \nTell me your name, poor person.",
     "jokeWithName": "Is this a name? Haha! It'll be that now.",
     "wellcome": "This world is dangerous, has a lot of monsters and everything more...You already know it. \nYou will go to into that forest and monsters will kill you. Like this. Cut the crap. Go!",
-    "leaving": "It seems he is a coward! Haha. See you, #PlayerName."
+    "leaving": "It seems he is a coward! Haha. See you, #PlayerName.",
+    "gameOver": "Game over!"
   },
 
   "Me": {
@@ -28,13 +29,14 @@
 
   "Player": {
     "fullLife": "Brand new again!",
-
-    "weaponBroke": "My weapon have broken!",
+    "lvlup": "Lvl up! \nI feel more strongh now.",
+    "getCoins": "These #Coins coins I have gotten will be really useful. \nI could buy something new.",
+    "getXp": "I received #Xpxp.",
 
     "noEscape": "I do not have as to escape... \nAll that's left for me is to fight!",
     "escape": "Well, I had to run away now, but if I ever encounter that monster again... \nI'm going to defeat him!",
 
-    "death": "I am...dying.",
+    "dying": "I am...dying.",
 
     // Zombie
     "zombieFound": "A zombie. Really? \nI will certainly have no trouble defeating him.",
@@ -69,7 +71,7 @@
 
     "allowSlimeRun": "You can run away, little slime.",
 
-    "catchSlime": "Today I am not a good man. /nWe will keep fighting.",
+    "catchSlime": "Today I am not a good man.\nWe will keep fighting.",
     "noCatchSlime": "He has escaped...Maybe I was too hard on him."
   },
 
@@ -103,8 +105,12 @@
     "runAway": "No..."
   },
 
+  "Weapon": {
+    "broke": "#Name's weapon have broken!"
+  },
+
   "Combat": {
-    "critic": "[Critic]!!!",
+    "critic": "[Critical]!!!",
     "dodge": "#Name dodged!",
     "getDamage": "#Name got #Damage damage."
   },

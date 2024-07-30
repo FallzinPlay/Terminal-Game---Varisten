@@ -18,6 +18,8 @@ namespace Game.Entities
             CriticDamage = 2.7d;
             MaxLvl = 15;
             Dodge = 0.5d;
+            DropChance = 2.7d;
+            EscapeChance = 0.5d;
         }
     }
 }

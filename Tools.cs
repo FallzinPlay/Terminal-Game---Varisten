@@ -21,7 +21,7 @@ namespace Game
 
         public static bool RandomChance(double chance)
         {
-            double totalChance = RandomDouble(20);
+            double totalChance = RandomDouble(25);
             bool result = totalChance <= chance;
             return result;
         }
@@ -64,10 +64,10 @@ namespace Game
             mob.Cure(RandomDouble(mob.MaxLife, mob.MaxLife / 2));
 
             // Randomizing mob's xp
-            mob.GetXp(RandomDouble(mob.NextLvlXp / 2, 10d));
+            mob.GetXp(RandomDouble(mob.NextLvlXp / 2, 10.0d));
 
             // Radomizing mob's coins
-            mob.GetCoins(RandomDouble(mob.Lvl * 2.5d, mob.Lvl * 1.5d));
+            mob.GetCoins(RandomDouble(mob.Lvl * 2.0d, mob.Lvl * 1.5d));
             return mob;
         }
 
