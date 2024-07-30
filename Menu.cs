@@ -18,7 +18,7 @@ namespace Game
 
         public static bool GameOver(LanguagesManager s, MobCreate player)
         {
-            if (player.Life <= 0)
+            if (player.State == MobState.Death)
             {
                 s.ShowSubtitle(s.GetSubtitle("Subtitles", "gameOver"));
                 return true;

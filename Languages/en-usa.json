@@ -1,168 +1,26 @@
 {
-  "Subtitles": {
-    "setName": "Hey! Let's create your character! \nFirst write their name:",
-
-    "wellcome": "Alright, new adventurer! Now we're going to go to into that forest. \nBut be careful, there are monsters over there. \nLet's go!",
-
-    "playMenu": "Wellcome to Varisten! \nHere is a magic world with so many adventures to go.",
-
-    "greatChose": "Great choose!",
-
-    "raceChoose": "Now, tell me which race would you like",
-
-    "leaving": "Leaving from the adventure...",
-
-    "gameOver": "You died! \nGAME OVER!",
-
-    "thanksForPlayed": "Thank you so much for have played! \nShutting down...",
-
-    // Coleta
-    "lvlUp": "Lvl Up!",
-
-    "xpReceived": "Xp received:",
-
-    "coinsReceived": "Coins received:",
-
-    "insufficientLvl": "I don't have enough Lvl!",
-
-    "insufficientMoney": "I don't have enough coins!",
-
-    "myCoins": "I have # coins",
-
-    // Weapon
-    "weaponEquipped": "Weapon equipped!",
-
-    "weaponFound": "A #! Should I equip it?",
-
-    "dontEquipWeapon": "I don't need it now...",
-
-    "myWeapon": "My weapon",
-
-    "haveNoWeapon": "I don't have any weapon...",
-
-    "weaponBroke": "My weapon broke!",
-
-    "weaponIgnore": "You ignored the weapon and went ahead in your journey.",
-
-    // Mob
-    "canRunAway": "You run away from the # as far as you can.",
-
-    "cantRunAway": "I couldn't escape. I will have to fight!",
-
-    "mobFound": "A #! What should I do?",
-
-    "mobDrop": "The #1 dropped a #2. \nWould you like to equip it?",
-
-    "mobRunningAway": "The # is running away!",
-
-    "allowMobRun": "I'll allow you escape today.",
-
-    "canCatchMob": "I catched it! Let's continue the fight!",
-
-    "cantCatchMob": "The # escaped!",
-
-    // Mercador
-    "merchantFound": "A merchant!",
-
-    "merchantIgnore": "I don't need to buy anything.",
-
-    "buyWeapon": "You bought and equiped the weapon.",
-
-    // Tesouro
-    "treasuryFound": "A can with full coins! \nWould you like to collect this treasury?"
+  "System": {
+    "presentation": "What is it?! Another adventurer? \nOh no...ok, ok. Let's do it quickly. \nTell me your name, poor person.",
+    "jokeWithName": "Is this a name? Haha! It'll be that now.",
+    "wellcome": "This world is dangerous, has a lot of monsters and everything more...You already know it. \nYou will go to into that forest and monsters will kill you. Like this. Cut the crap. Go!",
+    "leaving": "It seems he is a coward! Haha. See you, #PlayerName."
   },
 
-  "Titles": {
-    "races": "Races",
-    "myWeapon": "My Weapon",
-    "weaponFound": "Weapon Found",
-    "items": "Items",
-    "life": "Life"
+  "Me": {
+    "thanks": "Thank you so much for have played my little game! :D \nShutting down..."
   },
 
   "Menu": {
-    // Inicio
-    "start": "[MENU] \n1: Play \n0: Exit",
-
-    "options": "[ACTION] \n0: Exit \n1: Explore \n2: Status \n3: Weapon \n4: Description",
-
-    // Weapon
-    "weaponFound": "0: Ignore \n1: Compare \n2: Equip",
-
-    // Mob
-    "mobFound": "0: Run away \n1: Analize \n2: Atack! \n3- My status",
-
-    "returnConfirm": "0: Return \n1: Confirm",
-
-    "noYes": "0: No \n1: Yes",
-
-    "allowRunToward": "0: Allow \n1: Run toward it",
-
-    // Mercador
-    "merchantFound": "0: Ignore \n1: Verify"
+    "start": "[Varisten] \n0: Leave \n1: Play",
+    "adventure": "[Dark Forest] \n0: Leave \n1: Go ahead \n2: Inventory"
   },
 
-  "Weapons": {
-    "stick": "Stick",
-    "woodenSword": "Wooden sword",
-    "woodenBow": "Wooden bow"
-  },
-
-  "Mobs": {
-    "zombie": "Zombie",
-    "skeleton": "Skeleton",
-    "slime": "Slime"
+  "Player": {
+    "fullLife": "Brand new again!",
+    "weaponBroke": "My weapon have broken!"
   },
 
   "Merchant": {
-    "shop": "0- Leave \n1- HP Potion ($5) \n2- #1 ($#2)"
-  },
-
-  "Races": {
-    "zombies": "Zombies",
-    "skeletons": "Skeletons",
-    "slimes": "Slimes",
-
-    "humans": "Humans",
-    "dwarves": "Dwarves"
-  },
-
-  "Descriptions": {
-    "humans": "If you want to be adaptable, this race is perfect to you! \nThe humans are good learning new things and using all kind of weapons. \nThey living as in small civilizations as in big cities, and \ncan learning any language.",
-
-    "dwarves": "The dwarves are masters building anything. \nThey making the most powerful weapons in any civilization, and \nworking in the mines obtaining the most valuable ores. \nBut these armorers can be a bit unstable at times."
-  },
-
-  "MobClass": {
-    "race": "Race",
-    "necessaryXp": "Necessary XP",
-    "life": "Life",
-    "maxLife": "Max Life",
-    "dodge": "Dodge",
-    "damage": "Damage",
-    "criticChance": "Critic Chance",
-    "criticDamage": "Critic Damage",
-    "weapon": "Weapon",
-    "coins": "Coins"
-  },
-
-  "WeaponClass": {
-    "damage": "Damage",
-    "condition": "Condition",
-    "necessaryLvl": "Necessary Lvl"
-  },
-
-  "Combat": {
-    // 
-    "dodged": "DODGED!",
-    "critical": "CRITICAL!",
-
-    //
-    "damageTo": "dealt #1 damage to the #2.",
-    "mobDefeat": "You defeated #."
-  },
-
-  "Error": {
-    "invalidAction": "It is not a valid option."
+    "noCoins": "Are you joking me? You don't have enough coins!"
   }
 }

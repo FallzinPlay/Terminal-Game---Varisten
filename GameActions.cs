@@ -10,8 +10,6 @@ namespace Game
     {
         Exit,
         Adventure,
-        PlayerStatus,
         PlayerBag,
-        RaceDescription,
     }
 }

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    public enum MobState : int
+    internal class GameException : ApplicationException
     {
-        Exploring,
-        Fighting,
-        Death,
+        public GameException(string messageName) : base(messageName) { }
     }
 }

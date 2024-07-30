@@ -23,31 +23,16 @@ namespace Game
         {
             if (randomErode) this.Condition = R.Next(1, this.MaxCondition);
             else this.Condition--;
-            if (this.User != null) Break();
         }
 
-        public void Break()
-        {
-            if (this.Condition <= 0)
-            {
-                this.User.WeaponUnequip();
-                if (User.Player)
-                {
-                    // Mostra que a arma quebrou
-                    this.Language.ShowSubtitle(this.Language.GetSubtitle("Subtitles", "weaponBroke"));
-                }
-            }
-        }
-
-        public override string ToString()
+        public virtual string ShowInfo(LanguagesManager s)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(
                 $"[{this.Name}]\n" +
-                $"{this.Language.GetSubtitle("WeaponClass", "damage")}  : {this.Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{this.Language.GetSubtitle("WeaponClass", "condition")}: {this.Condition}\n" +
-                $"{this.Language.GetSubtitle("WeaponClass", "necessaryLvl")}: {this.NecessaryLvl}\n");
-
+                $"{s.GetSubtitle("WeaponClass", "damage")}  : {this.Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("WeaponClass", "condition")}: {this.Condition}\n" +
+                $"{s.GetSubtitle("WeaponClass", "necessaryLvl")}: {this.NecessaryLvl}\n");
             return sb.ToString();
         }
     }

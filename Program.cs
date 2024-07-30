@@ -30,90 +30,75 @@ namespace Game
             // --------------------------------------------------
 
             //*/
-            
-            #region Jogo
-            //*
-            if (s.Chose)
+
+            try
             {
-                // criação do jogador
-                s.ShowSubtitle(s.GetSubtitle("Subtitles", "setName")); // Pequena apresentação
-                Console.Write(">> ");
-                string playerName = Console.ReadLine(); // Pega o nome do jogador
-                s.ShowSubtitle(s.GetSubtitle("Subtitles", "greatChose"));
-                MobCreate player = new Player(playerName);
-                s.ShowSubtitle($"{s.GetSubtitle("Subtitles", "wellcome")}\n");
-
-                // Loop do jogo
-                Menu.StartMenu(s);
-                s.ShowSubtitle($"{s.GetSubtitle("Subtitles", "playMenu")}\n");
-                int answer;
-                do
+                #region Jogo
+                //*
+                if (s.Chose)
                 {
-                    // Menu
-                    answer = Tools.Answer(s,
-                        s.GetSubtitle("Menu", "options"),
-                        Enum.GetValues(typeof(StartActions)).Length);
-                    switch ((StartActions)answer)
+                    // criação do jogador
+                    s.ShowSubtitle(s.GetSubtitle("System", "presentation")); // Pequena apresentação
+                    Console.Write(">> ");
+                    string playerName = Console.ReadLine(); // Pega o nome do jogador
+                    s.ShowSubtitle(s.GetSubtitle("System", "jokeWithName"));
+                    Player player = new Player(s, playerName);
+
+                    // Loop do jogo
+                    Menu.StartMenu(s);
+                    s.ShowSubtitle($"{s.GetSubtitle("System", "wellcome")}\n");
+                    s.ShowSubtitle($"{s.GetSubtitle("Menu", "Start")}\n");
+                    // Fazer as opções jogar e sair
+                    int answer;
+                    do
                     {
-                        case StartActions.Exit:
-                            s.ShowSubtitle(s.GetSubtitle("Subtitles", "leaving")); // Saindo do jogo
-                            break;
+                        // Menu
+                        answer = Tools.Answer(s,
+                            s.GetSubtitle("Menu", "adventure"),
+                            Enum.GetValues(typeof(StartActions)).Length);
+                        switch ((StartActions)answer)
+                        {
+                            case StartActions.Exit:
+                                s.ShowSubtitle(s.GetSubtitle("System", "leaving").Replace("#PlayerName", player.Name)); // Saindo do jogo
+                                break;
 
-                        case StartActions.Adventure:
+                            case StartActions.Adventure:
 
-                            int randomAction = R.Next(10);
+                                int randomAction = R.Next(10);
 
-                            // Weapon
-                            if (randomAction <= 2) WeaponFound(s, player);
+                                // Weapon
+                                if (randomAction <= 2) WeaponFound(s, player);
 
-                            // Mob
-                            else if (randomAction <= 7) MobFound(s, player);
+                                // Mob
+                                else if (randomAction <= 7) MobFound(s, player);
 
-                            // Merchant
-                            else if (randomAction <= 8) MerchantFound(s, player);
+                                // Merchant
+                                else if (randomAction <= 8) MerchantFound(s, player);
 
-                            // Treasury
-                            else if (randomAction <= 10) TreasuryFound(s, player);
+                                // Treasury
+                                else if (randomAction <= 10) TreasuryFound(s, player);
 
-                            else
-                            {
-                                // Mostra ação invalida
-                                Tools.InvalidAction(s);
-                            }
-                            break;
+                                break;
 
-                        case StartActions.PlayerStatus:
-                            s.ShowSubtitle(player.ToString());
-                            break;
+                            case StartActions.PlayerBag:
+                                // Mostra a arma do player
+                                
+                                break;
 
-                        case StartActions.PlayerBag:
-                            // Mostra a arma do player
-                            if (player.Weapon != null)
-                            {
-                                s.ShowSubtitle(player.Weapon.ToString());
-                            }
-                            else
-                            {
-                                // Diz que não tem arma
-                                s.ShowSubtitle(s.GetSubtitle("Subtitles", "haveNoWeapon"));
-                            }
-                            break;
+                            default:
+                                continue;
+                        }
+                    } while (answer > 0 || Menu.GameOver(s, player));
+                }
 
-                        case StartActions.RaceDescription:
-                            s.ShowSubtitle(player.Description.ToString() + "\n");
-                            break;
-
-                        default:
-                            Tools.InvalidAction(s);
-                            continue;
-                    }
-                    if (Menu.GameOver(s, player)) break;
-                } while (answer > 0);
+                s.ShowSubtitle(s.GetSubtitle("Me", "thanks"));
+                //*/
+                #endregion
             }
-
-            s.ShowSubtitle(s.GetSubtitle("Subtitles", "thanksForPlayed"));
-            //*/
-            #endregion
+            catch (Exception ex)
+            {
+                s.ShowSubtitle("Error: " + ex.Message);
+            }
         }
 
         public static void WeaponFound(LanguagesManager s, MobCreate player)
@@ -160,7 +145,6 @@ namespace Game
 
                     default:
                         // Mensagem de erro
-                        Tools.InvalidAction(s);
                         continue;
                 }
                 break;
@@ -176,8 +160,6 @@ namespace Game
             player.State = MobState.Fighting;
             do
             {
-                if (player.Life <= 0) break;
-
                 // Menu
                 answer = Tools.Answer(s, s.GetSubtitle("Menu", "mobFound"), 4);
 
@@ -205,7 +187,7 @@ namespace Game
                         continue;
 
                     case 2:
-                        player.SetDamage(mobFound);
+                        player.Atack(mobFound);
                         mobFound.State = MobState.Fighting;
                         break;
 
@@ -215,12 +197,12 @@ namespace Game
 
                     default:
                         // Erro de ação invalida
-                        Tools.InvalidAction(s);
+
                         continue;
                 }
 
                 // Morte do inimigo
-                if (mobFound.Life <= 0)
+                if (mobFound.State == MobState.Death)
                 {
                     s.ShowSubtitle($"{s.GetSubtitle("Combat", "mobDefeat").Replace("#", mobFound.Name)}\n");
 
@@ -255,7 +237,6 @@ namespace Game
 
                                 default:
                                     // Mostra o erro de ação invalida
-                                    Tools.InvalidAction(s);
                                     continue;
                             }
                         }
@@ -299,7 +280,6 @@ namespace Game
                                     break;
 
                                 default:
-                                    Tools.InvalidAction(s);
                                     continue;
                             }
                         }
@@ -308,15 +288,15 @@ namespace Game
                     if (mobFound.State == MobState.Fighting)
                     {
                         // Ataque do inimigo
-                        mobFound.SetDamage(player);
+                        mobFound.Atack(player);
                     }
                     #endregion
                 }
             }
-            while (player.State == MobState.Fighting);
+            while (player.State == MobState.Fighting || !Menu.GameOver(s, player));
         }
 
-        public static void MerchantFound(LanguagesManager s, MobCreate player)
+        public static void MerchantFound(LanguagesManager s, Player player)
         {
             int answer;
             WeaponCreate weaponFound = new Stick();
@@ -349,7 +329,6 @@ namespace Game
                                 break;
 
                             case 1:
-
                                 if (player.Buy(5))
                                 {
                                     player.Cure(5);
@@ -365,9 +344,10 @@ namespace Game
 
                             case 2:
 
-                                if (player.Buy(weaponPrice) && player.WeaponEquip(weaponFound))
+                                if (player.Buy(weaponPrice))
                                 {
                                     // Compra e equipa a arma
+                                    player.WeaponEquip(weaponFound);
                                     s.ShowSubtitle(s.GetSubtitle("Subtitles", "buyWeapon"));
                                 }
                                 else
@@ -386,7 +366,6 @@ namespace Game
 
                     default:
                         // Mensagem de erro
-                        Tools.InvalidAction(s);
                         continue;
                 }
             }
@@ -412,7 +391,6 @@ namespace Game
                         break;
 
                     default:
-                        Tools.InvalidAction(s);
                         continue;
                 }
                 break;

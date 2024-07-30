@@ -36,200 +36,94 @@ namespace Game.ClassManager
         // Esquiva
         public bool GetDodge()
         {
-            if (Tools.RandomChance(this.Dodge))
-            {
-                // Legenda
-                this.Language.ShowSubtitle(
-                    $"[{this.Name} " +
-                    $"{this.Language.GetSubtitle("Combat", "dodged")}]!!");
-
+            if (Tools.RandomChance(Dodge))
                 return true;
-            }
             return false;
         }
 
         // Recebe dano
-        public double GetDamage(double damage)
+        public void GetDamage(double damage)
         {
-            this.Life -= damage;
-            return damage;
+            Life -= damage;
+            if (Life <= 0)
+                State = MobState.Death;
         }
 
         // Ataque
-        public double SetDamage(MobCreate enemy)
+        public virtual double Atack(MobCreate enemy)
         {
-            this.Language.ShowSubtitle($"[{this.Name}]");
-
             double damage = 0;
             if (!enemy.GetDodge())
             {
-                damage = this.Damage;
+                damage = Damage;
                 // Se estiver equipando uma arma, somar ataque
-                if (this.WeaponEquiped)
+                if (Weapon != null)
                 {
-                    damage = this.Weapon.Damage + this.Damage / 5;
-                    this.Weapon.Erode();
+                    damage = Weapon.Damage + Damage / 5;
+                    Weapon.Erode();
+                    if (Weapon.Condition <= 0)
+                    {
+                        WeaponUnequip();
+                    }
                 }
 
                 // Chance de crítico
-                if (Tools.RandomChance(this.CriticChance))
+                if (Tools.RandomChance(CriticChance))
                 {
-                    damage *= this.CriticDamage;
-
-                    // Legenda
-                    this.Language.ShowSubtitle(
-                        $"[{this.Language.GetSubtitle("Combat", "critical")}]!!");
+                    damage *= CriticDamage;
                 }
                 enemy.GetDamage(damage);
             }
-
-            // Mostra quanto dano ô jogador causou ao inimigo
-            this.Language.ShowSubtitle(
-                this.Language.GetSubtitle(
-                    "Combat", "damageTo").Replace("#1", damage.ToString("F2", CultureInfo.InvariantCulture)).Replace("#2", enemy.Name) +
-                    "\n");
-
             return damage;
         }
 
         #endregion
 
         #region Weapon
-        public bool WeaponEquip(WeaponCreate weapon)
+        public void WeaponEquip(WeaponCreate weapon)
         {
-            bool equipped = true;
-            if (weapon.Name == "--") equipped = false;
-            if (this.Player)
-            {
-                if (Lvl >= weapon.NecessaryLvl)
-                {
-                    // Legenda
-                    this.Language.ShowSubtitle(
-                        this.Language.GetSubtitle("Subtitles", "weaponEquipped"));
-                }
-                else
-                {
-                    // Legenda
-                    this.Language.ShowSubtitle(this.Language.GetSubtitle("Subtitles", "insufficientLvl"));
-                    return false;
-                }
-            }
-
-            this.WeaponEquiped = equipped;
-            this.Weapon = weapon;
-            this.Weapon.User = this;
-            return true;
+            Weapon = weapon;
         }
 
         public void WeaponUnequip()
         {
-            this.WeaponEquiped = false;
-            this.Weapon = null;
-            this.Weapon.User = null;
+            Weapon = null;
         }
         #endregion
 
-        #region Trade
-        public bool Buy(double price)
+        public virtual void Cure(double life)
         {
-            this.Coins = Math.Round(this.Coins, 2);
-            price = Math.Round(price, 2);
-            if (price <= this.Coins)
-            {
-                this.Coins -= price;
-                return true;
-            }
-            return false;
-        }
-        #endregion
-
-        public bool Cure(double life)
-        {
-            if (this.Life + life <= this.MaxLife)
-            {
-                this.Life += life;
-            }
-            else
-            {
-                this.Life = this.MaxLife;
-            }
-            return true;
+            Life += life;
         }
 
-        public bool GetCoins(double coins)
+        public void GetCoins(double coins)
         {
-            this.Coins += coins;
-            if (this.Player)
-            {
-                // Legenda
-                this.Language.ShowSubtitle(
-                    $"{this.Language.GetSubtitle("Subtitles", "coinsReceived")} " +
-                    $"{coins.ToString("F2", CultureInfo.InvariantCulture)} " +
-                    $"{this.Language.GetSubtitle("MobClass", "coins")}");
-            }
-
-            return true;
+            Coins += coins;
         }
 
         #region Lvl
-        public bool GetXp(double xp)
+        public virtual void GetXp(double xp)
         {
-            this.Xp += xp;
-            LvlUp();
-
-            if (this.Player)
-            {
-                //Legenda
-                this.Language.ShowSubtitle(
-                    $"{this.Language.GetSubtitle("Subtitles", "xpReceived")} " +
-                    $"{xp.ToString("F2", CultureInfo.InvariantCulture)}xp");
-            }
-
-            return true;
+            Xp += xp;
         }
 
-        public void LvlUp(int lvl = 0)
+        public virtual void LvlUp(int lvl)
         {
-            if (!this.Player) if (lvl > 0) this.Lvl = lvl;
-            if (this.Xp >= this.NextLvlXp)
-            {
-                this.Lvl += 1;
-                lvl = this.Lvl - 1;
-                this.Xp -= this.NextLvlXp;
-            }
-
-            this.NextLvlXp = this.Lvl * 50 / 2;
-            this.MaxLife += lvl;
-            this.Damage += 0.02 * lvl;
-
-            if (this.Player)
-            {
-                Cure(this.MaxLife);
-
-                // Legenda
-                this.Language.ShowSubtitle(
-                    $"{this.Language.GetSubtitle("Subtitles", "lvlUp")} [{this.Lvl}]\n" +
-                    $"{this.Language.GetSubtitle("MobClass", "maxLife")}: {this.MaxLife}\n" +
-                    $"{this.Language.GetSubtitle("MobClass", "damage")}: {this.Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                    $"{this.Language.GetSubtitle("MobClass", "life")}: {this.Life}\n");
-            }
+            Lvl += lvl;
+            MaxLife += lvl;
+            Damage += 0.02 * lvl;
         }
         #endregion
 
-        public string ShowInfo(LanguagesManager s)
+        public virtual string ShowInfo(LanguagesManager s)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(
                 $"[{Name}]\n" +
                 $"Lvl: {Lvl}\n" +
                 $"Xp: {Xp.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{s.GetSubtitle("MobClass", "necessaryXp")}: {NextLvlXp}\n" +
                 $"{s.GetSubtitle("MobClass", "life")}: {Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{s.GetSubtitle("MobClass", "maxLife")}: {MaxLife}\n" +
-                $"{s.GetSubtitle("MobClass", "dodge")}: {Dodge.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"{s.GetSubtitle("MobClass", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{s.GetSubtitle("MobClass", "criticChance")}: {CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{s.GetSubtitle("MobClass", "criticDamage")}: {CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
                 $"{s.GetSubtitle("MobClass", "weapon")}: {Weapon.Name}\n" +
                 $"{s.GetSubtitle("MobClass", "coins")}: {Coins.ToString("F2", CultureInfo.InvariantCulture)}");
 
