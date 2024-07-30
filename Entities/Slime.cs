@@ -12,7 +12,7 @@ namespace Game.Entities
         public Slime()
         {
             Name = "Slime";
-            Damage = 2.7d;
+            Damage = 0.7d;
             MaxLife = 4;
             CriticChance = 3.5d;
             CriticDamage = 2.7d;

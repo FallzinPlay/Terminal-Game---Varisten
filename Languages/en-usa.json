@@ -10,17 +10,121 @@
     "thanks": "Thank you so much for have played my little game! :D \nShutting down..."
   },
 
+  "Nick": {
+    "system": "System",
+    "you": "You",
+    "zombie": "Zombie",
+    "skeleton": "Skeleton",
+    "slime": "Slime",
+    "merchant": "Merchant"
+  },
+
   "Menu": {
     "start": "[Varisten] \n0: Leave \n1: Play",
-    "adventure": "[Dark Forest] \n0: Leave \n1: Go ahead \n2: Inventory"
+    "adventure": "[Dark Forest] \n0: Leave \n1: Go ahead \n2: Inventory",
+    "mobFound": "[Fighting with #MobName] \n0: Run away... \n1: Atack! \n2: Check #MobName \n3: Check my bag",
+    "mobRunningAway": "#MobName is escaping. \nWhat will you do? \n0: Allow \n1: Run toward him!"
   },
 
   "Player": {
     "fullLife": "Brand new again!",
-    "weaponBroke": "My weapon have broken!"
+
+    "weaponBroke": "My weapon have broken!",
+
+    "noEscape": "I do not have as to escape... \nAll that's left for me is to fight!",
+    "escape": "Well, I had to run away now, but if I ever encounter that monster again... \nI'm going to defeat him!",
+
+    "death": "I am...dying.",
+
+    // Zombie
+    "zombieFound": "A zombie. Really? \nI will certainly have no trouble defeating him.",
+
+    "attackZombie0": "Get it, you rotten!",
+    "attackZombie1": "This arm of yours does not even work anymore.",
+    "attackZombie2": "Look at that! \nI am completely dirty with your rotten flesh now!",
+
+    "allowZombieRun": "Okay, I will allow you to escape for today, zombie...",
+
+    "catchZombie": "I got you, stinky! \nThought you could escape, huh?",
+    "noCatchZombie": "Noo... \nI have lost the trail of that rotten smell...",
+
+    // Skeleton
+    "skeletonFound": "You are too thin, aren't you? \nWell, you will be lucky if I do not break this little body of yours.",
+
+    "attackSkeleton0": "Take that elbow, pure bone!",
+    "attackSkeleton1": "Looks like your leg fell off.",
+    "attackSkeleton2": "Is this hand of bone yours?",
+
+    "allowSkeletonRun": "Make sure you eat something before you come fight me next time!",
+
+    "catchSkeleton": "Did you thing you could hide from me?",
+    "noCatchSkeleton": "I can’t even see him, he’s so thin. \nYou will live another day.",
+
+    // Slime
+    "slimeFound": "What such a cute little slime. \nI could adopt you if you did not want to kill me.",
+
+    "attackSlime0": "One kick is enough for you.",
+    "attackSlime1": "Could you be poisonous?",
+    "attackSlime2": "Bleh! My clothes are dirty now...",
+
+    "allowSlimeRun": "You can run away, little slime.",
+
+    "catchSlime": "Today I am not a good man. /nWe will keep fighting.",
+    "noCatchSlime": "He has escaped...Maybe I was too hard on him."
+  },
+
+  "Zombie": {
+    "death": "When I can fix my body, you will pay me for it!",
+
+    "attack0": "You are too weak for a human.",
+    "attack1": "This wasn't even my strongest attack and you're already bleeding.",
+    "attack2": "I could infect you if I wanted to.",
+
+    "runAway": "Shit! I'll run..."
+  },
+
+  "Skeleton": {
+    "death": "My bones are hurting a little bit.",
+
+    "attack0": "You are thinner than me.",
+    "attack1": "Will you use this little arm to hit me?",
+    "attack2": "Maybe you should try to train a little harder?",
+
+    "runAway": "I've lost my foot!"
+  },
+
+  "Slime": {
+    "death": "Blob...",
+
+    "attack0": "Bad...human.",
+    "attack1": "SLAP!",
+    "attack2": "Weak...",
+
+    "runAway": "No..."
+  },
+
+  "Combat": {
+    "critic": "[Critic]!!!",
+    "dodge": "#Name dodged!",
+    "getDamage": "#Name got #Damage damage."
+  },
+
+  "Status": {
+    "life": "Life",
+    "damage": "Damage",
+    "weapon": "Weapon",
+    "necessaryXp": "Necessary XP",
+    "maxLife": "Max life",
+    "dodge": "Dodge",
+    "criticChance": "Critic chance",
+    "criticDamage": "Critic damage"
   },
 
   "Merchant": {
     "noCoins": "Are you joking me? You don't have enough coins!"
+  },
+
+  "Error": {
+    "invalidOption": "This option does not exist. \nPlease, try a valid one.\n"
   }
 }

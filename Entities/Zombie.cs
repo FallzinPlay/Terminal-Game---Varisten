@@ -12,7 +12,7 @@ namespace Game.Entities
         public Zombie()
         {
             Name = "Zombie";
-            Damage = 2.2d;
+            Damage = 1.1d;
             MaxLife = 7;
             CriticChance = 1.1d;
             CriticDamage = 1.7d;

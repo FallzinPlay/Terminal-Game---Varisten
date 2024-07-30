@@ -20,7 +20,7 @@ namespace Game
         {
             if (player.State == MobState.Death)
             {
-                s.ShowSubtitle(s.GetSubtitle("Subtitles", "gameOver"));
+                s.ShowSubtitle(s.GetSubtitle("Player", "death"));
                 return true;
             }
             return false;

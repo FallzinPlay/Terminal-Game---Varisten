@@ -46,22 +46,54 @@ namespace Game
         {
             try
             {
-                return this.Subtitles[group][chave].ToString();
+                return CharacterVerify(group) + Subtitles[group][chave].ToString();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao obter legenda: {ex.Message}");
+                Console.WriteLine($"Erro ao obter legenda: {ex}");
                 return null;
             }
         }
 
         public string ShowSubtitle(string subtitle)
         {
-            #region Show subtitles
             Console.WriteLine(subtitle);
-            #endregion
-
             return subtitle;
+        }
+
+        public string CharacterVerify(string character)
+        {
+            string _nick = null;
+            switch (character)
+            {
+                case "System":
+                    _nick = GetSubtitle("Nick", "system");
+                    break;
+
+                case "Player":
+                    _nick = GetSubtitle("Nick", "you");
+                    break;
+
+                case "Zombie":
+                    _nick = GetSubtitle("Nick", "zombie");
+                    break;
+
+                case "Skeleton":
+                    _nick = GetSubtitle("Nick", "skeleton");
+                    break;
+
+                case "Slime":
+                    _nick = GetSubtitle("Nick", "slime");
+                    break;
+
+                case "Merchant":
+                    _nick = GetSubtitle("Nick", "merchant");
+                    break;
+            }
+            if (_nick != null)
+                return $"[{_nick}] - ";
+            else
+                return "";
         }
     }
 }

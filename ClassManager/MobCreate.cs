@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using static System.Net.Mime.MediaTypeNames;
 using System.Security.Cryptography;
+using Game.Entities;
 
 namespace Game.ClassManager
 {
@@ -16,7 +17,7 @@ namespace Game.ClassManager
     {
         public string Name { get; set; }
         public string Description { get; protected set; }
-        public int Lvl { get; protected set; }
+        public int Lvl { get; protected set; } = 1;
         public int MaxLvl { get; protected set; }
         public int MaxLife { get; protected set; }
         public double Life { get; protected set; }
@@ -47,46 +48,55 @@ namespace Game.ClassManager
             Life -= damage;
             if (Life <= 0)
                 State = MobState.Death;
+            else
+                State = MobState.Fighting;
         }
 
         // Ataque
-        public virtual double Atack(MobCreate enemy)
+        public virtual double Attack(MobCreate enemy)
         {
             double damage = 0;
             if (!enemy.GetDodge())
             {
                 damage = Damage;
-                // Se estiver equipando uma arma, somar ataque
                 if (Weapon != null)
                 {
-                    damage = Weapon.Damage + Damage / 5;
                     Weapon.Erode();
                     if (Weapon.Condition <= 0)
-                    {
                         WeaponUnequip();
-                    }
                 }
 
                 // Chance de crítico
                 if (Tools.RandomChance(CriticChance))
-                {
                     damage *= CriticDamage;
-                }
                 enemy.GetDamage(damage);
             }
-            return damage;
+            return Tools.RandomDouble(damage, damage / 2);
+        }
+
+        public virtual bool TryRunAway()
+        {
+            if (Tools.RandomChance(EscapeChance))
+            {
+                State = MobState.Exploring;
+                return true;
+            }
+            return false;
         }
 
         #endregion
 
         #region Weapon
-        public void WeaponEquip(WeaponCreate weapon)
+        public virtual bool WeaponEquip(WeaponCreate weapon)
         {
             Weapon = weapon;
+            Damage += weapon.Damage;
+            return true;
         }
 
         public void WeaponUnequip()
         {
+            Damage -= Weapon.Damage;
             Weapon = null;
         }
         #endregion
@@ -122,10 +132,11 @@ namespace Game.ClassManager
                 $"[{Name}]\n" +
                 $"Lvl: {Lvl}\n" +
                 $"Xp: {Xp.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{s.GetSubtitle("MobClass", "life")}: {Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{s.GetSubtitle("MobClass", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{s.GetSubtitle("MobClass", "weapon")}: {Weapon.Name}\n" +
-                $"{s.GetSubtitle("MobClass", "coins")}: {Coins.ToString("F2", CultureInfo.InvariantCulture)}");
+                $"{s.GetSubtitle("Status", "life")}: {Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("Status", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"Coins: {Coins.ToString("F2", CultureInfo.InvariantCulture)}");
+
+            if (Weapon != null) sb.AppendLine($"{s.GetSubtitle("Status", "weapon")}: {Weapon.Name}");
 
             return sb.ToString();
         }

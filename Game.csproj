@@ -54,7 +54,7 @@
     <Compile Include="Items\Weapons\Stick.cs" />
     <Compile Include="Items\Weapons\WoodenBow.cs" />
     <Compile Include="Items\Weapons\WoodenSword.cs" />
-    <Compile Include="LanguagesManager.cs" />
+    <Compile Include="ClassManager\LanguagesManager.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="ClassManager\MobCreate.cs" />
     <Compile Include="MobState.cs" />

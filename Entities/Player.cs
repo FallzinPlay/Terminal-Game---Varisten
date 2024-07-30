@@ -18,7 +18,7 @@ namespace Game.Entities
             MaxLvl = 20;
             MaxLife = 10;
             Life = MaxLife;
-            Damage = 2.7d;
+            Damage = 1.7d;
             Dodge = 1.2d;
             CriticChance = 1.5d;
             CriticDamage = 1.5d;
@@ -29,16 +29,38 @@ namespace Game.Entities
             _language = language;
         }
 
-        public override double Atack(MobCreate enemy)
+        public override double Attack(MobCreate enemy)
         {
-            double _damage = base.Atack(enemy);
-            if (Weapon.Condition <= 0)
+            double _damage = base.Attack(enemy);
+            if (Weapon != null && Weapon.Condition <= 0)
             {
                 WeaponUnequip();
                 _language.ShowSubtitle(
                     _language.GetSubtitle("Weapon", "broke"));
             }
             return _damage;
+        }
+
+        public override bool TryRunAway()
+        {
+            bool _escape = base.TryRunAway();
+            if (_escape)
+                _language.ShowSubtitle(
+                    _language.GetSubtitle("Player", "escape") + "\n");
+            else
+                _language.ShowSubtitle(
+                    _language.GetSubtitle("Player", "noEscape") + "\n");
+            return _escape;
+        }
+
+        public override bool WeaponEquip(WeaponCreate weapon)
+        {
+            if (Lvl >= weapon.NecessaryLvl)
+            {
+                base.WeaponEquip(weapon);
+                return true;
+            }
+            return false;
         }
 
         public sealed override void Cure(double life)
@@ -85,16 +107,18 @@ namespace Game.Entities
             sb.AppendLine(
                 $"[{Name}]\n" +
                 $"Lvl: {Lvl}\n" +
-                $"Xp: {Xp.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{_language.GetSubtitle("MobClass", "necessaryXp")}: {NextLvlXp}\n" +
-                $"{_language.GetSubtitle("MobClass", "maxLife")}: {MaxLife}\n" +
-                $"{_language.GetSubtitle("MobClass", "life")}: {Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{_language.GetSubtitle("MobClass", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{_language.GetSubtitle("MobClass", "dodge")}: {Dodge.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{_language.GetSubtitle("MobClass", "criticChance")}: {CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{_language.GetSubtitle("MobClass", "criticDamage")}: {CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{_language.GetSubtitle("MobClass", "weapon")}: {Weapon.Name}\n" +
-                $"{_language.GetSubtitle("MobClass", "coins")}: {Coins.ToString("F2", CultureInfo.InvariantCulture)}");
+                $"Xp: {Xp.ToString("F2", CultureInfo.InvariantCulture)}xp\n" +
+                $"{_language.GetSubtitle("Status", "necessaryXp")}: {NextLvlXp}\n" +
+                $"{_language.GetSubtitle("Status", "maxLife")}: {MaxLife}\n" +
+                $"{_language.GetSubtitle("Status", "life")}: {Life.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{_language.GetSubtitle("Status", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{_language.GetSubtitle("Status", "dodge")}: {Dodge.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{_language.GetSubtitle("Status", "criticChance")}: {CriticChance.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{_language.GetSubtitle("Status", "criticDamage")}: {CriticDamage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"Coins: {Coins.ToString("F2", CultureInfo.InvariantCulture)} coins");
+
+            if (Weapon != null)
+                sb.AppendLine($"{_language.GetSubtitle("Status", "weapon")}: {Weapon.Name}");
 
             return sb.ToString();
         }
