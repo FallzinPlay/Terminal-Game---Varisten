@@ -6,11 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Game.ClassManager;
+using Game.Items;
 
 namespace Game.Entities
 {
     internal class Player : MobCreate
     {
+        public Inventory Bag { get; private set; } = new Inventory();
+
         private LanguagesManager _language;
 
         public Player(LanguagesManager language, string name)
@@ -26,8 +29,51 @@ namespace Game.Entities
             Lvl = 1;
             NextLvlXp = 10;
             State = MobState.Exploring;
+            EscapeChance = 5d;
 
             _language = language;
+        }
+        // !!!!!!!!!!!!!!!!!!! Fazer a verificação da arma !!!!!!!!!!!!!!!!!!!!
+        public void BagVerify()
+        {
+            _language.ShowSubtitle(ToString());
+            ItemCreate[] _bag = Bag.Bag;
+            int _item;
+            do
+            {
+                _item = Tools.Answer(_language,
+                    Bag.CheckBag(_language) +  _language.GetSubtitle("Menu", "leave").Replace("#N", _bag.Length.ToString()),
+                    _bag.Length + 1);
+
+                if (_item == _bag.Length) break;
+                if (_bag[_item] == null)
+                {
+                    _language.ShowSubtitle(_language.GetSubtitle("Player", "emptySlot"));
+                    continue;
+                }
+
+                int _action = Tools.Answer(_language,
+                _bag[_item].ShowInfo(_language) + "\n" + _language.GetSubtitle("Menu", "checkingBag"),
+                3);
+                switch (_action)
+                {
+                    case 0:
+                        break;
+
+                    case 1:
+                        if (_bag[_item] is WeaponCreate)
+                        {
+                            WeaponEquip(_bag[_item] as WeaponCreate);
+                            Bag.DropItem(_bag[_item]);
+                        }
+                        break;
+
+                    case 2:
+                        Bag.DropItem(_bag[_item]);
+                        break;
+                }
+                break;
+            } while (_item != _bag.Length);
         }
 
         public sealed override void GetDamage(double damage)
@@ -99,18 +145,16 @@ namespace Game.Entities
         {
             base.GetXp(xp);
             if (Xp >= NextLvlXp)
-            {
-                Xp -= NextLvlXp;
                 LvlUp();
-            }
             _language.ShowSubtitle(
                 _language.GetSubtitle("Player", "getXp").Replace("#Xp", Xp.ToString("F2", CultureInfo.InvariantCulture)));
         }
 
         public sealed override void LvlUp(int lvl = 1)
         {
-            base.LvlUp(lvl);
+            base.LvlUp(Lvl += lvl);
             Cure(MaxLife);
+            Xp -= NextLvlXp;
             NextLvlXp = Lvl * 42;
 
             _language.ShowSubtitle(

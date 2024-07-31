@@ -46,11 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassManager\ItemCreate.cs" />
     <Compile Include="Entities\Skeleton.cs" />
     <Compile Include="Entities\Slime.cs" />
     <Compile Include="EntityRegistry.cs" />
     <Compile Include="GameException.cs" />
     <Compile Include="Identifier.cs" />
+    <Compile Include="Items\Inventory.cs" />
     <Compile Include="Items\Weapons\Stick.cs" />
     <Compile Include="Items\Weapons\WoodenBow.cs" />
     <Compile Include="Items\Weapons\WoodenSword.cs" />

@@ -26,7 +26,7 @@ namespace Game
             return result;
         }
 
-        public static MobCreate RandomMob(MobCreate player)
+        public static MobCreate RandomMob(EntityRegistry register, MobCreate player)
         {
             MobCreate mob = null;
             while (true)
@@ -52,7 +52,7 @@ namespace Game
             if (mob.Weapon != null)
                 mob.LvlUp(mob.Weapon.NecessaryLvl);
             else
-                if (R.Next(5) < 2) mob.WeaponEquip(RandomWeapon());
+                if (R.Next(5) < 2) mob.WeaponEquip(RandomWeapon(register));
 
             // Adjusting mob's lvl
             int _lvlMin = mob.Lvl;
@@ -68,10 +68,12 @@ namespace Game
 
             // Radomizing mob's coins
             mob.GetCoins(RandomDouble(mob.Lvl * 2.0d, mob.Lvl * 1.5d));
+
+            register.AddEntity(mob);
             return mob;
         }
 
-        public static WeaponCreate RandomWeapon()
+        public static WeaponCreate RandomWeapon(EntityRegistry register)
         {
             WeaponCreate weapon = null;
             while (true)
@@ -93,6 +95,8 @@ namespace Game
                 if (weapon != null) break;
             }
             weapon.Erode(true);
+
+            register.AddEntity(weapon);
             return weapon;
         }
 

@@ -41,6 +41,7 @@ namespace Game
                 string playerName = Console.ReadLine(); // Pega o nome do jogador
                 s.ShowSubtitle(s.GetSubtitle("System", "jokeWithName"));
                 Player player = new Player(s, playerName);
+                register.AddEntity(player);
 
                 // Loop do jogo
                 s.ShowSubtitle($"{s.GetSubtitle("System", "wellcome")}\n");
@@ -65,10 +66,10 @@ namespace Game
                                 double randomAction = 4;// Tools.RandomDouble(totalActions);
 
                                 // Mob
-                                if (randomAction < totalActions * 0.5d) MobFound(s, R, player);
+                                if (randomAction < totalActions * 0.5d) MobFound(register, s, R, player);
 
                                 // Merchant
-                                else if (randomAction < totalActions * 0.7d) MerchantFound(s, player);
+                                else if (randomAction < totalActions * 0.7d) MerchantFound(register, s, player);
 
                                 // Treasury
                                 else if (randomAction < totalActions * 1d) TreasuryFound(s, player);
@@ -77,16 +78,21 @@ namespace Game
 
                             case StartActions.PlayerBag:
                                 // Mostra a arma do player
-
+                                player.BagVerify();
                                 break;
 
                             default:
                                 continue;
                         }
-                        if (Menu.GameOver(s, player)) break;
+                        if (Menu.GameOver(s, player))
+                        {
+                            player = new Player(s, playerName);
+                            register.AddEntity(player);
+                            break;
+                        }
                     } while (answer > 0);
                 }
-
+                foreach (KeyValuePair<Guid, Identifier> id in register.GetAllEntities()) Console.WriteLine(id);
                 s.ShowSubtitle(s.GetSubtitle("Me", "thanks"));
                 //*/
                 #endregion
@@ -97,10 +103,10 @@ namespace Game
             }
         }
 
-        public static void MobFound(LanguagesManager s, Random r, MobCreate player)
+        public static void MobFound(EntityRegistry register, LanguagesManager s, Random r, Player player)
         {
             int answer;
-            MobCreate mobFound = Tools.RandomMob(player);
+            MobCreate mobFound = Tools.RandomMob(register, player);
             s.ShowSubtitle(
                 s.GetSubtitle("Player", mobFound.Name.ToLower() + "Found") + "\n");
             player.State = MobState.Fighting;
@@ -110,7 +116,8 @@ namespace Game
                 switch (answer)
                 {
                     case 0:
-                        player.TryRunAway();
+                        if (!player.TryRunAway())
+                            mobFound.State = MobState.Fighting;
                         break;
 
                     case 1:
@@ -127,7 +134,7 @@ namespace Game
                         continue;
 
                     case 3:
-                        s.ShowSubtitle(player.ToString());
+                        player.BagVerify();
                         continue;
 
                     default:
@@ -233,7 +240,7 @@ namespace Game
                     }
                     #endregion
                 }
-                if (Menu.GameOver(s, player)) break;
+                if (player.Life <= 0) break;
             }
             while (player.State == MobState.Fighting);
         }
@@ -269,10 +276,10 @@ namespace Game
             return _damage;
         }
 
-        public static void MerchantFound(LanguagesManager s, Player player)
+        public static void MerchantFound(EntityRegistry register, LanguagesManager s, Player player)
         {
             int answer;
-            WeaponCreate weaponFound = new Stick();
+            WeaponCreate weaponFound = Tools.RandomWeapon(register);
             double weaponPrice = Tools.RandomDouble(weaponFound.MaxPrice, weaponFound.MinPrice);
 
             // Encontra o mercador

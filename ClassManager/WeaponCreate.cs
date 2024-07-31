@@ -4,36 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using Game.ClassManager;
 
 namespace Game
 {
-    public abstract class WeaponCreate : Identifier
+    public abstract class WeaponCreate : ItemCreate
     {
-        public string Name { get; set; }
         public double Damage { get; protected set; }
         public int NecessaryLvl { get; protected set; }
         public int Condition { get; set; }
         public int MaxCondition { get; protected set; }
-        public double MinPrice { get; protected set; }
-        public double MaxPrice { get; protected set; }
 
         private static readonly Random R = new Random();
 
         public void Erode(bool randomErode = false)
         {
-            if (randomErode) this.Condition = R.Next(1, this.MaxCondition);
-            else this.Condition--;
+            if (randomErode) Condition = R.Next(1, MaxCondition);
+            else Condition--;
         }
 
-        public virtual string ShowInfo(LanguagesManager s)
+        public override string ShowInfo(LanguagesManager s)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(
-                $"[{this.Name}]\n" +
-                $"{s.GetSubtitle("WeaponClass", "damage")}  : {this.Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
-                $"{s.GetSubtitle("WeaponClass", "condition")}: {this.Condition}\n" +
-                $"{s.GetSubtitle("WeaponClass", "necessaryLvl")}: {this.NecessaryLvl}\n");
-            return sb.ToString();
+                $"{s.GetSubtitle("Status", "damage")}: {Damage.ToString("F2", CultureInfo.InvariantCulture)}\n" +
+                $"{s.GetSubtitle("Status", "condition")}: {Condition}\n" +
+                $"{s.GetSubtitle("Status", "necessaryLvl")}: {NecessaryLvl}\n");
+            return base.ShowInfo(s) + sb.ToString();
         }
     }
 }

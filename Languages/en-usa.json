@@ -21,10 +21,12 @@
   },
 
   "Menu": {
+    "leave": "[#N]: Leave",
     "start": "[Varisten] \n0: Leave \n1: Play",
     "adventure": "[Dark Forest] \n0: Leave \n1: Go ahead \n2: Inventory",
     "mobFound": "[Fighting with #MobName] \n0: Run away... \n1: Atack! \n2: Check #MobName \n3: Check my bag",
-    "mobRunningAway": "#MobName is escaping. \nWhat will you do? \n0: Allow \n1: Run toward him!"
+    "mobRunningAway": "#MobName is escaping. \nWhat will you do? \n0: Allow \n1: Run toward him!",
+    "checkingBag": "[Checking my bag] \n0: Leave \n1: Use \n2: Drop"
   },
 
   "Player": {
@@ -32,6 +34,7 @@
     "lvlup": "Lvl up! \nI feel more strongh now.",
     "getCoins": "These #Coins coins I have gotten will be really useful. \nI could buy something new.",
     "getXp": "I received #Xpxp.",
+    "emptySlot": "Oops.... That slot is empty.",
 
     "noEscape": "I do not have as to escape... \nAll that's left for me is to fight!",
     "escape": "Well, I had to run away now, but if I ever encounter that monster again... \nI'm going to defeat him!",
@@ -123,7 +126,11 @@
     "maxLife": "Max life",
     "dodge": "Dodge",
     "criticChance": "Critic chance",
-    "criticDamage": "Critic damage"
+    "criticDamage": "Critic damage",
+    "averagePrice": "Average price",
+    "condition": "Condition",
+    "myBag": "My bag",
+    "necessaryLvl": "Necessary Lvl"
   },
 
   "Merchant": {
