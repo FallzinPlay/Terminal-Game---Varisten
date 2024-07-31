@@ -92,7 +92,6 @@ namespace Game
                         }
                     } while (answer > 0);
                 }
-                foreach (KeyValuePair<Guid, Identifier> id in register.GetAllEntities()) Console.WriteLine(id);
                 s.ShowSubtitle(s.GetSubtitle("Me", "thanks"));
                 //*/
                 #endregion

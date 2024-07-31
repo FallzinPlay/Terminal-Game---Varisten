@@ -88,7 +88,7 @@ namespace Game.ClassManager
             return true;
         }
 
-        public void WeaponUnequip()
+        public virtual void WeaponUnequip()
         {
             Damage -= Weapon.Damage;
             Weapon = null;

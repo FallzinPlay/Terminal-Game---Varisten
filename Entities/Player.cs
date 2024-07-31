@@ -33,47 +33,105 @@ namespace Game.Entities
 
             _language = language;
         }
-        // !!!!!!!!!!!!!!!!!!! Fazer a verificação da arma !!!!!!!!!!!!!!!!!!!!
+
         public void BagVerify()
         {
-            _language.ShowSubtitle(ToString());
-            ItemCreate[] _bag = Bag.Bag;
+            int _action;
             int _item;
+            int _actionInWeapon;
+            int _actionInBag;
+            string _invalidOption = _language.GetSubtitle("Player", "invalidOption");
+            ItemCreate[] _bag = Bag.Bag;
             do
             {
-                _item = Tools.Answer(_language,
-                    Bag.CheckBag(_language) +  _language.GetSubtitle("Menu", "leave").Replace("#N", _bag.Length.ToString()),
-                    _bag.Length + 1);
-
-                if (_item == _bag.Length) break;
-                if (_bag[_item] == null)
-                {
-                    _language.ShowSubtitle(_language.GetSubtitle("Player", "emptySlot"));
-                    continue;
-                }
-
-                int _action = Tools.Answer(_language,
-                _bag[_item].ShowInfo(_language) + "\n" + _language.GetSubtitle("Menu", "checkingBag"),
-                3);
-                switch (_action)
+                _action = Tools.Answer(_language,
+                    ToString() + "\n" + _language.GetSubtitle("Menu", "inventory"),
+                    3);
+                switch(_action)
                 {
                     case 0:
                         break;
 
                     case 1:
-                        if (_bag[_item] is WeaponCreate)
+                        #region Weapon
+                        if (Weapon != null)
                         {
-                            WeaponEquip(_bag[_item] as WeaponCreate);
-                            Bag.DropItem(_bag[_item]);
+                            _actionInWeapon = Tools.Answer(_language,
+                                Weapon.ShowInfo(_language) + _language.GetSubtitle("Menu", "weaponCheck"),
+                                3);
+                            switch (_actionInWeapon)
+                            {
+                                case 0:
+                                    break;
+
+                                case 1:
+                                    Bag.ColectItem(Weapon);
+                                    WeaponUnequip();
+                                    break;
+
+                                case 2:
+                                    WeaponUnequip();
+                                    break;
+
+                                default:
+                                    _language.ShowSubtitle(_invalidOption);
+                                    continue;
+                            }
                         }
-                        break;
+                        else
+                            _language.ShowSubtitle(_language.GetSubtitle("Player", "noWeapon"));
+                        #endregion
+                        continue;
 
                     case 2:
-                        Bag.DropItem(_bag[_item]);
-                        break;
+                        #region Bag
+                        do
+                        {
+                            _item = Tools.Answer(_language,
+                                Bag.CheckBag(_language) + _language.GetSubtitle("Menu", "leave").Replace("#N", _bag.Length.ToString()),
+                                _bag.Length + 1);
+
+                            if (_item == _bag.Length) break;
+                            if (_bag[_item] == null)
+                            {
+                                _language.ShowSubtitle(_language.GetSubtitle("Player", "emptySlot"));
+                                continue;
+                            }
+
+                            _actionInBag = Tools.Answer(_language,
+                            _bag[_item].ShowInfo(_language) + "\n" + _language.GetSubtitle("Menu", "checkingBag"),
+                            3);
+                            switch (_actionInBag)
+                            {
+                                case 0:
+                                    break;
+
+                                case 1:
+                                    if (_bag[_item] is WeaponCreate)
+                                    {
+                                        WeaponEquip(_bag[_item] as WeaponCreate);
+                                        Bag.DropItem(_bag[_item]);
+                                    }
+                                    break;
+
+                                case 2:
+                                    Bag.DropItem(_bag[_item]);
+                                    break;
+
+                                default:
+                                    _language.ShowSubtitle(_invalidOption);
+                                    continue;
+                            }
+                            break;
+                        } while (_item != _bag.Length);
+                        #endregion
+                        continue;
+
+                    default:
+                        _language.ShowSubtitle(_invalidOption);
+                        continue;
                 }
-                break;
-            } while (_item != _bag.Length);
+            } while (_action != 0);
         }
 
         public sealed override void GetDamage(double damage)
@@ -107,9 +165,22 @@ namespace Game.Entities
             if (Lvl >= weapon.NecessaryLvl)
             {
                 base.WeaponEquip(weapon);
+                _language.ShowSubtitle(
+                    _language.GetSubtitle("System", "weaponEquip") +
+                    "\n" +
+                    _language.GetSubtitle("Player", "weaponEquip"));
                 return true;
             }
             return false;
+        }
+
+        public sealed override void WeaponUnequip()
+        {
+            base.WeaponUnequip();
+            _language.ShowSubtitle(
+                    _language.GetSubtitle("System", "weaponUnequip") +
+                    "\n" +
+                    _language.GetSubtitle("Player", "weaponUnequip"));
         }
 
         public sealed override void Cure(double life)

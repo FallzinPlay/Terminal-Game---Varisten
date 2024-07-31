@@ -4,7 +4,9 @@
     "jokeWithName": "Is this a name? Haha! It'll be that now.",
     "wellcome": "This world is dangerous, has a lot of monsters and everything more...You already know it. \nYou will go to into that forest and monsters will kill you. Like this. Cut the crap. Go!",
     "leaving": "It seems he is a coward! Haha. See you, #PlayerName.",
-    "gameOver": "Game over!"
+    "gameOver": "Game over!",
+    "weaponEquip": "Weapon equipped.",
+    "weaponUnequip": "Weapon unequipped."
   },
 
   "Me": {
@@ -22,11 +24,13 @@
 
   "Menu": {
     "leave": "[#N]: Leave",
-    "start": "[Varisten] \n0: Leave \n1: Play",
-    "adventure": "[Dark Forest] \n0: Leave \n1: Go ahead \n2: Inventory",
-    "mobFound": "[Fighting with #MobName] \n0: Run away... \n1: Atack! \n2: Check #MobName \n3: Check my bag",
-    "mobRunningAway": "#MobName is escaping. \nWhat will you do? \n0: Allow \n1: Run toward him!",
-    "checkingBag": "[Checking my bag] \n0: Leave \n1: Use \n2: Drop"
+    "start": "[Varisten] \n[0]: Leave \n[1]: Play",
+    "adventure": "[Dark Forest] \n[0]: Leave \n[1]: Go ahead \n[2]: Inventory",
+    "mobFound": "[Fighting with #MobName] \n[0]: Run away... \n[1]: Atack! \n[2]: Check #MobName \n[3]: Check my bag",
+    "mobRunningAway": "#MobName is escaping. \nWhat will you do? \n[0]: Allow \n[1]: Run toward him!",
+    "inventory": "[Inventory] \n[0]: Leave \n[1]: Weapon equipped \n[2]: Items",
+    "checkingBag": "[Checking my bag] \n[0]: Leave \n[1]: Use \n[2]: Drop",
+    "weaponCheck": "[Weapon] \n[0]: Leave \n[1]: Unequip \n[2]: Drop"
   },
 
   "Player": {
@@ -35,6 +39,10 @@
     "getCoins": "These #Coins coins I have gotten will be really useful. \nI could buy something new.",
     "getXp": "I received #Xpxp.",
     "emptySlot": "Oops.... That slot is empty.",
+    "noWeapon": "I am not using a weapon.",
+    "weaponEquip": "Using this weapon, I feel stronger.",
+    "weaponUnequip": "I do not need that weapon for now.",
+    "invalidOption": "Oops..., I can not do it.",
 
     "noEscape": "I do not have as to escape... \nAll that's left for me is to fight!",
     "escape": "Well, I had to run away now, but if I ever encounter that monster again... \nI'm going to defeat him!",
