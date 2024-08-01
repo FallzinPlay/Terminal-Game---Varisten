@@ -55,9 +55,12 @@ namespace Game
             }
         }
 
-        public string ShowSubtitle(string subtitle)
+        public string ShowSubtitle(string subtitle, bool jumpLine = true)
         {
-            Console.WriteLine(subtitle);
+            if (jumpLine)
+                Console.WriteLine(subtitle);
+            else
+                Console.Write(subtitle);
             return subtitle;
         }
 

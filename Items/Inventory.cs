@@ -1,81 +1,88 @@
 ﻿using Game.ClassManager;
+using Game.Entities;
 using Game.Items.Weapons;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Game.Items
 {
-    internal class Inventory
+    public class Inventory
     {
-        public ItemCreate[] Bag { get; private set; } = new ItemCreate[5];
+        public List<ItemCreate> Bag { get; private set; } = new List<ItemCreate>();
+        public int MaxCapacity {  get; private set; }
 
-        public Inventory()
+        public Inventory(int maxCapacity, params ItemCreate[] item)
         {
-            ColectItem(new Stick());
+            MaxCapacity = maxCapacity;
+            foreach (ItemCreate i in item)
+                ColectItem(i);
         }
 
         public bool ColectItem(ItemCreate item)
         {
-            for (int i = 0; i <  Bag.Length; i++)
+            if (Bag.Count <= MaxCapacity)
             {
-                if (Bag[i] == null)
-                {
-                    Bag[i] = item;
-                    return true;
-                }
+                Bag.Add(item);
+                return true;
             }
             return false;
         }
 
-        public bool DropItem(ItemCreate item)
+        public void DropItem(ItemCreate item)
         {
-            for (int i = 0; i < Bag.Length; i++)
-            {
-                if (Bag[i].Id == item.Id)
-                {
-                    Bag[i] = null;
-                    return true;
-                }
-            }
-            throw new GameException("Item not found.");
-        }
-
-        public ItemCreate GetItemIntoBag(ItemCreate item)
-        {
-            for (int i = 0; i < Bag.Length; i++)
-            {
-                if (Bag[i].Id == item.Id)
-                    return Bag[i];
-            }
-            throw new GameException("Item not found.");
+            Bag.Remove(item);
         }
 
         public void BagUpgrade()
         {
-            ItemCreate[] _oldBag = Bag;
-            ItemCreate[] _newBag = new ItemCreate[_oldBag.Length + 5];
-            for (int i = 0; i <= _oldBag.Length; i++)
-            {
-                if (_oldBag[i] != null)
-                    _newBag.Append(_oldBag[i]);
-            }
+            MaxCapacity += 3;
         }
 
         public string CheckBag(LanguagesManager s)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"[{s.GetSubtitle("Status", "myBag")}]");
-            for (int i = 0; i < Bag.Length; i++)
+            int _count = 0;
+            foreach (ItemCreate item in Bag)
             {
-                if (Bag[i] != null)
-                    sb.AppendLine($"[{i}]: {Bag[i].Name}");
-                else
-                    sb.AppendLine("--");
-            }
+                sb.AppendLine($"[{_count+1}]: {item.Name}");
+                _count++;
+            } 
+            for (int i = _count; i < MaxCapacity; i++)
+                    sb.AppendLine($"[{i+1}]: --");
             return sb.ToString();
+        }
+
+        public void ManageBag(LanguagesManager s, MobCreate owner)
+        {
+            int _item;
+            int _bagCount = Bag.Count;
+            string _invalidOption = s.GetSubtitle("Player", "invalidOption");
+            do
+            {
+                _item = Tools.Answer(s,
+                   $"[{s.GetSubtitle("Status", "items")}]\n" + s.GetSubtitle("Menu", "leave") + "\n" + CheckBag(s),
+                   MaxCapacity + 1);
+
+                if (_item == 0) break;
+                if (_item > Bag.Count)
+                {
+                    s.ShowSubtitle(s.GetSubtitle("System", "emptySlot"));
+                    continue;
+                }
+
+                _item--;
+                if (owner is Player)
+                {
+                    Player player = owner as Player;
+                    player.ManageItem(_item);
+                }
+            } while (_item != _bagCount);
         }
     }
 }

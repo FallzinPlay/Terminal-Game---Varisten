@@ -119,6 +119,22 @@ namespace Game.ClassManager
         }
         #endregion
 
+        public bool Buy(double price)
+        {
+            if (price > Coins)
+                return false;
+
+            Coins = Math.Round(Coins, 2);
+            price = Math.Round(price, 2);
+            Coins -= price;
+            return true;
+        }
+
+        public virtual void Sell(double coins)
+        {
+            Coins += coins;
+        }
+
         public virtual string ShowInfo(LanguagesManager s)
         {
             StringBuilder sb = new StringBuilder();

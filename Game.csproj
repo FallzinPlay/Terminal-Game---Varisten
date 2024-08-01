@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassManager\ItemCreate.cs" />
+    <Compile Include="Entities\Merchant.cs" />
     <Compile Include="Entities\Skeleton.cs" />
     <Compile Include="Entities\Slime.cs" />
     <Compile Include="EntityRegistry.cs" />

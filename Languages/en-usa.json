@@ -6,7 +6,8 @@
     "leaving": "It seems he is a coward! Haha. See you, #PlayerName.",
     "gameOver": "Game over!",
     "weaponEquip": "Weapon equipped.",
-    "weaponUnequip": "Weapon unequipped."
+    "weaponUnequip": "Weapon unequipped.",
+    "emptySlot": "Nothing to do. \nThat slot is empty."
   },
 
   "Me": {
@@ -23,14 +24,16 @@
   },
 
   "Menu": {
-    "leave": "[#N]: Leave",
+    "leave": "[0]: Leave",
     "start": "[Varisten] \n[0]: Leave \n[1]: Play",
     "adventure": "[Dark Forest] \n[0]: Leave \n[1]: Go ahead \n[2]: Inventory",
     "mobFound": "[Fighting with #MobName] \n[0]: Run away... \n[1]: Atack! \n[2]: Check #MobName \n[3]: Check my bag",
     "mobRunningAway": "#MobName is escaping. \nWhat will you do? \n[0]: Allow \n[1]: Run toward him!",
     "inventory": "[Inventory] \n[0]: Leave \n[1]: Weapon equipped \n[2]: Items",
-    "checkingBag": "[Checking my bag] \n[0]: Leave \n[1]: Use \n[2]: Drop",
-    "weaponCheck": "[Weapon] \n[0]: Leave \n[1]: Unequip \n[2]: Drop"
+    "checkingItems": "[Item] \n[0]: Leave \n[1]: Use \n[2]: Drop",
+    "weaponCheck": "[Weapon] \n[0]: Leave \n[1]: Unequip \n[2]: Drop",
+    "merchantFound": "[Merchant] \n[0]: Leave \n[1]: Check \n[2]: Try to steal.",
+    "buyingItem": "[Item] \n[0]: Leave \n[1]: buy"
   },
 
   "Player": {
@@ -38,16 +41,14 @@
     "lvlup": "Lvl up! \nI feel more strongh now.",
     "getCoins": "These #Coins coins I have gotten will be really useful. \nI could buy something new.",
     "getXp": "I received #Xpxp.",
-    "emptySlot": "Oops.... That slot is empty.",
     "noWeapon": "I am not using a weapon.",
     "weaponEquip": "Using this weapon, I feel stronger.",
     "weaponUnequip": "I do not need that weapon for now.",
     "invalidOption": "Oops..., I can not do it.",
-
     "noEscape": "I do not have as to escape... \nAll that's left for me is to fight!",
     "escape": "Well, I had to run away now, but if I ever encounter that monster again... \nI'm going to defeat him!",
-
     "dying": "I am...dying.",
+    "myCoins": "I have $#Coins coins.",
 
     // Zombie
     "zombieFound": "A zombie. Really? \nI will certainly have no trouble defeating him.",
@@ -83,7 +84,11 @@
     "allowSlimeRun": "You can run away, little slime.",
 
     "catchSlime": "Today I am not a good man.\nWe will keep fighting.",
-    "noCatchSlime": "He has escaped...Maybe I was too hard on him."
+    "noCatchSlime": "He has escaped...Maybe I was too hard on him.",
+
+    // Merchant
+    "merchantFound": "Is that a merchant? \nGood! I will be able to buy something now.",
+    "leaveMerchant": "Well, bye. \nThank you for showing me your products."
   },
 
   "Zombie": {
@@ -135,10 +140,11 @@
     "dodge": "Dodge",
     "criticChance": "Critic chance",
     "criticDamage": "Critic damage",
-    "averagePrice": "Average price",
+    "price": "Price",
     "condition": "Condition",
     "myBag": "My bag",
-    "necessaryLvl": "Necessary Lvl"
+    "necessaryLvl": "Necessary Lvl",
+    "items": "Items"
   },
 
   "Merchant": {

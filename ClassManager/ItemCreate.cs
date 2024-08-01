@@ -11,15 +11,19 @@ namespace Game.ClassManager
     public abstract class ItemCreate : Identifier
     {
         public string Name { get; set; }
-        public double MinPrice { get; protected set; }
-        public double MaxPrice { get; protected set; }
+        public double Price {  get; protected set; }
+
+        public void SetPrice(double value)
+        {
+            Price = Math.Round(value, 2);
+        }
 
         public virtual string ShowInfo(LanguagesManager s)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(
                 $"[{Name}]\n" +
-                $"{s.GetSubtitle("Status", "averagePrice")}: {((MinPrice + MaxPrice) / 2).ToString("F2", CultureInfo.InvariantCulture)}");
+                $"{s.GetSubtitle("Status", "price")}: {Price.ToString("F2", CultureInfo.InvariantCulture)}");
             return sb.ToString();
         }
     }

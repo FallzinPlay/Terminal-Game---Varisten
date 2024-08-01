@@ -10,6 +10,8 @@ using System.Diagnostics;
 using Game.ClassManager;
 using Game.Entities;
 using Game.Items.Weapons;
+using Microsoft.Win32;
+using Game.Items;
 
 namespace Game
 {
@@ -63,13 +65,13 @@ namespace Game
 
                             case StartActions.Adventure:
                                 byte totalActions = 10;
-                                double randomAction = 4;// Tools.RandomDouble(totalActions);
+                                double randomAction = 8;// Tools.RandomDouble(totalActions);
 
                                 // Mob
                                 if (randomAction < totalActions * 0.5d) MobFound(register, s, R, player);
 
                                 // Merchant
-                                else if (randomAction < totalActions * 0.7d) MerchantFound(register, s, player);
+                                else if (randomAction < totalActions * 0.9d) MerchantFound(register, s, player);
 
                                 // Treasury
                                 else if (randomAction < totalActions * 1d) TreasuryFound(s, player);
@@ -277,12 +279,11 @@ namespace Game
 
         public static void MerchantFound(EntityRegistry register, LanguagesManager s, Player player)
         {
-            int answer;
-            WeaponCreate weaponFound = Tools.RandomWeapon(register);
-            double weaponPrice = Tools.RandomDouble(weaponFound.MaxPrice, weaponFound.MinPrice);
-
             // Encontra o mercador
-            s.ShowSubtitle(s.GetSubtitle("Subtitles", "merchantFound"));
+            Merchant merchant = new Merchant(register);
+            register.AddEntity(merchant as MobCreate);
+            int answer;
+            s.ShowSubtitle(s.GetSubtitle("Player", "merchantFound") + "\n");
             do
             {
                 answer = Tools.Answer(s, s.GetSubtitle("Menu", "merchantFound"));
@@ -290,61 +291,31 @@ namespace Game
                 {
                     case 0:
                         // Ignora o mercador
-                        s.ShowSubtitle(s.GetSubtitle("Subtitles", "merchantIgnore"));
+                        s.ShowSubtitle(s.GetSubtitle("Player", "leaveMerchant") + "\n");
                         break;
 
                     case 1:
-                        // Legenda
-                        s.ShowSubtitle(
-                            $"[{s.GetSubtitle("Titles", "items")}] \n" +
-                            $"[{s.GetSubtitle("Subtitles", "myCoins").Replace("#", player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]");
-
-                        answer = Tools.Answer(s,
-                            s.GetSubtitle("Merchant", "shop").Replace("#1", weaponFound.Name).Replace("#2", weaponPrice.ToString("F2", CultureInfo.InvariantCulture)),
-                            3);
-                        switch (answer)
-                        {
-                            case 0:
-                                break;
-
-                            case 1:
-                                if (player.Buy(5))
-                                {
-                                    player.Cure(5);
-                                    // Compra e toma a poção
-                                    s.ShowSubtitle($"[{s.GetSubtitle("Titles", "life")}] {player.Life.ToString("F2", CultureInfo.InvariantCulture)}\n");
-                                }
-                                else
-                                {
-                                    // Moedas insuficientes
-                                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "insufficientMoney"));
-                                }
-                                continue;
-
-                            case 2:
-
-                                if (player.Buy(weaponPrice))
-                                {
-                                    // Compra e equipa a arma
-                                    player.WeaponEquip(weaponFound);
-                                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "buyWeapon"));
-                                }
-                                else
-                                {
-                                    // Moedas insuficientes
-                                    s.ShowSubtitle(s.GetSubtitle("Subtitles", "insufficientMoney"));
-                                }
-                                continue;
-
-                            default:
-                                // Mensagem de erro
-                                s.ShowSubtitle(s.GetSubtitle("Error", "invalidAction"));
-                                continue;
-                        }
+                        s.ShowSubtitle($"[{s.GetSubtitle("Player", "myCoins").Replace("#Coins", player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]");
+                        int _action;
+                        Inventory _shop = merchant.Shop;
+                        do
+                        { /// Arrumar a loja e fazer um sistema de compra /// Organizar os codigos no Player e o Inventario
+                            _action = Tools.Answer(s,
+                                s.GetSubtitle("Menu", "leave") + "\n" + _shop.CheckBag(s),
+                                _shop.Bag.Count + 1);
+                            if (_action > 0)
+                            {
+                                s.ShowSubtitle(_shop.Bag[_action++]);
+                            }
+                        } while (_action > 0);
                         continue;
 
+                    case 2:
+
+                        break;
+
                     default:
-                        // Mensagem de erro
+                        InvalidOption(s);
                         continue;
                 }
             }

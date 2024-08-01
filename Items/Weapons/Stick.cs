@@ -18,8 +18,7 @@ namespace Game.Items.Weapons
             MaxCondition = 4;
             Condition = MaxCondition;
             NecessaryLvl = 1;
-            MinPrice = 5d;
-            MaxPrice = 10d;
+            Price = 3.50d;
         }
     }
 }

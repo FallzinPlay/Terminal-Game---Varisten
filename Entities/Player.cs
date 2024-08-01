@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Game.ClassManager;
 using Game.Items;
+using Game.Items.Weapons;
 
 namespace Game.Entities
 {
-    internal class Player : MobCreate
+    public class Player : MobCreate
     {
-        public Inventory Bag { get; private set; } = new Inventory();
+        public Inventory Bag { get; private set; } = new Inventory(5, new Stick() as ItemCreate);
 
         private LanguagesManager _language;
 
@@ -30,18 +32,15 @@ namespace Game.Entities
             NextLvlXp = 10;
             State = MobState.Exploring;
             EscapeChance = 5d;
-
+            
             _language = language;
         }
 
         public void BagVerify()
         {
             int _action;
-            int _item;
             int _actionInWeapon;
-            int _actionInBag;
             string _invalidOption = _language.GetSubtitle("Player", "invalidOption");
-            ItemCreate[] _bag = Bag.Bag;
             do
             {
                 _action = Tools.Answer(_language,
@@ -84,47 +83,7 @@ namespace Game.Entities
                         continue;
 
                     case 2:
-                        #region Bag
-                        do
-                        {
-                            _item = Tools.Answer(_language,
-                                Bag.CheckBag(_language) + _language.GetSubtitle("Menu", "leave").Replace("#N", _bag.Length.ToString()),
-                                _bag.Length + 1);
-
-                            if (_item == _bag.Length) break;
-                            if (_bag[_item] == null)
-                            {
-                                _language.ShowSubtitle(_language.GetSubtitle("Player", "emptySlot"));
-                                continue;
-                            }
-
-                            _actionInBag = Tools.Answer(_language,
-                            _bag[_item].ShowInfo(_language) + "\n" + _language.GetSubtitle("Menu", "checkingBag"),
-                            3);
-                            switch (_actionInBag)
-                            {
-                                case 0:
-                                    break;
-
-                                case 1:
-                                    if (_bag[_item] is WeaponCreate)
-                                    {
-                                        WeaponEquip(_bag[_item] as WeaponCreate);
-                                        Bag.DropItem(_bag[_item]);
-                                    }
-                                    break;
-
-                                case 2:
-                                    Bag.DropItem(_bag[_item]);
-                                    break;
-
-                                default:
-                                    _language.ShowSubtitle(_invalidOption);
-                                    continue;
-                            }
-                            break;
-                        } while (_item != _bag.Length);
-                        #endregion
+                        Bag.ManageBag(_language, this);
                         continue;
 
                     default:
@@ -132,6 +91,40 @@ namespace Game.Entities
                         continue;
                 }
             } while (_action != 0);
+        }
+
+        public void ManageItem(int index)
+        {
+            int _actionInBag;
+            List<ItemCreate> _bag = Bag.Bag;
+            do
+            {
+                _actionInBag = Tools.Answer(_language,
+                _bag[index].ShowInfo(_language) + "\n" + _language.GetSubtitle("Menu", "checkingItems"),
+                3);
+                switch (_actionInBag)
+                {
+                    case 0:
+                        break;
+
+                    case 1:
+                        if (_bag[index] is WeaponCreate)
+                        {
+                            WeaponEquip(_bag[index] as WeaponCreate);
+                            Bag.DropItem(_bag[index]);
+                        }
+                        break;
+
+                    case 2:
+                        Bag.DropItem(_bag[index]);
+                        break;
+
+                    default:
+                        _language.ShowSubtitle(_language.GetSubtitle("Error", "invalidOption"));
+                        continue;
+                }
+                break;
+            } while (_actionInBag > 0);
         }
 
         public sealed override void GetDamage(double damage)
@@ -168,7 +161,8 @@ namespace Game.Entities
                 _language.ShowSubtitle(
                     _language.GetSubtitle("System", "weaponEquip") +
                     "\n" +
-                    _language.GetSubtitle("Player", "weaponEquip"));
+                    _language.GetSubtitle("Player", "weaponEquip") +
+                    "\n");
                 return true;
             }
             return false;
@@ -180,7 +174,8 @@ namespace Game.Entities
             _language.ShowSubtitle(
                     _language.GetSubtitle("System", "weaponUnequip") +
                     "\n" +
-                    _language.GetSubtitle("Player", "weaponUnequip"));
+                    _language.GetSubtitle("Player", "weaponUnequip") +
+                    "\n");
         }
 
         public sealed override void Cure(double life)
@@ -191,18 +186,10 @@ namespace Game.Entities
             base.Cure(life);
         }
 
-        public bool Buy(double price)
+        public override void Sell(double value)
         {
-            if (price > Coins)
-            {
-                _language.ShowSubtitle(_language.GetSubtitle("Merchant", "noCoins"));
-                return false;
-            }
-
-            Coins = Math.Round(Coins, 2);
-            price = Math.Round(price, 2);
-            Coins -= price;
-            return true;
+            base.Sell(value);
+            _language.ShowSubtitle($"+${value} coins.");
         }
 
         public sealed override void GetCoins(double coins)
