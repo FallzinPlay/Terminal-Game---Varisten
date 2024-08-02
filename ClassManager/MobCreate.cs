@@ -33,7 +33,6 @@ namespace Game.ClassManager
         public MobState State { get; set; } = MobState.Exploring;
         public WeaponCreate Weapon { get; protected set; }
 
-        #region Combat
 
         // Chance de critico
         public double CriticCheck(double damage)
@@ -52,7 +51,7 @@ namespace Game.ClassManager
         }
 
         // Recebe dano
-        public virtual void GetDamage(double damage)
+        public void GetDamage(double damage)
         {
             Life -= damage;
             if (Life <= 0)
@@ -62,12 +61,12 @@ namespace Game.ClassManager
         }
 
         // Ataque
-        public virtual double SetDamage()
+        public double SetDamage()
         {
-            double damage = Damage;
-            return Tools.RandomDouble(damage, damage / 2);
+            return Tools.RandomDouble(Damage, Damage / 2);
         }
 
+        // Gera uma chance de tentar fugir
         public virtual bool TryRunAway()
         {
             if (Tools.RandomChance(EscapeChance))
@@ -78,9 +77,7 @@ namespace Game.ClassManager
             return false;
         }
 
-        #endregion
-
-        #region Weapon
+        // Equipa a arma
         public virtual bool WeaponEquip(WeaponCreate weapon)
         {
             Weapon = weapon;
@@ -88,37 +85,40 @@ namespace Game.ClassManager
             return true;
         }
 
+        // Desequipa a arma
         public virtual void WeaponUnequip()
         {
             Damage -= Weapon.Damage;
             Weapon = null;
         }
-        #endregion
 
+        // Cura
         public virtual void Cure(double life)
         {
             Life += life;
         }
 
+        // Coleta moedas
         public virtual void GetCoins(double coins)
         {
             Coins += coins;
         }
 
-        #region Lvl
+        // Coleta xp
         public virtual void GetXp(double xp)
         {
             Xp += xp;
         }
 
+        // Upa de nivel
         public virtual void LvlUp(int lvl)
         {
             Lvl = lvl;
             MaxLife += lvl;
             Damage += 0.02 * lvl;
         }
-        #endregion
 
+        // Compra
         public bool Buy(double price)
         {
             if (price > Coins)
@@ -130,11 +130,7 @@ namespace Game.ClassManager
             return true;
         }
 
-        public virtual void Sell(double coins)
-        {
-            Coins += coins;
-        }
-
+        // Mostra o status
         public virtual string ShowInfo(LanguagesManager s)
         {
             StringBuilder sb = new StringBuilder();

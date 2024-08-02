@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,31 +59,28 @@ namespace Game.Items
             return sb.ToString();
         }
 
-        public void ManageBag(LanguagesManager s, MobCreate owner)
+        public ItemCreate GetItemInBag(LanguagesManager s)
         {
-            int _item;
-            int _bagCount = Bag.Count;
-            string _invalidOption = s.GetSubtitle("Player", "invalidOption");
+            int _index;
+            ItemCreate _item = null;
             do
             {
-                _item = Tools.Answer(s,
+                _index = Tools.Answer(s,
                    $"[{s.GetSubtitle("Status", "items")}]\n" + s.GetSubtitle("Menu", "leave") + "\n" + CheckBag(s),
                    MaxCapacity + 1);
 
-                if (_item == 0) break;
-                if (_item > Bag.Count)
+                if (_index > Bag.Count)
                 {
-                    s.ShowSubtitle(s.GetSubtitle("System", "emptySlot"));
+                    s.ShowSubtitle(s.GetSubtitle("System", "emptySlot") + "\n");
                     continue;
                 }
-
-                _item--;
-                if (owner is Player)
+                if (_index > 0)
                 {
-                    Player player = owner as Player;
-                    player.ManageItem(_item);
+                    _index--;
+                    _item = Bag[_index];
                 }
-            } while (_item != _bagCount);
+            } while (_item == null);
+            return _item;
         }
     }
 }

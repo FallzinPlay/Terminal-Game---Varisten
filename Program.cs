@@ -297,6 +297,8 @@ namespace Game
                     case 1:
                         s.ShowSubtitle($"[{s.GetSubtitle("Player", "myCoins").Replace("#Coins", player.Coins.ToString("F2", CultureInfo.InvariantCulture))}]");
                         int _action;
+                        int _weaponAction;
+                        ItemCreate _item;
                         Inventory _shop = merchant.Shop;
                         do
                         { /// Arrumar a loja e fazer um sistema de compra /// Organizar os codigos no Player e o Inventario
@@ -305,7 +307,19 @@ namespace Game
                                 _shop.Bag.Count + 1);
                             if (_action > 0)
                             {
-                                s.ShowSubtitle(_shop.Bag[_action++]);
+                                _action--;
+                                _item = _shop.Bag[_action];
+                                s.ShowSubtitle(_item.ShowInfo(s));
+                                _weaponAction = Tools.Answer(s,
+                                    s.GetSubtitle("Menu", "buyingItem"),
+                                    2);
+                                if (_weaponAction == 1)
+                                    if (player.Buy(_item.Price))
+                                    {
+                                        merchant.GetCoins(_item.Price);
+                                        player.Bag.ColectItem(_item);
+                                        _shop.DropItem(_item);
+                                    }
                             }
                         } while (_action > 0);
                         continue;

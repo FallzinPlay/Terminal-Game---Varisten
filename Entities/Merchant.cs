@@ -1,5 +1,6 @@
 ﻿using Game.ClassManager;
 using Game.Items;
+using Game.Items.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,16 @@ namespace Game.Entities
             EscapeChance = 2.0d;
 
             int _capacity = 5;
-            ItemCreate[] _item = new ItemCreate[_capacity];
-            for (int i = 0; i < _capacity; i++)
-                _item[i] = Tools.RandomWeapon(register);
+            ItemCreate[] _item = new ItemCreate[]
+            {
+                new Stick(),
+                new Stick(),
+                new WoodenSword(),
+                new WoodenSword(),
+                new WoodenBow()
+            };
+            foreach (ItemCreate i in _item)
+                i.SetPrice(i.Price + i.Price * 0.15d);
             Shop = new Inventory(_capacity, _item);
         }
 

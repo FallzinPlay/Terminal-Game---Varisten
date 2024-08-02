@@ -39,11 +39,7 @@
   "Player": {
     "fullLife": "Brand new again!",
     "lvlup": "Lvl up! \nI feel more strongh now.",
-    "getCoins": "These #Coins coins I have gotten will be really useful. \nI could buy something new.",
-    "getXp": "I received #Xpxp.",
     "noWeapon": "I am not using a weapon.",
-    "weaponEquip": "Using this weapon, I feel stronger.",
-    "weaponUnequip": "I do not need that weapon for now.",
     "invalidOption": "Oops..., I can not do it.",
     "noEscape": "I do not have as to escape... \nAll that's left for me is to fight!",
     "escape": "Well, I had to run away now, but if I ever encounter that monster again... \nI'm going to defeat him!",

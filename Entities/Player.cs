@@ -32,6 +32,7 @@ namespace Game.Entities
             NextLvlXp = 10;
             State = MobState.Exploring;
             EscapeChance = 5d;
+            Coins = 5d;
             
             _language = language;
         }
@@ -40,6 +41,8 @@ namespace Game.Entities
         {
             int _action;
             int _actionInWeapon;
+            int _actionInItem;
+            ItemCreate _item;
             string _invalidOption = _language.GetSubtitle("Player", "invalidOption");
             do
             {
@@ -83,62 +86,37 @@ namespace Game.Entities
                         continue;
 
                     case 2:
-                        Bag.ManageBag(_language, this);
-                        continue;
+                        _item = Bag.GetItemInBag(_language);
+                        _actionInItem = Tools.Answer(_language,
+                            _item.ShowInfo(_language) + "\n" + _language.GetSubtitle("Menu", "checkingItems"),
+                            3);
+                        switch (_actionInItem)
+                        {
+                            case 0:
+                                break;
+
+                            case 1:
+                                if (_item is WeaponCreate)
+                                    WeaponEquip(_item as WeaponCreate);
+                                Bag.DropItem(_item);
+                                break;
+
+                            case 2:
+                                Bag.DropItem(_item);
+                                break;
+
+                            default:
+                                _language.ShowSubtitle(_invalidOption);
+                                continue;
+                        }
+                        break;
 
                     default:
                         _language.ShowSubtitle(_invalidOption);
                         continue;
                 }
-            } while (_action != 0);
-        }
-
-        public void ManageItem(int index)
-        {
-            int _actionInBag;
-            List<ItemCreate> _bag = Bag.Bag;
-            do
-            {
-                _actionInBag = Tools.Answer(_language,
-                _bag[index].ShowInfo(_language) + "\n" + _language.GetSubtitle("Menu", "checkingItems"),
-                3);
-                switch (_actionInBag)
-                {
-                    case 0:
-                        break;
-
-                    case 1:
-                        if (_bag[index] is WeaponCreate)
-                        {
-                            WeaponEquip(_bag[index] as WeaponCreate);
-                            Bag.DropItem(_bag[index]);
-                        }
-                        break;
-
-                    case 2:
-                        Bag.DropItem(_bag[index]);
-                        break;
-
-                    default:
-                        _language.ShowSubtitle(_language.GetSubtitle("Error", "invalidOption"));
-                        continue;
-                }
                 break;
-            } while (_actionInBag > 0);
-        }
-
-        public sealed override void GetDamage(double damage)
-        {
-            base.GetDamage(damage);
-            if (Life < Life / 5)
-                _language.ShowSubtitle(
-                    _language.GetSubtitle("Player", "dying"));
-        }
-
-        public sealed override double SetDamage()
-        {
-            double _damage = base.SetDamage();
-            return _damage;
+            } while (true);
         }
 
         public sealed override bool TryRunAway()
@@ -160,8 +138,6 @@ namespace Game.Entities
                 base.WeaponEquip(weapon);
                 _language.ShowSubtitle(
                     _language.GetSubtitle("System", "weaponEquip") +
-                    "\n" +
-                    _language.GetSubtitle("Player", "weaponEquip") +
                     "\n");
                 return true;
             }
@@ -173,8 +149,6 @@ namespace Game.Entities
             base.WeaponUnequip();
             _language.ShowSubtitle(
                     _language.GetSubtitle("System", "weaponUnequip") +
-                    "\n" +
-                    _language.GetSubtitle("Player", "weaponUnequip") +
                     "\n");
         }
 
@@ -186,17 +160,10 @@ namespace Game.Entities
             base.Cure(life);
         }
 
-        public override void Sell(double value)
-        {
-            base.Sell(value);
-            _language.ShowSubtitle($"+${value} coins.");
-        }
-
         public sealed override void GetCoins(double coins)
         {
             base.GetCoins(coins);
-            _language.ShowSubtitle(
-                _language.GetSubtitle("Player", "getCoins").Replace("#Coins", Coins.ToString("F2", CultureInfo.InvariantCulture)) + "\n");
+            _language.ShowSubtitle($"(+${coins} coins)");
         }
 
         public sealed override void GetXp(double xp)
@@ -204,8 +171,7 @@ namespace Game.Entities
             base.GetXp(xp);
             if (Xp >= NextLvlXp)
                 LvlUp();
-            _language.ShowSubtitle(
-                _language.GetSubtitle("Player", "getXp").Replace("#Xp", Xp.ToString("F2", CultureInfo.InvariantCulture)));
+            _language.ShowSubtitle($"(+{xp}Xp)");
         }
 
         public sealed override void LvlUp(int lvl = 1)
